@@ -9,4 +9,8 @@ export const Colors = {
   yellow: "#FBD97D",
   brown: "#A78989",
   grey: "#E2E2E2",
+  white: '#fff',
+  dark: '#000',
+  light: '#F1F1F1',
+  transparent: 'rgba(0,0,0,0)'
 };
