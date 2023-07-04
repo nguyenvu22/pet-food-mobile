@@ -1,6 +1,6 @@
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-
+import { Colors } from '../../constants/styles'
 const BannerCarousel = () => {
     const carouselData = [
         {
@@ -25,6 +25,11 @@ const BannerCarousel = () => {
         return (
             <View style={styles.containerCarousel} >
                 <Image source={item.image} style={styles.bannerImage} />
+                <View style={styles.carouselTextContainer}>
+                    <Text style={styles.carouselTextTitle}>Pet Sitter</Text>
+                    <Text style={styles.carouselTextTitle2}>Care Service</Text>
+                    {/* <Text style={styles.carouselTextDes}>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Adipisci ipsum  </Text> */}
+                </View>
             </View>
         )
     }
@@ -33,6 +38,7 @@ const BannerCarousel = () => {
             style={styles.container}>
             <View style={{
                 height: 180,
+
             }}>
                 <FlatList data={carouselData}
                     renderItem={renderCarouselItem}
@@ -48,15 +54,52 @@ const BannerCarousel = () => {
 export default BannerCarousel
 
 const styles = StyleSheet.create({
+    carouselTextContainer: {
+        backgroundColor: Colors.transparentDark,
+        top: 43,
+        maxWidth: 275,
+        // marginRight: 80,
+        paddingHorizontal: 5,
+        // borderRadius: 8,
+        right: 85,
+        borderBottomLeftRadius: 20,
+        borderTopRightRadius: 40,
+        overflow: 'hidden'
+    },
+    carouselTextTitle: {
+        padding: 5,
+
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: Colors.peach,
+        lineHeight: 25,
+        paddingLeft: 8
+    },
+    carouselTextTitle2: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: Colors.browPastel100,
+        lineHeight: 20,
+        marginLeft: 40,
+        paddingBottom: 7,
+    },
+    carouselTextDes: {
+        fontSize: 11,
+        fontWeight: '600',
+        color: Colors.light,
+        textAlign: 'right',
+    },
     container: {
         height: 180,
     },
     bannerImage: {
+        position: 'absolute',
         height: 150,
         // width: 343,
         width: 325,
         borderRadius: 20,
         resizeMode: 'cover',
+
     },
     containerCarousel: {
         justifyContent: 'center',

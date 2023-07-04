@@ -12,5 +12,11 @@ export const Colors = {
   white: '#fff',
   dark: '#000',
   light: '#F1F1F1',
-  transparent: 'rgba(0,0,0,0)'
+  transparent: 'rgba(0,0,0,0)',
+  blue: '#2773E5',
+  transparentDark: '#75757569',
+  redPastel100: '#FF9B9B',
+  redPastel200: '#FD8A8A',
+  browPastel100: '#FFDBA4',
+  peach: '#F2D7D9'
 };
