@@ -22,13 +22,9 @@ export default function HomeScreen() {
       }}>
         <HeaderHome />
         <View style={styles.container}>
-
-          {/* <HeaderUser name='Hương Bơ' image={avatar} /> */}
-
           <View style={styles.banner}>
             <BannerCarousel />
           </View>
-
           <View style={styles.listCard}>
             <ListCardCategory />
           </View>
