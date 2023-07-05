@@ -1,6 +1,6 @@
 import { Image, ImageBackground, StyleSheet, Text, View, TouchableOpacity, Pressable } from 'react-native'
 import React from 'react'
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/styles';
 import img from '../../assets/bgHeader1.jpg'
 import Search from '../search/Search';

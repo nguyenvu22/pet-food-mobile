@@ -1,13 +1,9 @@
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from "../../constants/styles";
 import BannerCarousel from "../../components/banner/BannerCarousel";
 import ListCard from "../../components/listCard/ListCard";
 import ListCardCategory from "../../components/listCard/ListCardCategory";
-import HeaderUser from "../../components/header/HeaderUser";
-import avatar from '../../assets/meme1.jpg'
-import Search from "../../components/search/Search";
 import BannerSale from "../../components/banner/BannerSale";
 import HeaderHome from "../../components/header/HeaderHome";
 
