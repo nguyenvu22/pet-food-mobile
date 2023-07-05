@@ -8,6 +8,6 @@ const productSlice = createSlice({
   },
 });
 
-export const todo = userSlice.actions.todo;
+export const todo = productSlice.actions.todo;
 
 export default productSlice.reducer;

@@ -1,21 +1,32 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Lottie from "lottie-react-native";
+import { useSelector } from "react-redux";
 
-export default function SplashScreen({ navigation }) {
+export default function SplashScreen({ navigation, route }) {
   const [isDone, setIsDone] = useState(false);
+  const user = useSelector((state) => state.userReducers.user);
+  const hasLaunched = route.params.hasLaunched;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTimeout(() => {
       setIsDone(true);
-    }, 3000);
+    }, 4000);
   }, []);
 
   useEffect(() => {
-    if (isDone) {
-      navigation.replace("Onboard");
+    if (hasLaunched) {
+      if (isDone) {
+        Object.keys(user).length === 0
+          ? navigation.replace("Login")
+          : navigation.replace("Store");
+      }
+    } else {
+      setTimeout(() => {
+        navigation.replace("Onboard");
+      }, 4000);
     }
-  }, [isDone, navigation]);
+  }, [isDone, navigation, user, hasLaunched]);
 
   return (
     <View style={styles.rootContainer}>
