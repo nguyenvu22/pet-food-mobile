@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/styles';
@@ -8,7 +8,7 @@ const Search = () => {
     return (
         <View style={styles.searchContainer}>
             <View style={styles.searchInnerContainer}>
-                <Ionicons name="search" size={24} color="black"
+                <Ionicons name="search" size={18} color="black"
                     style={styles.iconSearch} />
                 <TextInput placeholder='Search Store ' style={styles.textInputSearch} />
             </View>
@@ -20,16 +20,18 @@ export default Search
 
 const styles = StyleSheet.create({
     searchContainer: {
-        marginTop: 30,
+        position: 'relative',
         flexDirection: 'row',
+        paddingLeft: 5,
+        paddingTop: 2
     },
     searchInnerContainer: {
-        flex: 1,
         flexDirection: 'row',
-        height: 50,
+        height: 30,
         backgroundColor: Colors.light,
-        borderRadius: 13,
+        borderRadius: 8,
         alignItems: 'center',
+        width: 320,
     },
     iconSearch: {
         marginLeft: 20,
@@ -39,6 +41,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: Colors.dark,
         flex: 1,
-        fontWeight: '500'
+        fontWeight: '500',
+
     },
 })

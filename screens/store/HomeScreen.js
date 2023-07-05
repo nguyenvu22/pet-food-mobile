@@ -5,23 +5,25 @@ import { Colors } from "../../constants/styles";
 import BannerCarousel from "../../components/banner/BannerCarousel";
 import ListCard from "../../components/listCard/ListCard";
 import ListCardCategory from "../../components/listCard/ListCardCategory";
-import Header from "../../components/header/Header";
+import HeaderUser from "../../components/header/HeaderUser";
 import avatar from '../../assets/meme1.jpg'
 import Search from "../../components/search/Search";
 import BannerSale from "../../components/banner/BannerSale";
+import HeaderHome from "../../components/header/HeaderHome";
 
 export default function HomeScreen() {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+
       <SafeAreaView style={{
         flex: 1,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.pink100,
         paddingBottom: 10,
       }}>
+        <HeaderHome />
         <View style={styles.container}>
-          <Header name='Hương Bơ' image={avatar} />
 
-          <Search />
+          {/* <HeaderUser name='Hương Bơ' image={avatar} /> */}
 
           <View style={styles.banner}>
             <BannerCarousel />
@@ -51,7 +53,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 15,
-    marginVertical: 100,
+    marginBottom: 30,
   },
 
   banner: {

@@ -42,9 +42,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginTop: 20,
         justifyContent: 'space-between',
-        elevation: 8,//android
         borderRadius: 15,
         backgroundColor: 'white',
+
+        elevation: 8,//android
         shadowColor: 'black',
         shadowOpacity: 0.25,
         shadowOffset: { width: 0, height: 2 },

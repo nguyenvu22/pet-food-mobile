@@ -3,7 +3,7 @@ import React from 'react'
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/styles';
 
-const Header = ({ name, image }) => {
+const HeaderUser = ({ name, image }) => {
     return (
         <View style={styles.header}>
             <View style={styles.headerUser}>
@@ -20,7 +20,7 @@ const Header = ({ name, image }) => {
     )
 }
 
-export default Header
+export default HeaderUser
 
 const styles = StyleSheet.create({
     header: {
