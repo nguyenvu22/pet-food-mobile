@@ -6,7 +6,11 @@ export const Colors = {
   pink800: "#C48590",
   red: "#D42323",
   green: "#8ED0C5",
-  yellow: "#FBD97D",
-  brown: "#A78989",
+  yellow100: "#FBD97D",
+  // yellow200: "#F3B454",
+  yellow200: "#efba80",
+  brown100: "#A78989",
+  brown600: "#CA6D36",
+  brown700: "#B24D00",
   grey: "#E2E2E2",
 };
