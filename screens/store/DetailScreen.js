@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     priceText: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: Colors.yellow,
+        color: Colors.yellow100,
         marginRight: 5
     },
     currencyUnit: {

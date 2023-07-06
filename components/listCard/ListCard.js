@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 12,
-    marginHorizontal: 10,
-    marginRight:25,
+    marginHorizontal: 20,
+    marginRight: 25,
   },
   titleText: {
     fontSize: 24,
