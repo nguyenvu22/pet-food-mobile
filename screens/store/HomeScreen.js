@@ -10,7 +10,6 @@ import HeaderHome from "../../components/header/HeaderHome";
 export default function HomeScreen() {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-
       <SafeAreaView style={{
         flex: 1,
         backgroundColor: Colors.pink100,

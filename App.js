@@ -141,10 +141,10 @@ export default function App() {
 const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
-    height: 60,
-    bottom: 15,
+    height: 52,
+    bottom: 20,
     borderRadius: 90,
-    marginHorizontal: 2,
+    marginHorizontal: 4,
     alignItems: 'center',
 
     justifyContent: 'center',
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: 'absolute',
-    top: 3,
+    top: 1,
     alignItems: 'center',
     justifyContent: 'center',
     // backgroundColor: 'red',
