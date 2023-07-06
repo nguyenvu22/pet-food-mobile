@@ -25,6 +25,7 @@ import { Colors } from "./constants/styles";
 // import settingTab from "./assets/settingTab.png";
 // import userTab from "./assets/userTab.png";
 import AddButtonTab from "./components/button/AddButtonTab";
+import DetailScreen from "./screens/store/DetailScreen";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -151,6 +152,7 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen name="Login" component={LoginScreen} options={{}} />
       <Stack.Screen name="Regist" component={RegistScreen} options={{}} />
       <Stack.Screen name="Search" component={SearchScreen} options={{}} />
+      <Stack.Screen name='Detail' component={DetailScreen} options={{}} />
     </Stack.Navigator>
   );
 }

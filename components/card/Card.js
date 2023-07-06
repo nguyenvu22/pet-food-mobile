@@ -9,14 +9,24 @@ import {
 import React from "react";
 import { Entypo } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
+import { useNavigation } from '@react-navigation/native';
 
 const width = Dimensions.get("screen").width;
 const Card = ({ id, image, specificWeight, brand, price, title }) => {
+
+  const navigation = useNavigation();
+  const SelectMeal = () => {
+    navigation.navigate('Detail', {
+      mealId: id
+    })
+  }
+
   return (
     <View style={styles.container}>
       <Pressable
         android_ripple={{ color: "#ccccc" }}
         style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
+        onPress={SelectMeal}
       >
         <View
           style={{
