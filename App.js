@@ -9,9 +9,9 @@ import RegistScreen from "./screens/auth/RegistScreen";
 import HomeScreen from "./screens/store/HomeScreen";
 import ProfileScreen from "./screens/store/ProfileScreen";
 import CartScreen from "./screens/store/CartScreen";
-
 import SplashScreen from "./screens/splash/SplashScreen";
 import OnboardScreen from "./screens/onboard/OnboardScreen";
+import SearchScreen from "./screens/others/SearchScreen";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./redux/redux";
 import { initUser } from "./redux/user/user";
@@ -30,18 +30,13 @@ const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 const HAS_LAUNCH = "HAS_LAUNCH";
 
-// const getIconSize = focused => ({
-//   height: focused ? 64 : 40,
-//   width: focused ? 64 : 40,
-// });
-
 function BottomTabsScreen() {
   return (
     <Tabs.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: Colors.yellow,
+        tabBarActiveTintColor: Colors.yellow100,
         tabBarStyle: styles.tabBar,
         tabBarIconStyle: styles.tabBarIcon,
         tabBarInactiveTintColor: Colors.purple100,
@@ -55,13 +50,10 @@ function BottomTabsScreen() {
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
               {/* <Image source={imageHome} resizeMode='contain'
-                style={[styles.tabBarIcon, getIconSize(focused)]} /> */}
+                style={[{ height: 40,width: 40 }, getIconSize(focused)]} /> */}
               <AntDesign name="home" size={size} color={color} />
             </View>
           ),
-          tabBarItemStyle: {
-            height: 0,
-          },
         }}
       />
 
@@ -75,11 +67,27 @@ function BottomTabsScreen() {
               {/* <Image source={cartTab} resizeMode='contain'
               style={[styles.tabBarIcon, getIconSize(focused)]} /> */}
               <AntDesign name="shoppingcart" size={size} color={color} />
+              <View
+                style={{
+                  position: "absolute",
+                  top: -5,
+                  right: -6,
+                  backgroundColor: "red",
+                  width: 18,
+                  height: 18,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 10,
+                }}
+              >
+                <Text
+                  style={{ color: "white", fontSize: 12, fontWeight: "500" }}
+                >
+                  1
+                </Text>
+              </View>
             </View>
           ),
-          tabBarItemStyle: {
-            height: 0,
-          },
         }}
       />
 
@@ -89,9 +97,6 @@ function BottomTabsScreen() {
         options={{
           tabBarLabel: "Add Meal",
           tabBarIcon: ({ focused }) => <AddButtonTab />,
-          tabBarItemStyle: {
-            height: 0,
-          },
         }}
       />
 
@@ -107,9 +112,6 @@ function BottomTabsScreen() {
               <AntDesign name="user" size={size} color={color} />
             </View>
           ),
-          tabBarItemStyle: {
-            height: 0,
-          },
         }}
       />
       <Tabs.Screen
@@ -124,9 +126,6 @@ function BottomTabsScreen() {
               <AntDesign name="setting" size={size} color={color} />
             </View>
           ),
-          tabBarItemStyle: {
-            height: 0,
-          },
         }}
       />
     </Tabs.Navigator>
@@ -151,6 +150,7 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen name="Store" component={BottomTabsScreen} options={{}} />
       <Stack.Screen name="Login" component={LoginScreen} options={{}} />
       <Stack.Screen name="Regist" component={RegistScreen} options={{}} />
+      <Stack.Screen name="Search" component={SearchScreen} options={{}} />
     </Stack.Navigator>
   );
 }
@@ -213,16 +213,13 @@ export default function App() {
 const styles = StyleSheet.create({
   tabBar: {
     position: "absolute",
-    height: 52,
-    bottom: 20,
+    bottom: 30,
+    left: 20,
+    right: 20,
+    height: 55,
     borderRadius: 90,
-    marginHorizontal: 4,
     alignItems: "center",
-
     justifyContent: "center",
-    padding: 0,
-    left: 16,
-    right: 16,
     borderTopColor: "transparent",
     backgroundColor: Colors.purple400,
     shadowColor: Colors.dark,
@@ -233,21 +230,10 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: "absolute",
-    top: 1,
-    alignItems: "center",
+    top: 12,
     justifyContent: "center",
-    // backgroundColor: 'red',
-    borderRadius: 99999,
+    alignItems: "center",
     padding: 1,
-    height: 55,
-    width: 55,
-  },
-  tabBarIcon: {
-    height: 40,
-    width: 40,
-  },
-  focusedIcon: {
-    height: 70,
-    width: 70,
+    margin: 0,
   },
 });
