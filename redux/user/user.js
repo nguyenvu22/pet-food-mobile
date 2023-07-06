@@ -8,11 +8,7 @@ const userSlice = createSlice({
     initUser: (state, action) => {
       const user = action.payload.user;
       state.user = user;
-      console.log("action.payload.user");
-      console.log(action.payload.user);
-      console.log(state.user);
     },
-    
   },
 });
 
