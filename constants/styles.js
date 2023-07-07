@@ -1,8 +1,8 @@
 export const Colors = {
   purple100: "#D8CCFA",
   purple200: "#BBB7EA",
-  purple800: "#474672",
   purple400: "#654E92",
+  purple800: "#474672",
   pink100: "#FBEDEC",
   pink800: "#C48590",
   red: "#D42323",
