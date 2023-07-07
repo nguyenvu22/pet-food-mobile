@@ -61,6 +61,7 @@ export default function LoginScreen({ navigation }) {
             dob: user.data.dob,
             phoneNumber: user.data.phoneNumber,
             avatar: user.data.avatar,
+            accessToken: response.data.accessToken,
           };
           await AsyncStorage.setItem("user", JSON.stringify(storeUser));
           dispatch(initUser({ user: storeUser }));
@@ -70,9 +71,9 @@ export default function LoginScreen({ navigation }) {
     }
   }
 
-  function loginGoogle() {}
+  function loginGoogle() { }
 
-  function loginFacebook() {}
+  function loginFacebook() { }
 
   function goToRegister() {
     navigation.replace("Regist");

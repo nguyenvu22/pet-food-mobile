@@ -37,7 +37,6 @@ const Card = ({ id, image, specificWeight, brand, price, title }) => {
           <View style={styles.imgContainer}>
             <Image style={styles.img} source={image} />
           </View>
-
           <View style={styles.title}>
             <Text style={styles.name} numberOfLines={1}>
               {title}
