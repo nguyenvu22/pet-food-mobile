@@ -81,6 +81,7 @@ export default ListCard;
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
+    // backgroundColor: 'red'
   },
   title: {
     flexDirection: "row",
@@ -99,6 +100,7 @@ const styles = StyleSheet.create({
     color: "green",
   },
   list: {
-    paddingLeft: 10,
+    paddingLeft: 1,
+    marginHorizontal: 5,
   },
 });

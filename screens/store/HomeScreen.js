@@ -34,7 +34,7 @@ export default function HomeScreen() {
             <ListCardCategory />
           </View>
 
-          <View style={[styles.listCard, { marginHorizontal: 0 }]}>
+          <View style={styles.listCardMeal}>
             <ListCard title="Popular Food" />
           </View>
 
@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
   listCard: {
     marginTop: 5,
     marginHorizontal: 15,
+  },
+  listCardMeal: {
+    marginTop: 5,
   },
   sale: {
     marginTop: 5,

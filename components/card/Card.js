@@ -37,6 +37,7 @@ const Card = ({ id, image, specificWeight, brand, price, title }) => {
           <View style={styles.imgContainer}>
             <Image style={styles.img} source={image} />
           </View>
+
           <View style={styles.title}>
             <Text style={styles.name} numberOfLines={1}>
               {title}
@@ -71,25 +72,25 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     // marginHorizontal: 10,
     borderRadius: 10,
-    borderRadius: 10,
   },
   buttonPressed: {
     opacity: 0.75,
+    borderRadius: 10,
   },
   imgContainer: {
-    // height: 110,
-    // width: 155,
+    height: 110,
+    width: 155,
     alignItems: "center",
-    // justifyContent: "center",
+    justifyContent: "center",
     backgroundColor: Colors.light,
     marginHorizontal: 6,
-    marginVertical: 8,
+    marginVertical: 6,
     borderRadius: 8,
   },
   img: {
     resizeMode: "cover",
-    height: 110,
-    width: 170,
+    height: '100%',
+    width: '100%',
     borderRadius: 8,
   },
   title: {
