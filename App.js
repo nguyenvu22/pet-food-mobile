@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -20,18 +20,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign } from "@expo/vector-icons";
 import SettingScreen from "./screens/store/SettingScreen";
 import { Colors } from "./constants/styles";
-// import imageHome from "./assets/homeTab.png";
-// import cartTab from "./assets/cartTab.png";
-// import settingTab from "./assets/settingTab.png";
-// import userTab from "./assets/userTab.png";
 import AddButtonTab from "./components/button/AddButtonTab";
-import DetailScreen from "./screens/store/DetailScreen";
+import MealScreen from "./screens/store/MealScreen";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 const HAS_LAUNCH = "HAS_LAUNCH";
 
 function BottomTabsScreen() {
+  function EmptyScreen() {
+    return <></>;
+  }
   return (
     <Tabs.Navigator
       screenOptions={{
@@ -93,11 +92,16 @@ function BottomTabsScreen() {
       />
 
       <Tabs.Screen
-        name="AddMeal"
-        component={ProfileScreen}
+        name="AddMealyyy"
+        component={EmptyScreen}
         options={{
           tabBarLabel: "Add Meal",
-          tabBarIcon: ({ focused }) => <AddButtonTab />,
+          // tabBarIcon: ({ focused }) => <AddButtonTab />,
+          tabBarButton: () => (
+            <TouchableOpacity disabled>
+              <AddButtonTab />
+            </TouchableOpacity>
+          ),
         }}
       />
 
@@ -108,8 +112,6 @@ function BottomTabsScreen() {
           tabBarLabel: "Profile",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              {/* <Image source={userTab} resizeMode='contain'
-              style={[styles.tabBarIcon, getIconSize(focused)]} /> */}
               <AntDesign name="user" size={size} color={color} />
             </View>
           ),
@@ -122,8 +124,6 @@ function BottomTabsScreen() {
           tabBarLabel: "Setting",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              {/* <Image source={settingTab} resizeMode='contain'
-              style={[styles.tabBarIcon, getIconSize(focused)]} /> */}
               <AntDesign name="setting" size={size} color={color} />
             </View>
           ),
@@ -152,7 +152,11 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen name="Login" component={LoginScreen} options={{}} />
       <Stack.Screen name="Regist" component={RegistScreen} options={{}} />
       <Stack.Screen name="Search" component={SearchScreen} options={{}} />
-      <Stack.Screen name='Detail' component={DetailScreen} options={{}} />
+      <Stack.Screen
+        name="AddMeal"
+        component={MealScreen}
+        options={{ presentation: "modal",  }}
+      />
     </Stack.Navigator>
   );
 }

@@ -54,7 +54,6 @@ export default function LoginScreen({ navigation }) {
       } else if (response.status === "Success") {
         const user = await getUserProfile(response.data.accessToken);
         if (user.status === "Success") {
-          console.log(user.data);
           const storeUser = {
             fullName: user.data.fullName,
             email: user.data.email,
@@ -63,6 +62,8 @@ export default function LoginScreen({ navigation }) {
             avatar: user.data.avatar,
             accessToken: response.data.accessToken,
           };
+          console.log(storeUser);
+          console.log(JSON.stringify(storeUser));
           await AsyncStorage.setItem("user", JSON.stringify(storeUser));
           dispatch(initUser({ user: storeUser }));
           navigation.replace("Store");

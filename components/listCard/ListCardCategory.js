@@ -63,7 +63,9 @@ const ListCardCategory = () => {
   ];
 
   const renderCategoryList = (itemData) => {
-    const handlerCategory = () => {};
+    const handlerCategory = () => {
+      
+    };
     return (
       <CardCategory
         color={itemData.item.color}
@@ -81,8 +83,8 @@ const ListCardCategory = () => {
         keyExtractor={(item) => item.id}
         renderItem={renderCategoryList}
         numColumns={4}
-        contentContainerStyle={styles.flatListContent}
         scrollEnabled={false}
+        contentContainerStyle={styles.flatListContent}
         columnWrapperStyle={styles.columnWrapper}
       />
     </View>

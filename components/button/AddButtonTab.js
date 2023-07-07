@@ -10,13 +10,17 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import addTab from "../../assets/addTab.png";
 import { Colors } from "../../constants/styles";
+import { useNavigation } from "@react-navigation/native";
+
 const AddButtonTab = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View style={styles.box}>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => console.log("ok")}
+          onPress={() => navigation.navigate("AddMeal")}
         >
           <View style={[styles.addButtonInner]}>
             <Image source={addTab} style={styles.imgAdd} />
