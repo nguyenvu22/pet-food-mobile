@@ -15,6 +15,7 @@ import SearchScreen from "./screens/others/SearchScreen";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./redux/redux";
 import { initUser } from "./redux/user/user";
+import { updateCart } from "./redux/cart/cart";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign } from "@expo/vector-icons";
@@ -155,7 +156,7 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen
         name="AddMeal"
         component={MealScreen}
-        options={{ presentation: "modal",  }}
+        options={{ presentation: "modal" }}
       />
     </Stack.Navigator>
   );
@@ -173,6 +174,14 @@ function Main({ hasLaunched, setHasLaunched }) {
       }
     }
     getUser().catch((err) => console.log(err));
+
+    async function getCart() {
+      const cartFromStorage = await AsyncStorage.getItem("cart");
+      if (cartFromStorage !== null) {
+        dispatch(updateCart({ cart: JSON.parse(cartFromStorage) }));
+      }
+    }
+    getCart().catch((err) => console.log(err));
 
     async function getIsFirstLaunch() {
       const isLaunched = await AsyncStorage.getItem(HAS_LAUNCH);
