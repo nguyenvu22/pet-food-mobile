@@ -1,5 +1,6 @@
 import {
   Animated,
+  FlatList,
   Image,
   Pressable,
   StyleSheet,
@@ -17,7 +18,7 @@ export default function CartProduct({
   stateData,
   selectedProducts,
   setSelectedProducts,
-  setchosenProduct
+  setchosenProduct,
 }) {
   const [scaleValue, setScaleValue] = useState(new Animated.Value(1));
 
@@ -66,6 +67,33 @@ export default function CartProduct({
     stateData(newValue);
   }
 
+  // function renderProductImage({ item }) {
+  //   console.log(item);
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //         marginRight: 10,
+  //         padding: 5,
+  //         borderColor: Colors.transparentDark,
+  //         borderWidth: 2,
+  //         borderRadius: 5,
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         flexDirection: "row",
+  //       }}
+  //     >
+  //       <Image
+  //         source={{ uri: `${item.product.image}` }}
+  //         style={{ width: 40, height: 40 }}
+  //       />
+  //       <Text style={{ marginLeft: 5, color: "rgba(0,0,0,0.4)" }}>
+  //         x{item.amount}
+  //       </Text>
+  //     </View>
+  //   );
+  // }
+
   return (
     <TouchableWithoutFeedback onPress={animationButton}>
       <Animated.View
@@ -91,7 +119,7 @@ export default function CartProduct({
           <View style={styles.right}>
             <View style={styles.header}>
               <Text numberOfLines={1} style={styles.name}>
-                {dataItem.productName}
+                {dataItem.title}
               </Text>
               <View
                 style={[
@@ -113,14 +141,22 @@ export default function CartProduct({
               </View>
             </View>
 
-            <View>
-              <Text style={styles.desc} numberOfLines={2}>
-                {dataItem.description}
-              </Text>
+            <View style={styles.body}>
+              {/* <FlatList
+                data={dataItem.productMeals}
+                renderItem={renderProductImage}
+                horizontal
+              /> */}
+              <Text numberOfLines={2}>{dataItem.description}</Text>
             </View>
 
             <View style={styles.footer}>
-              <Text style={styles.price}>${dataItem.price}</Text>
+              <Text style={styles.price}>
+                $
+                {dataItem.productMeals.reduce((value, item) => {
+                  return (value += item.amount * item.product.price);
+                }, 0)}
+              </Text>
               <View style={styles.plus}>
                 <Pressable onPress={changeQuantity.bind(this, "decrease")}>
                   <Text style={styles.button}>-</Text>
@@ -170,8 +206,8 @@ const styles = StyleSheet.create({
   },
   name: {
     flex: 1,
-    fontSize: 17,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: "400",
   },
   check: {
     marginLeft: 10,
@@ -180,10 +216,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: Colors.pink800,
   },
-  desc: {
-    fontSize: 13,
-    fontWeight: "400",
-    marginRight: 5,
+  body: {
+    flex: 1,
+    justifyContent: "center",
+    marginVertical: 5,
   },
   footer: {
     flexDirection: "row",

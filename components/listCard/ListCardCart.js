@@ -1,15 +1,13 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import CartProduct from "../../components/card/CartProduct";
-import CartMeal from "../../components/card/CartMeal";
+import CartProduct from "../card/CardCartItem";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
 import { useState } from "react";
 
 export default function ListCardCart({
   data,
-  label,
-  type,
   stateData,
+  type,
   selectedProducts,
   setSelectedProducts,
 }) {
@@ -30,26 +28,22 @@ export default function ListCardCart({
   }
 
   function renderItemCard({ item }) {
-    if (type === "Product") {
-      return (
-        <CartProduct
-          data={data}
-          dataItem={item}
-          stateData={stateData}
-          selectedProducts={selectedProducts}
-          setSelectedProducts={setSelectedProducts}
-          setchosenProduct={setchosenProduct}
-        />
-      );
-    } else if (type === "Meal") {
-      return <CartMeal data={data} dataItem={item} stateData={stateData} />;
-    }
+    return (
+      <CartProduct
+        data={data}
+        dataItem={item}
+        stateData={stateData}
+        selectedProducts={selectedProducts}
+        setSelectedProducts={setSelectedProducts}
+        setchosenProduct={setchosenProduct}
+      />
+    );
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>{label}</Text>
+        <Text style={styles.label}>Selected ({chosenProduct.length})</Text>
         <Pressable
           style={[
             styles.check,
@@ -83,10 +77,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 18,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
   },
   label: {
-    fontSize: 20,
-    fontWeight: "600",
+    fontSize: 14,
+    marginRight: 10,
   },
   check: {
     marginRight: 13,

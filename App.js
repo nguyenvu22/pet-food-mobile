@@ -12,6 +12,9 @@ import CartScreen from "./screens/store/CartScreen";
 import SplashScreen from "./screens/splash/SplashScreen";
 import OnboardScreen from "./screens/onboard/OnboardScreen";
 import SearchScreen from "./screens/others/SearchScreen";
+import SettingScreen from "./screens/store/SettingScreen";
+import MealScreen from "./screens/store/MealScreen";
+import AddButtonTab from "./components/button/AddButtonTab";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./redux/redux";
 import { initUser } from "./redux/user/user";
@@ -19,10 +22,9 @@ import { updateCart } from "./redux/cart/cart";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign } from "@expo/vector-icons";
-import SettingScreen from "./screens/store/SettingScreen";
 import { Colors } from "./constants/styles";
-import AddButtonTab from "./components/button/AddButtonTab";
-import MealScreen from "./screens/store/MealScreen";
+import { useFonts } from "expo-font";
+import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -165,6 +167,9 @@ function StackScreen({ hasLaunched }) {
 function Main({ hasLaunched, setHasLaunched }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [fontLoaded] = useFonts({
+    SeaweedScript: require("./assets/fonts/SeaweedScript-Regular.ttf"),
+  });
 
   useEffect(() => {
     async function getUser() {
@@ -197,14 +202,40 @@ function Main({ hasLaunched, setHasLaunched }) {
     getIsFirstLaunch().catch((err) => console.log(err));
   }, []);
 
-  if (loading) {
+  if (loading || !fontLoaded) {
     return null; // Render a loading state or a placeholder component here
   }
 
+  const theme = {
+    ...DefaultTheme,
+    fonts: {
+      regular: {
+        fontFamily: "SeaweedScript",
+        // fontFamily: "another font",
+        fontWeight: "normal",
+      },
+      // bold: {
+      //   fontFamily: 'SeaweedScript-Bold',
+      //   fontWeight: 'bold',
+      // },
+      // italic: {
+      //   fontFamily: 'SeaweedScript-Italic',
+      //   fontWeight: 'normal',
+      //   fontStyle: 'italic',
+      // },
+      // anotherFamilyRegular: {
+      //   fontFamily: 'AnotherFamily-Regular',
+      //   fontWeight: 'normal',
+      // },
+    },
+  };
+
   return (
-    <NavigationContainer>
-      <StackScreen hasLaunched={hasLaunched} />
-    </NavigationContainer>
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <StackScreen hasLaunched={hasLaunched} />
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
 
