@@ -61,7 +61,6 @@ const DetailScreen = ({ route }) => {
         try {
 
             const response = await getAllProduct(accessToken);
-            console.log('response', response.data)
             if (response?.status === 'Success') {
                 setProducts(response.data);
                 setIsLoading(false);

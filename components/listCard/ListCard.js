@@ -9,7 +9,6 @@ import LoadingScreen from "../loading/LoadingScreen";
 
 
 const ListCard = ({ title }) => {
-
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   )
@@ -20,7 +19,6 @@ const ListCard = ({ title }) => {
   const getAllListProduct = async (accessToken) => {
     try {
       const response = await getAllProduct(accessToken);
-      console.log('response', response.data.remainQuantity)
       if (response?.status === 'Success') {
         setProducts(response.data);
         setIsLoading(false);
@@ -33,7 +31,7 @@ const ListCard = ({ title }) => {
 
 
   useEffect(() => {
-    // setIsLoading(true);
+    setIsLoading(true);
     getAllListProduct(accessToken);
   }, [accessToken])
 

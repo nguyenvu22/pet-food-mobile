@@ -12,6 +12,8 @@ const CardSearch = ({ image, productName, expiredDate, price, id, type }) => {
             itemType: type
         })
     }
+
+
     return (
         <Pressable
             onPress={SelectItem}
@@ -21,7 +23,7 @@ const CardSearch = ({ image, productName, expiredDate, price, id, type }) => {
             ]}
             android_ripple={{ color: "#cccccc" }}>
             <View style={styles.itemContainer}>
-                {/* <View style={styles.innerContainer}> */}
+
                 <View style={styles.imageContainer}>
                     <Image style={styles.image} source={{ uri: image }} />
                 </View>
@@ -33,7 +35,7 @@ const CardSearch = ({ image, productName, expiredDate, price, id, type }) => {
                         <Text style={{ fontSize: 10, fontWeight: '400' }}>VND</Text>
                     </View>
                 </View>
-                {/* </View> */}
+
             </View>
         </Pressable>
     )
@@ -70,10 +72,16 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         borderWidth: 1,
         marginLeft: 20,
-        borderColor: Colors.grey
+        borderColor: Colors.grey,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: Colors.light,
     },
     image: {
+        resizeMode: 'contain',
+        height: '100%',
         width: '100%',
+        borderRadius: 50,
     },
     textContainer: {
         marginLeft: 10,

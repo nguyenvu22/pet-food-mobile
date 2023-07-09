@@ -12,13 +12,14 @@ import { Colors } from "../../constants/styles";
 import { useNavigation } from '@react-navigation/native';
 
 const width = Dimensions.get("screen").width;
-const Card = ({ id, image, remainQuantity, expiredDate, price, productName }) => {
+const Card = ({ id, image, remainQuantity, expiredDate, price, productName, type }) => {
 
   const navigation = useNavigation();
 
-  const SelectMeal = () => {
+  const SelectProduct = () => {
     navigation.navigate('Detail', {
-      mealId: id
+      itemId: id,
+      itemType: type
     })
   }
 
@@ -27,7 +28,7 @@ const Card = ({ id, image, remainQuantity, expiredDate, price, productName }) =>
       <Pressable
         android_ripple={{ color: "#ccccc" }}
         style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
-        onPress={SelectMeal}
+        onPress={SelectProduct}
       >
         <View
           style={{
