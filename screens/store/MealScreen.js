@@ -181,7 +181,14 @@ export default function MealScreen({}) {
 
   return (
     <View style={styles.rootContainer}>
-      <MealModal isVisible={openModal} />
+      <MealModal
+        isVisible={openModal}
+        setIsVisible={setOpenModal}
+        title={title}
+        description={description}
+        birdId={birdId}
+        products={selectedProducts}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Prepare your own meal</Text>
 
