@@ -1,6 +1,14 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, ScrollView, } from "react-native";
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ScrollView,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import { Colors } from '../../constants/styles'
+import { Colors } from "../../constants/styles";
 import { useSelector } from "react-redux";
 import { getAllProduct } from "../../services/product";
 import { getAllMeal } from "../../services/meal";
@@ -10,80 +18,70 @@ import CardSearch from "../../components/card/CardSearch";
 import LoadingScreen from "../../components/loading/LoadingScreen";
 
 export default function SearchScreen() {
-
   const [isLoading, setIsLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState("");
   const [dataProducts, setDataProducts] = useState([]);
   const [dataMeals, setDataMeals] = useState([]);
   const [fullData, setFullData] = useState([]);
 
-  const handSearch = (query) => {
+  const accessToken = useSelector(
+    (state) => state.userReducers.user.accessToken
+  );
+
+  const handleSearch = (query) => {
     setSearchQuery(query);
     const formattedQuery = query.toLowerCase();
 
     const filteredData = filter(fullData, (item) => {
-      return contains(item.productName, formattedQuery) || contains(item.mealName, formattedQuery);
+      return (
+        contains(item.productName, formattedQuery) ||
+        contains(item.mealName, formattedQuery)
+      );
     });
     setDataProducts(filteredData.filter((item) => item.productName));
     setDataMeals(filteredData.filter((item) => item.mealName));
   };
 
-
   const contains = (item, query) => {
     return item && item.toLowerCase().includes(query);
   };
 
-  const accessToken = useSelector(
-    (state) => state.userReducers.user.accessToken
-  )
-
-  const getAllProducts = async (accessToken) => {
-    try {
-      const response = await getAllProduct(accessToken);
-      if (response?.status === 'Success') {
-        setDataProducts(response.data);
-        setFullData((prevData) => [...prevData, ...response.data]);
-        setIsLoading(false);
-      } else {
-        console.log('error in screen : ');
-        // setIsLoading(false);
-      }
-    } catch (error) {
-      // setIsLoading(false);
-      console.log("error in screen : ", error);
-    }
-  }
-
-  const getAllMeals = async (accessToken) => {
-    try {
-      const response = await getAllMeal(accessToken);
-      if (response?.status === 'Success') {
-        setDataMeals(response.data)
-        setFullData((prevData) => [...prevData, ...response.data]);
-        setIsLoading(false);
-      } else {
-        console.log('error in screen : ');
-      }
-    } catch (error) {
-      // setIsLoading(false);
-      console.log("error in screen : ", error);
-    }
-  }
-
   useEffect(() => {
     setIsLoading(true);
-    const fetchData = async () => {
-      await getAllMeals(accessToken)
-      await getAllProducts(accessToken);
-    }
+    const getAllProducts = async (accessToken) => {
+      try {
+        const response = await getAllProduct(accessToken);
+        if (response?.status === "Success") {
+          setDataProducts(response.data);
+          setFullData((prevData) => [...prevData, ...response.data]);
+        } else {
+          console.log("error in screen : ");
+        }
+      } catch (error) {
+        console.log("error in screen : ", error);
+      }
+    };
+    getAllProducts(accessToken);
 
-    fetchData()
-  }, [accessToken])
+    const getAllMeals = async (accessToken) => {
+      try {
+        const response = await getAllMeal(accessToken);
+        if (response?.status === "Success") {
+          setDataMeals(response.data);
+          setFullData((prevData) => [...prevData, ...response.data]);
+          setIsLoading(false);
+        } else {
+          console.log("error in screen : ");
+        }
+      } catch (error) {
+        console.log("error in screen : ", error);
+      }
+    };
+    getAllMeals(accessToken);
+  }, [accessToken]);
 
   if (isLoading) {
-    return (
-      <LoadingScreen />
-    )
+    return <LoadingScreen />;
   }
 
   const RenderItemProduct = (itemData) => {
@@ -95,12 +93,11 @@ export default function SearchScreen() {
           expiredDate={itemData.item.expiredDate}
           id={itemData.item.id}
           price={itemData.item.price}
-          type='product'
+          type="product"
         />
       </View>
-
-    )
-  }
+    );
+  };
 
   const RenderItemMeal = (itemData) => {
     return (
@@ -111,22 +108,21 @@ export default function SearchScreen() {
           expiredDate={itemData.item.expiredDate}
           id={itemData.item.id}
           price={itemData.item.price}
-          type='meal'
+          type="meal"
         />
       </View>
-
-    )
-  }
+    );
+  };
 
   return (
-    <SafeAreaView style={{
-      flex: 1,
-      paddingVertical: 20,
-      backgroundColor: Colors.pink100,
-
-    }}>
-      <ScrollView
-      >
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingVertical: 20,
+        backgroundColor: Colors.pink100,
+      }}
+    >
+      <ScrollView>
         <View style={styles.container}>
           <View style={styles.searchContainer}>
             <View style={styles.searchInnerContainer}>
@@ -143,22 +139,21 @@ export default function SearchScreen() {
                 autoCapitalize="none"
                 autoCorrect={false}
                 value={searchQuery}
-                onChangeText={(query) => handSearch(query)}
+                onChangeText={(query) => handleSearch(query)}
               />
             </View>
           </View>
           <View style={styles.productContainer}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', paddingBottom: 10, marginLeft: 10, }}>Products</Text>
-            <FlatList
-              scrollEnabled={false}
-              data={dataProducts}
-              renderItem={RenderItemProduct}
-              key={(item) => item.productName}
-            />
-          </View>
-
-          <View style={styles.productContainer}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', paddingBottom: 10, marginLeft: 10, }}>Meals</Text>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                paddingBottom: 10,
+                marginLeft: 10,
+              }}
+            >
+              Meals
+            </Text>
             <FlatList
               scrollEnabled={false}
               data={dataMeals}
@@ -166,11 +161,27 @@ export default function SearchScreen() {
               key={(item) => item.mealName}
             />
           </View>
+          <View style={styles.productContainer}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "bold",
+                paddingBottom: 10,
+                marginLeft: 10,
+              }}
+            >
+              Products
+            </Text>
+            <FlatList
+              scrollEnabled={false}
+              data={dataProducts}
+              renderItem={RenderItemProduct}
+              key={(item) => item.productName}
+            />
+          </View>
         </View>
       </ScrollView>
-
     </SafeAreaView>
-
   );
 }
 
@@ -195,21 +206,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
-
   },
   searchInnerContainer: {
     flex: 1,
     flexDirection: "row",
     backgroundColor: Colors.light,
     alignItems: "center",
-    width: '100%'
+    width: "100%",
   },
   searchBox: {
-    width: '90%',
+    width: "90%",
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
   iconSearch: {
     marginLeft: 20,
   },
-})
+});

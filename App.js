@@ -14,6 +14,7 @@ import OnboardScreen from "./screens/onboard/OnboardScreen";
 import SearchScreen from "./screens/others/SearchScreen";
 import SettingScreen from "./screens/store/SettingScreen";
 import MealScreen from "./screens/store/MealScreen";
+import DetailScreen from "./screens/others/DetailScreen";
 import AddButtonTab from "./components/button/AddButtonTab";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./redux/redux";
