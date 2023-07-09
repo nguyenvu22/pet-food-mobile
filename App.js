@@ -52,8 +52,6 @@ function BottomTabsScreen() {
           tabBarLabel: "Home",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              {/* <Image source={imageHome} resizeMode='contain'
-                style={[{ height: 40,width: 40 }, getIconSize(focused)]} /> */}
               <AntDesign name="home" size={size} color={color} />
             </View>
           ),
@@ -67,8 +65,6 @@ function BottomTabsScreen() {
           tabBarLabel: "Cart",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              {/* <Image source={cartTab} resizeMode='contain'
-              style={[styles.tabBarIcon, getIconSize(focused)]} /> */}
               <AntDesign name="shoppingcart" size={size} color={color} />
               <View
                 style={{
@@ -99,7 +95,6 @@ function BottomTabsScreen() {
         component={EmptyScreen}
         options={{
           tabBarLabel: "Add Meal",
-          // tabBarIcon: ({ focused }) => <AddButtonTab />,
           tabBarButton: () => (
             <TouchableOpacity disabled>
               <AddButtonTab />
@@ -160,6 +155,7 @@ function StackScreen({ hasLaunched }) {
         component={MealScreen}
         options={{ presentation: "modal" }}
       />
+      <Stack.Screen name="Detail" component={DetailScreen} options={{}} />
     </Stack.Navigator>
   );
 }

@@ -28,7 +28,7 @@ const BannerCarousel = () => {
         <Image
           source={item.image}
           style={styles.bannerImage}
-          resizeMode="cover"
+          resizeMode="contain"
         />
         <View style={styles.carouselTextContainer}>
           <Text style={styles.carouselTextTitle}>Pet Sitter</Text>
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   bannerImage: {
     position: "absolute",
     borderRadius: 20,
+    width: '100%'
   },
   carouselTextContainer: {
     backgroundColor: Colors.transparentDark,

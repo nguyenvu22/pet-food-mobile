@@ -63,7 +63,9 @@ const ListCardCategory = () => {
   ];
 
   const renderCategoryList = (itemData) => {
-    const handlerCategory = () => {};
+    const handlerCategory = () => {
+      
+    };
     return (
       <CardCategory
         color={itemData.item.color}
