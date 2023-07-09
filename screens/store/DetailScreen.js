@@ -1,56 +1,123 @@
-import { Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, Image, ImageBackground, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/styles';
 import { Ionicons, Octicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { getAllProduct, getProductByIdFunction } from '../../services/product';
+import { getAllMeal, getMealByIdFunction } from '../../services/meal';
+import { useSelector } from 'react-redux';
+import LoadingScreen from '../../components/loading/LoadingScreen';
 
 const DetailScreen = ({ route }) => {
+
+    const [isLoading, setIsLoading] = useState(false);
+    const type = route.params.itemType;
     const navigation = useNavigation()
+    const [products, setProducts] = useState()
+    const [meals, setMeals] = useState()
 
-    const popularData = [
-        {
-            id: 1,
-            image: require('../../assets/meme1.jpg'),
-            title: 'mèo ngu',
-            specificWeight: "1kg",
-            brand: 'Trung Quốc ',
-            price: '23.3'
-        },
-        {
-            id: 2,
-            image: require('../../assets/meme2.jpg'),
-            title: 'mèo thông minh',
-            specificWeight: "2kg",
-            brand: 'Việt Nam ',
-            price: '103.3'
-        },
-        {
-            id: 3,
-            image: require('../../assets/meme3.jpg'),
-            title: 'mèo đần',
-            specificWeight: "3kg",
-            brand: 'Việt Nam ',
-            price: '103.3'
-        },
-        {
-            id: 4,
-            image: require('../../assets/meme4.jpg'),
-            title: 'mèo đần',
-            specificWeight: "4kg",
-            brand: 'lào ',
-            price: '13.3'
-        },
-    ]
 
-    const idMeal = route.params.mealId;
-    const selectMeal = popularData.find((item) => item.id === idMeal)
+    const id = route.params.itemId;
+
+    let selectItem;
+    if (type === 'product') {
+        selectItem = products?.find((item) => item.id === id)
+    } else {
+        selectItem = meals?.find((item) => item.id === id)
+    }
+
+    const accessToken = useSelector(
+        (state) => state.userReducers.user.accessToken
+    )
+
+    const getProductById = async (idProduct, accessToken) => {
+        try {
+            const response = await getProductByIdFunction(idProduct, accessToken);
+            if (response?.status === 'Success') {
+                setProducts(response.data)
+            } else {
+                console.log('error in screen : ');
+            }
+        } catch (error) {
+            console.log('error in screen : ', error);
+        }
+    }
+
+    const getMealById = async (idMeal, accessToken) => {
+        try {
+            const response = await getMealByIdFunction(idMeal, accessToken);
+            if (response?.status === 'Success') {
+                setMeals(response.data)
+            } else {
+                console.log('error in screen : ');
+            }
+        } catch (error) {
+            console.log('error in screen : ', error);
+        }
+    }
+
+    const getAllProducts = async (accessToken) => {
+        try {
+
+            const response = await getAllProduct(accessToken);
+            console.log('response', response.data)
+            if (response?.status === 'Success') {
+                setProducts(response.data);
+                setIsLoading(false);
+            } else {
+                console.log('error in screen : ');
+            }
+        } catch (error) {
+            console.log("error in screen : ", error);
+        }
+    }
+    const getAllMeals = async (accessToken) => {
+        try {
+
+            const response = await getAllMeal(accessToken);
+            if (response?.status === 'Success') {
+                setMeals(response.data);
+                setIsLoading(false);
+            } else {
+                console.log('error in screen : ');
+            }
+        } catch (error) {
+            console.log("error in screen : ", error);
+        }
+    }
+
+    const handlerAddToCart = () => {
+        console.log('click');
+    }
+
+    const handlerLike = () => {
+        console.log('click like');
+    }
+
+    useEffect(() => {
+        setIsLoading(true);
+        if (type === "product") {
+            // getProductById(id, accessToken);
+            getAllProducts(accessToken);
+        } else {
+            // getMealById(id, accessToken);
+            getAllMeals(accessToken)
+        }
+
+    }, [accessToken])
+
+    if (isLoading) {
+        return (
+            <LoadingScreen />
+        )
+    }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.pink100, paddingBottom: 10 }}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.ImgBgContainer}>
-                    <ImageBackground source={selectMeal.image} style={styles.image} >
+                    <ImageBackground source={{ uri: selectItem?.image }} style={styles.image} >
                         <View style={styles.header}>
                             <View style={styles.headerBtn}>
                                 <Ionicons name="chevron-back" size={22} color="black"
@@ -62,38 +129,48 @@ const DetailScreen = ({ route }) => {
                         </View>
                     </ImageBackground>
                     <View style={styles.desTag}>
-                        <Text style={styles.desTitle} ellipsizeMode='tail' numberOfLines={1}>{selectMeal.title}</Text>
+                        <Text style={styles.desTitle} ellipsizeMode='tail' numberOfLines={1}>{selectItem?.productName}</Text>
                     </View>
                 </View>
                 <View style={styles.desContainer}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={styles.desText}>
-                            {selectMeal.brand}
+                            {selectItem?.expiredDate}
                         </Text>
                         <View style={styles.priceContainer}>
                             <Text style={styles.priceText}>
-                                {selectMeal.price}
+                                {selectItem?.price}
                             </Text>
                             <Text style={styles.currencyUnit}>
                                 VND
                             </Text>
                         </View>
                     </View>
-                    <Text style={styles.desText2}>{selectMeal.specificWeight}</Text>
+                    <Text style={styles.desText2}>
+                        <Text style={{ fontSize: 15, fontWeight: '500', color: Colors.dark }}>quantity : </Text>
+                        {selectItem?.remainQuantity}
+                    </Text>
                     <View style={styles.desDetailContainer}>
                         <Text style={styles.desDetailText}>
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Fuga voluptate architecto dolorum similique doloremque ratione saepe amet velit ipsum, incidunt corrupti enim quas quos voluptatem animi tempore, fugiat esse quidem!
+                            {selectItem?.description}
                         </Text>
                     </View>
                     <View style={styles.footer}>
                         <View style={styles.likeContainer}>
-                            <Octicons name="feed-heart" size={27} color="black" />
+                            <Pressable
+                                style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]}
+                                android_ripple={{ color: '#cccccc' }}
+                                onPress={handlerLike}>
+                                <View style={styles.likeInnerContainer}>
+                                    <Octicons name="feed-heart" size={27} color="black" />
+                                </View>
+                            </Pressable>
                         </View>
                         <View style={styles.addCartContainer}>
                             <Pressable
                                 style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]}
                                 android_ripple={{ color: '#cccccc' }}
-                            // onPress={onPress}
+                                onPress={handlerAddToCart}
                             >
                                 <View style={styles.addCartInnerContainer}>
                                     <Text style={styles.addCartText}>
@@ -235,11 +312,22 @@ const styles = StyleSheet.create({
 
     },
     likeContainer: {
+        height: 50,
+        width: 50,
         backgroundColor: Colors.white,
-        padding: 10,
+        // padding: 10,
         borderRadius: 99999,
         elevation: 8,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    likeInnerContainer: {
+        height: 50,
+        width: 50,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     addCartContainer: {
         height: 50,

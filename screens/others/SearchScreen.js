@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, Image, ScrollView, Pressable } from "react-native";
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View, ScrollView, } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from '../../constants/styles'
 import { useSelector } from "react-redux";
@@ -6,8 +6,11 @@ import { getAllProduct } from "../../services/product";
 import { getAllMeal } from "../../services/meal";
 import filter from "lodash.filter";
 import { Ionicons } from "@expo/vector-icons";
+import CardSearch from "../../components/card/CardSearch";
+import LoadingScreen from "../../components/loading/LoadingScreen";
 
 export default function SearchScreen() {
+
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('')
   const [dataProducts, setDataProducts] = useState([]);
@@ -19,15 +22,12 @@ export default function SearchScreen() {
     const formattedQuery = query.toLowerCase();
 
     const filteredData = filter(fullData, (item) => {
-      return contains(item.productName, formattedQuery)
+      return contains(item.productName, formattedQuery) || contains(item.mealName, formattedQuery);
     });
-    setDataProducts(filteredData);
-
-    const filteredMeals = fullData.filter((item) => {
-      return contains(item.mealName, formattedQuery);
-    });
-    setDataMeals(filteredMeals);
+    setDataProducts(filteredData.filter((item) => item.productName));
+    setDataMeals(filteredData.filter((item) => item.mealName));
   };
+
 
   const contains = (item, query) => {
     return item && item.toLowerCase().includes(query);
@@ -42,70 +42,77 @@ export default function SearchScreen() {
       const response = await getAllProduct(accessToken);
       if (response?.status === 'Success') {
         setDataProducts(response.data);
-        setFullData(response.data)
+        setFullData((prevData) => [...prevData, ...response.data]);
+        setIsLoading(false);
       } else {
         console.log('error in screen : ');
+        // setIsLoading(false);
       }
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
+      // setIsLoading(false);
       console.log("error in screen : ", error);
     }
   }
-
 
   const getAllMeals = async (accessToken) => {
     try {
       const response = await getAllMeal(accessToken);
       if (response?.status === 'Success') {
         setDataMeals(response.data)
+        setFullData((prevData) => [...prevData, ...response.data]);
+        setIsLoading(false);
       } else {
         console.log('error in screen : ');
       }
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
+      // setIsLoading(false);
       console.log("error in screen : ", error);
     }
   }
 
   useEffect(() => {
-    getAllMeals(accessToken)
     setIsLoading(true);
-    getAllProducts(accessToken);
+    const fetchData = async () => {
+      await getAllMeals(accessToken)
+      await getAllProducts(accessToken);
+    }
+
+    fetchData()
   }, [accessToken])
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size={"large"} color={Colors.brown700} />
-      </View>
+      <LoadingScreen />
     )
   }
+
   const RenderItemProduct = (itemData) => {
     return (
       <View>
-        <Pressable style={({ pressed }) => [
-          styles.button,
-          pressed ? styles.buttonPressed : null,
-        ]}
-          android_ripple={{ color: "#cccccc" }}>
-          <View style={styles.itemContainer}>
-            {/* <View style={styles.innerContainer}> */}
-            <View style={styles.imageContainer}>
-              <Image style={styles.image} source={{ uri: itemData.item.image }} />
-            </View>
-            <View style={styles.textContainer}>
-              <Text style={styles.textName}>{itemData.item.productName}</Text>
-              <Text style={styles.textPriedDate}>{itemData.item.expiredDate}</Text>
-              <View style={styles.priceContainer}>
-                <Text style={styles.textPrice}>{itemData.item.price}</Text>
-                <Text style={{ fontSize: 10, fontWeight: '400' }}>VND</Text>
-              </View>
-            </View>
-            {/* </View> */}
-          </View>
-        </Pressable>
+        <CardSearch
+          image={itemData.item.image}
+          productName={itemData.item.productName}
+          expiredDate={itemData.item.expiredDate}
+          id={itemData.item.id}
+          price={itemData.item.price}
+          type='product'
+        />
+      </View>
+
+    )
+  }
+
+  const RenderItemMeal = (itemData) => {
+    return (
+      <View>
+        <CardSearch
+          image={itemData.item.image}
+          productName={itemData.item.mealName}
+          expiredDate={itemData.item.expiredDate}
+          id={itemData.item.id}
+          price={itemData.item.price}
+          type='meal'
+        />
       </View>
 
     )
@@ -146,7 +153,7 @@ export default function SearchScreen() {
               scrollEnabled={false}
               data={dataProducts}
               renderItem={RenderItemProduct}
-              key={(item) => item.id.toString()}
+              key={(item) => item.productName}
             />
           </View>
 
@@ -155,8 +162,8 @@ export default function SearchScreen() {
             <FlatList
               scrollEnabled={false}
               data={dataMeals}
-              renderItem={RenderItemProduct}
-              key={(item) => item.id}
+              renderItem={RenderItemMeal}
+              key={(item) => item.mealName}
             />
           </View>
         </View>
@@ -205,55 +212,4 @@ const styles = StyleSheet.create({
   iconSearch: {
     marginLeft: 20,
   },
-  button: {
-    flex: 1,
-    marginHorizontal: 5,
-    marginTop: 10,
-    marginBottom: 5,
-    // backgroundColor: 'red'
-  },
-  buttonPressed: {
-    opacity: 0.5,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-
-    backgroundColor: Colors.white,
-    paddingVertical: 10,
-    borderRadius: 8,
-    borderWidth: 1
-  },
-  innerContainer: {
-
-  },
-  imageContainer: {
-    height: 50,
-    width: 50,
-    borderRadius: 50
-  },
-  image: {
-    width: '100%',
-  },
-  textContainer: {
-    marginLeft: 10,
-  },
-  textName: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  textPriedDate: {
-    fontSize: 10,
-    fontWeight: '400',
-  },
-  priceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start'
-  },
-  textPrice: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginRight: 2
-  }
-});
+})

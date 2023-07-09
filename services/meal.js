@@ -15,3 +15,15 @@ export async function getAllMeal(accessToken) {
   }
 }
 
+export async function getMealByIdFunction(id, accessToken) {
+  try {
+    const response = await axios.get(API_KEY + `/meal/${id}`, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error.response);
+  }
+}

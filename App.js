@@ -22,6 +22,8 @@ import SettingScreen from "./screens/store/SettingScreen";
 import { Colors } from "./constants/styles";
 import AddButtonTab from "./components/button/AddButtonTab";
 import MealScreen from "./screens/store/MealScreen";
+import DetailScreen from './screens/store/DetailScreen'
+
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -155,8 +157,9 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen
         name="AddMeal"
         component={MealScreen}
-        options={{ presentation: "modal",  }}
+        options={{ presentation: "modal", }}
       />
+      <Stack.Screen name="Detail" component={DetailScreen} options={{}} />
     </Stack.Navigator>
   );
 }

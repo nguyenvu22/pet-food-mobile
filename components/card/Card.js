@@ -12,9 +12,10 @@ import { Colors } from "../../constants/styles";
 import { useNavigation } from '@react-navigation/native';
 
 const width = Dimensions.get("screen").width;
-const Card = ({ id, image, specificWeight, brand, price, title }) => {
+const Card = ({ id, image, remainQuantity, expiredDate, price, productName }) => {
 
   const navigation = useNavigation();
+
   const SelectMeal = () => {
     navigation.navigate('Detail', {
       mealId: id
@@ -35,15 +36,15 @@ const Card = ({ id, image, specificWeight, brand, price, title }) => {
           }}
         >
           <View style={styles.imgContainer}>
-            <Image style={styles.img} source={image} />
+            <Image style={styles.img} source={{ uri: image }} />
           </View>
           <View style={styles.title}>
             <Text style={styles.name} numberOfLines={1}>
-              {title}
+              {productName}
             </Text>
             <View style={styles.desContainer}>
-              <Text style={styles.descriptionText}>{specificWeight} ,</Text>
-              <Text style={styles.descriptionText}>{brand}</Text>
+              <Text style={styles.descriptionText}>{expiredDate} ,</Text>
+              <Text style={styles.descriptionText}>{remainQuantity}</Text>
             </View>
           </View>
           <View style={styles.footer}>
