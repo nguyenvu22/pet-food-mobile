@@ -14,6 +14,7 @@ import OnboardScreen from "./screens/onboard/OnboardScreen";
 import SearchScreen from "./screens/others/SearchScreen";
 import SettingScreen from "./screens/store/SettingScreen";
 import MealScreen from "./screens/store/MealScreen";
+import DetailScreen from "./screens/others/DetailScreen";
 import AddButtonTab from "./components/button/AddButtonTab";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./redux/redux";
@@ -52,8 +53,6 @@ function BottomTabsScreen() {
           tabBarLabel: "Home",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              {/* <Image source={imageHome} resizeMode='contain'
-                style={[{ height: 40,width: 40 }, getIconSize(focused)]} /> */}
               <AntDesign name="home" size={size} color={color} />
             </View>
           ),
@@ -67,8 +66,6 @@ function BottomTabsScreen() {
           tabBarLabel: "Cart",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              {/* <Image source={cartTab} resizeMode='contain'
-              style={[styles.tabBarIcon, getIconSize(focused)]} /> */}
               <AntDesign name="shoppingcart" size={size} color={color} />
               <View
                 style={{
@@ -99,7 +96,6 @@ function BottomTabsScreen() {
         component={EmptyScreen}
         options={{
           tabBarLabel: "Add Meal",
-          // tabBarIcon: ({ focused }) => <AddButtonTab />,
           tabBarButton: () => (
             <TouchableOpacity disabled>
               <AddButtonTab />
@@ -160,6 +156,7 @@ function StackScreen({ hasLaunched }) {
         component={MealScreen}
         options={{ presentation: "modal" }}
       />
+      <Stack.Screen name="Detail" component={DetailScreen} options={{}} />
     </Stack.Navigator>
   );
 }

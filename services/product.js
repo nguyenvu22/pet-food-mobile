@@ -14,3 +14,17 @@ export async function getAllProduct(accessToken) {
     console.log(error.response);
   }
 }
+
+
+export async function getProductByIdFunction(id, accessToken) {
+  try {
+    const response = await axios.get(API_KEY + `/product/${id}`, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error.response);
+  }
+}

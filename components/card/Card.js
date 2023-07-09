@@ -9,14 +9,26 @@ import {
 import React from "react";
 import { Entypo } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
+import { useNavigation } from '@react-navigation/native';
 
 const width = Dimensions.get("screen").width;
-const Card = ({ id, image, specificWeight, brand, price, title }) => {
+const Card = ({ id, image, remainQuantity, expiredDate, price, productName, type }) => {
+
+  const navigation = useNavigation();
+
+  const SelectProduct = () => {
+    navigation.navigate('Detail', {
+      itemId: id,
+      itemType: type
+    })
+  }
+
   return (
     <View style={styles.container}>
       <Pressable
         android_ripple={{ color: "#ccccc" }}
         style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
+        onPress={SelectProduct}
       >
         <View
           style={{
@@ -25,15 +37,15 @@ const Card = ({ id, image, specificWeight, brand, price, title }) => {
           }}
         >
           <View style={styles.imgContainer}>
-            <Image style={styles.img} source={image} />
+            <Image style={styles.img} source={{ uri: image }} />
           </View>
           <View style={styles.title}>
             <Text style={styles.name} numberOfLines={1}>
-              {title}
+              {productName}
             </Text>
             <View style={styles.desContainer}>
-              <Text style={styles.descriptionText}>{specificWeight} ,</Text>
-              <Text style={styles.descriptionText}>{brand}</Text>
+              <Text style={styles.descriptionText}>{expiredDate} ,</Text>
+              <Text style={styles.descriptionText}>{remainQuantity}</Text>
             </View>
           </View>
           <View style={styles.footer}>
@@ -61,25 +73,25 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     // marginHorizontal: 10,
     borderRadius: 10,
-    borderRadius: 10,
   },
   buttonPressed: {
     opacity: 0.75,
+    borderRadius: 10,
   },
   imgContainer: {
-    // height: 110,
-    // width: 155,
+    height: 110,
+    width: 155,
     alignItems: "center",
-    // justifyContent: "center",
+    justifyContent: "center",
     backgroundColor: Colors.light,
     marginHorizontal: 6,
-    marginVertical: 8,
+    marginVertical: 6,
     borderRadius: 8,
   },
   img: {
     resizeMode: "cover",
-    height: 110,
-    width: 170,
+    height: '100%',
+    width: '100%',
     borderRadius: 8,
   },
   title: {

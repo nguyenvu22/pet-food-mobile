@@ -72,9 +72,9 @@ export default function LoginScreen({ navigation }) {
     }
   }
 
-  function loginGoogle() {}
+  function loginGoogle() { }
 
-  function loginFacebook() {}
+  function loginFacebook() { }
 
   function goToRegister() {
     navigation.replace("Regist");

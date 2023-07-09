@@ -4,7 +4,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: { user: {} },
   reducers: {
-    todo: (state, action) => {},
+    todo: (state, action) => { },
     initUser: (state, action) => {
       const user = action.payload.user;
       state.user = user;
