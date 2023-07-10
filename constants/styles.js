@@ -4,6 +4,7 @@ export const Colors = {
   purple400: "#654E92",
   purple800: "#474672",
   pink100: "#FBEDEC",
+  pink200: "#fadddc",
   pink800: "#C48590",
   red: "#D42323",
   green: "#8ED0C5",

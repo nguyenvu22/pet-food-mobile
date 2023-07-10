@@ -2,7 +2,7 @@ import { ActivityIndicator, Image, ImageBackground, Pressable, ScrollView, Style
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/styles';
-import { Ionicons, Octicons } from '@expo/vector-icons';
+import { Ionicons, Octicons, Feather, AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { getAllProduct, getProductByIdFunction } from '../../services/product';
 import { getAllMeal, getMealByIdFunction } from '../../services/meal';
@@ -113,7 +113,10 @@ const DetailScreen = ({ route }) => {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: Colors.pink100, paddingBottom: 10 }}>
+        <SafeAreaView style={{
+            paddingBottom: type === 'product' ? 1 : 40,
+            backgroundColor: Colors.pink100,
+        }}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.ImgBgContainer}>
                     <ImageBackground source={{ uri: selectItem?.image }} style={styles.image} >
@@ -122,9 +125,11 @@ const DetailScreen = ({ route }) => {
                                 <Ionicons name="chevron-back" size={22} color="black"
                                     onPress={navigation.goBack} />
                             </View>
-                            <View style={styles.headerBtn}>
-                                <Ionicons name="cart-outline" size={22} color="black" />
-                            </View>
+                            {type === 'meal' && (
+                                <View style={styles.headerBtn}>
+                                    <Ionicons name="cart-outline" size={22} color="black" />
+                                </View>
+                            )}
                         </View>
                     </ImageBackground>
                     <View style={styles.desTag}>
@@ -145,42 +150,114 @@ const DetailScreen = ({ route }) => {
                             </Text>
                         </View>
                     </View>
-                    <Text style={styles.desText2}>
-                        <Text style={{ fontSize: 15, fontWeight: '500', color: Colors.dark }}>quantity : </Text>
-                        {selectItem?.remainQuantity}
-                    </Text>
+                    <View style={styles.quantity}>
+                        <Feather name="box" size={20} color="black" />
+                        <Text style={styles.desText2}>
+                            {selectItem?.remainQuantity}
+                        </Text>
+                    </View>
+                    <View style={styles.box}>
+                        <View style={styles.innerBox}>
+                            <Text style={styles.titleBox}>
+                                Weight
+                            </Text>
+                            <Text style={styles.textBox}>
+                                200g
+                            </Text>
+                        </View>
+                        <View>
+                            <Text style={styles.titleBox}>
+                                Branch
+                            </Text>
+                            <Text style={styles.textBox}>
+                                Supereme
+                            </Text>
+                        </View>
+                        <View>
+                            <Text style={styles.titleBox}>
+                                Origin
+                            </Text>
+                            <Text style={styles.textBox}>
+                                US/UK
+                            </Text>
+                        </View>
+                    </View>
                     <View style={styles.desDetailContainer}>
                         <Text style={styles.desDetailText}>
                             {selectItem?.description}
                         </Text>
                     </View>
-                    <View style={styles.footer}>
-                        <View style={styles.likeContainer}>
-                            <Pressable
-                                style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]}
-                                android_ripple={{ color: '#cccccc' }}
-                                onPress={handlerLike}>
-                                <View style={styles.likeInnerContainer}>
-                                    <Octicons name="feed-heart" size={27} color="black" />
-                                </View>
-                            </Pressable>
-                        </View>
-                        <View style={styles.addCartContainer}>
-                            <Pressable
-                                style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]}
-                                android_ripple={{ color: '#cccccc' }}
-                                onPress={handlerAddToCart}
-                            >
-                                <View style={styles.addCartInnerContainer}>
-                                    <Text style={styles.addCartText}>
-                                        Add To Cart
-                                    </Text>
-                                </View>
-                            </Pressable>
+                    <View style={styles.instructContainer}>
+                        <Text style={styles.instructTitle}>
+                            Storage Instructions :
+                        </Text>
+                        <Text style={styles.instructText}>
+                            - Use about 30 days after opening
+                        </Text>
+                        <Text style={styles.instructText}>
+                            - Store the product at a cool temperature
+                        </Text>
+                        <Text style={styles.instructText}>
+                            -<Text style={{ fontSize: 15, fontWeight: '800' }}> Note </Text>Do not use products that show signs of damage
+                        </Text>
+                    </View>
+                    <View style={styles.instructContainer}>
+                        <Text style={styles.instructTitle}>
+                            Refund Instructions :
+                        </Text>
+                        <Text style={styles.instructText}>
+                            In case the customer receives a damaged product due to the transfer process, please take a photo of the product and contact it through the Pet Shop app via the following 2 ways for instructions on how to return it via the following 2 ways.
+                        </Text>
+                        <Text style={styles.instructText}>
+                            - <Text style={{ fontSize: 15, fontWeight: '800' }}> 1 </Text> Go to the app to choose a product, please leave a picture in the comment below
+                        </Text>
+                        <Text style={styles.instructText}>
+                            -<Text style={{ fontSize: 15, fontWeight: '800' }}> 2 </Text>At the Pet shop page, please contact us to leave a picture of the product name you want to support
+                        </Text>
+                    </View>
+                    <View style={styles.reviewContainer}>
+                        <Text style={styles.reviewTitle}>
+                            Review (12)
+                        </Text>
+                        <View style={styles.iconStarReview}>
+                            <AntDesign name="star" size={24} color={Colors.yellow200} />
+                            <AntDesign name="star" size={24} color={Colors.yellow200} />
+                            <AntDesign name="star" size={24} color={Colors.yellow200} />
+                            <AntDesign name="star" size={24} color={Colors.yellow200} />
+                            <AntDesign name="staro" size={24} color={Colors.yellow200} />
                         </View>
                     </View>
+
                 </View>
             </ScrollView>
+            {type === 'meal' && (
+                <View style={styles.footer}>
+                    <View style={styles.likeContainer}>
+                        <Pressable
+                            style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]}
+                            android_ripple={{ color: '#cccccc' }}
+                            onPress={handlerLike}>
+                            <View style={styles.likeInnerContainer}>
+                                <Octicons name="feed-heart" size={27} color="black" />
+                            </View>
+                        </Pressable>
+                    </View>
+                    <View style={styles.addCartContainer}>
+                        <Pressable
+                            style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : null]}
+                            android_ripple={{ color: '#cccccc' }}
+                            onPress={handlerAddToCart}
+                        >
+                            <View style={styles.addCartInnerContainer}>
+                                <Text style={styles.addCartText}>
+                                    Add To Cart
+                                </Text>
+                            </View>
+                        </Pressable>
+                    </View>
+                </View>
+            )}
+
         </SafeAreaView>
     )
 }
@@ -191,7 +268,6 @@ const styles = StyleSheet.create({
     ImgBgContainer: {
         marginHorizontal: 20,
         marginTop: 20,
-        // justifyContent: 'center',
         alignItems: 'center',
         elevation: 20,
         height: 350,
@@ -253,7 +329,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 8,
-        marginBottom: 30,
+        marginBottom: 10,
     },
     desText: {
         paddingHorizontal: 20,
@@ -268,10 +344,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 10,
         backgroundColor: Colors.green,
-        // height: 35,
         borderBottomLeftRadius: 20,
-        // borderTopLeftRadius: 20,
-        // left: 30
 
     },
     priceText: {
@@ -284,10 +357,40 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '400',
     },
-    desText2: {
+    quantity: {
+        flexDirection: 'row',
         paddingHorizontal: 20,
+    },
+    desText2: {
         color: 'gray',
         fontSize: 14,
+        marginLeft: 5,
+    },
+    box: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: Colors.light,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        marginHorizontal: 10,
+        marginTop: 20,
+    },
+    innerBox: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    titleBox: {
+        fontSize: 16,
+        fontWeight: '400',
+        color: 'gray',
+        marginBottom: 5,
+    },
+    textBox: {
+        fontWeight: '600',
+        color: Colors.dark,
     },
     desDetailContainer: {
         marginVertical: 20,
@@ -298,23 +401,49 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         lineHeight: 20
     },
-    footer: {
-        height: 70,
-        backgroundColor: Colors.light,
-        borderRadius: 10,
-        paddingHorizontal: 20,
+    instructContainer: {
+        marginHorizontal: 20,
+        marginVertical: 20,
+    },
+    instructTitle: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: Colors.dark,
+        marginBottom: 10,
+
+    },
+    instructText: {
+        marginBottom: 2,
+    },
+    reviewContainer: {
+        marginHorizontal: 20,
         marginVertical: 10,
+    },
+    reviewTitle: {
+        fontSize: 15,
+        fontWeight: '800',
+        color: Colors.dark,
+        marginBottom: 10,
+    },
+    iconStarReview: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 30
+    },
+    footer: {
+        backgroundColor: Colors.pink200,
+        paddingHorizontal: 20,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginHorizontal: 10,
+        paddingTop: 10,
+        paddingBottom: 20
 
     },
     likeContainer: {
         height: 50,
         width: 50,
         backgroundColor: Colors.white,
-        // padding: 10,
         borderRadius: 99999,
         elevation: 8,
         overflow: 'hidden',

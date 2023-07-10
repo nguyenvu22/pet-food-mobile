@@ -117,79 +117,83 @@ export default function SearchScreen() {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        paddingBottom: 20,
-        backgroundColor: Colors.white,
-      }}
-    >
-      <ScrollView>
-        <View style={styles.header}>
-          <View style={styles.headerBtn}>
-            <Ionicons name="chevron-back" size={22} color="black"
-              onPress={navigation.goBack} />
+    <>
+      <View style={styles.header}>
+        <View style={styles.headerBtn}>
+          <Ionicons name="chevron-back" size={22} color="black"
+            onPress={navigation.goBack} />
+        </View>
+        <View style={styles.searchContainer}>
+          <View style={styles.searchInnerContainer}>
+            <Ionicons
+              name="search"
+              size={18}
+              color={Colors.transparentDark}
+              style={styles.iconSearch}
+            />
+            <TextInput
+              placeholder="Search "
+              style={styles.searchBox}
+              clearButtonMode="always"
+              autoCapitalize="none"
+              autoCorrect={false}
+              value={searchQuery}
+              onChangeText={(query) => handleSearch(query)}
+            />
           </View>
-          <View style={styles.searchContainer}>
-            <View style={styles.searchInnerContainer}>
-              <Ionicons
-                name="search"
-                size={18}
-                color={Colors.transparentDark}
-                style={styles.iconSearch}
+        </View>
+      </View>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          paddingBottom: 50,
+          backgroundColor: Colors.white,
+        }}
+      >
+
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={styles.productContainer}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  paddingBottom: 10,
+                  marginLeft: 10,
+                }}
+              >
+                Meals
+              </Text>
+              <FlatList
+                scrollEnabled={false}
+                data={dataMeals}
+                renderItem={RenderItemMeal}
+                key={(item) => item.mealName}
               />
-              <TextInput
-                placeholder="Search "
-                style={styles.searchBox}
-                clearButtonMode="always"
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={searchQuery}
-                onChangeText={(query) => handleSearch(query)}
+            </View>
+            <View style={styles.productContainer}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  paddingBottom: 10,
+                  marginLeft: 10,
+                }}
+              >
+                Products
+              </Text>
+              <FlatList
+                scrollEnabled={false}
+                data={dataProducts}
+                renderItem={RenderItemProduct}
+                key={(item) => item.productName}
               />
             </View>
           </View>
-        </View>
-        <View style={styles.container}>
-          <View style={styles.productContainer}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                paddingBottom: 10,
-                marginLeft: 10,
-              }}
-            >
-              Meals
-            </Text>
-            <FlatList
-              scrollEnabled={false}
-              data={dataMeals}
-              renderItem={RenderItemMeal}
-              key={(item) => item.mealName}
-            />
-          </View>
-          <View style={styles.productContainer}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                paddingBottom: 10,
-                marginLeft: 10,
-              }}
-            >
-              Products
-            </Text>
-            <FlatList
-              scrollEnabled={false}
-              data={dataProducts}
-              renderItem={RenderItemProduct}
-              key={(item) => item.productName}
-            />
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </>
+
   );
 }
 
@@ -200,17 +204,17 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     marginBottom: 30,
+    marginTop: 30
   },
   header: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.purple800,
     paddingHorizontal: 10,
-    paddingTop: 30,
+    paddingTop: 60,
     paddingBottom: 10,
-    marginBottom: 30,
+    // marginBottom: 30,
   },
   headerBtn: {
     height: 35,
@@ -241,7 +245,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   searchBox: {
-    width: "90%",
+    width: "88%",
     paddingHorizontal: 5,
     paddingVertical: 5,
   },
