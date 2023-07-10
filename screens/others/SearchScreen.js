@@ -16,9 +16,11 @@ import filter from "lodash.filter";
 import { Ionicons } from "@expo/vector-icons";
 import CardSearch from "../../components/card/CardSearch";
 import LoadingScreen from "../../components/loading/LoadingScreen";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SearchScreen() {
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation()
   const [searchQuery, setSearchQuery] = useState("");
   const [dataProducts, setDataProducts] = useState([]);
   const [dataMeals, setDataMeals] = useState([]);
@@ -118,12 +120,16 @@ export default function SearchScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        paddingVertical: 20,
-        backgroundColor: Colors.pink100,
+        paddingBottom: 20,
+        backgroundColor: Colors.white,
       }}
     >
       <ScrollView>
-        <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.headerBtn}>
+            <Ionicons name="chevron-back" size={22} color="black"
+              onPress={navigation.goBack} />
+          </View>
           <View style={styles.searchContainer}>
             <View style={styles.searchInnerContainer}>
               <Ionicons
@@ -143,6 +149,8 @@ export default function SearchScreen() {
               />
             </View>
           </View>
+        </View>
+        <View style={styles.container}>
           <View style={styles.productContainer}>
             <Text
               style={{
@@ -193,15 +201,32 @@ const styles = StyleSheet.create({
   productContainer: {
     marginBottom: 30,
   },
+  header: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.purple800,
+    paddingHorizontal: 10,
+    paddingTop: 30,
+    paddingBottom: 10,
+    marginBottom: 30,
+  },
+  headerBtn: {
+    height: 35,
+    width: 35,
+    backgroundColor: Colors.white,
+    borderRadius: 99999,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10
+  },
   searchContainer: {
     flex: 1,
     backgroundColor: "white",
-    borderRadius: 12,
-    overflow: "hidden",
-    marginBottom: 30,
-    marginTop: 10,
+    borderRadius: 40,
 
-    elevation: 20,
+    elevation: 30,
     shadowColor: "black",
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 2 },
@@ -213,11 +238,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light,
     alignItems: "center",
     width: "100%",
+    borderRadius: 40,
   },
   searchBox: {
     width: "90%",
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
   },
   iconSearch: {
     marginLeft: 20,
