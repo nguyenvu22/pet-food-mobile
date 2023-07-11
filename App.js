@@ -16,6 +16,7 @@ import SettingScreen from "./screens/store/SettingScreen";
 import MealScreen from "./screens/store/MealScreen";
 import DetailScreen from "./screens/others/DetailScreen";
 import AddButtonTab from "./components/button/AddButtonTab";
+import CheckoutScreen from "./screens/others/CheckoutScreen";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "./redux/redux";
 import { initUser } from "./redux/user/user";
@@ -151,6 +152,7 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen name="Login" component={LoginScreen} options={{}} />
       <Stack.Screen name="Regist" component={RegistScreen} options={{}} />
       <Stack.Screen name="Search" component={SearchScreen} options={{}} />
+      <Stack.Screen name="Checkout" component={CheckoutScreen} options={{}} />
       <Stack.Screen
         name="AddMeal"
         component={MealScreen}
@@ -208,7 +210,6 @@ function Main({ hasLaunched, setHasLaunched }) {
     fonts: {
       regular: {
         fontFamily: "SeaweedScript",
-        // fontFamily: "another font",
         fontWeight: "normal",
       },
       // bold: {
@@ -244,7 +245,7 @@ export default function App() {
       <StatusBar
         translucent
         backgroundColor={Colors.transparent}
-        style="auto"
+        style="light"
       />
       <Provider store={store}>
         <Main hasLaunched={hasLaunched} setHasLaunched={setHasLaunched} />
