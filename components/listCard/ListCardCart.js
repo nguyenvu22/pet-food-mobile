@@ -1,41 +1,32 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import CartProduct from "../card/CardCartItem";
+import CardCartItem from "../card/CardCartItem";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
 import { useState } from "react";
 
 export default function ListCardCart({
   data,
-  stateData,
-  type,
+  setMeals,
   selectedProducts,
   setSelectedProducts,
 }) {
-  const [chosenProduct, setchosenProduct] = useState(
-    selectedProducts.filter((item) => item.type === type)
-  );
 
   function dataSelection() {
-    if (chosenProduct.length === data.length) {
-      console.log("chosenProduct.length === data.length");
+    if (selectedProducts.length === data.length) {
       setSelectedProducts([]);
-      setchosenProduct([]);
     } else {
-      console.log("Add all");
       setSelectedProducts(data);
-      setchosenProduct(data);
     }
   }
 
   function renderItemCard({ item }) {
     return (
-      <CartProduct
+      <CardCartItem
         data={data}
         dataItem={item}
-        stateData={stateData}
+        stateData={setMeals}
         selectedProducts={selectedProducts}
         setSelectedProducts={setSelectedProducts}
-        setchosenProduct={setchosenProduct}
       />
     );
   }
@@ -43,11 +34,11 @@ export default function ListCardCart({
   return (
     <View style={styles.container}>
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>Selected ({chosenProduct.length})</Text>
+        <Text style={styles.label}>Selected ({selectedProducts.length})</Text>
         <Pressable
           style={[
             styles.check,
-            chosenProduct.length === 0 && {
+            selectedProducts.length === 0 && {
               backgroundColor: "transparent",
             },
           ]}
@@ -55,7 +46,7 @@ export default function ListCardCart({
         >
           <Ionicons
             name="checkmark-sharp"
-            color={chosenProduct.length !== 0 ? "white" : "transparent"}
+            color={selectedProducts.length !== 0 ? "white" : "transparent"}
             size={20}
           />
         </Pressable>

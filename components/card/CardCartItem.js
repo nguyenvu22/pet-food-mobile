@@ -1,4 +1,5 @@
 import {
+  Alert,
   Animated,
   FlatList,
   Image,
@@ -18,7 +19,6 @@ export default function CartProduct({
   stateData,
   selectedProducts,
   setSelectedProducts,
-  setchosenProduct,
 }) {
   const [scaleValue, setScaleValue] = useState(new Animated.Value(1));
 
@@ -39,32 +39,47 @@ export default function CartProduct({
       setSelectedProducts(
         selectedProducts.filter((item) => item.id !== dataItem.id)
       );
-      setchosenProduct(
-        selectedProducts.filter((item) => item.id !== dataItem.id)
-      );
     } else {
       const newValue = [...selectedProducts, dataItem];
       setSelectedProducts(newValue);
-      setchosenProduct(newValue);
     }
   }
 
   function changeQuantity(method) {
     const newValue = data.map((item) => {
       if (item.id === dataItem.id) {
+        let newQuantity = dataItem.quantity;
+        if (method === "increase") {
+          newQuantity += 1;
+        } else {
+          
+          if (dataItem.quantity > 1) {
+            newQuantity -= 1;
+          } else {
+            Alert.alert("Removing from cart", "Are you sure?", [
+              {
+                text: "No",
+                onPress: () => {},
+                style: "destructive",
+              },
+              {
+                text: "Yes",
+                onPress: () => {},
+              },
+            ]);
+          }
+        }
+
         return {
           ...item,
-          quantity:
-            method === "increase"
-              ? dataItem.quantity + 1
-              : dataItem.quantity - 1
-              ? dataItem.quantity - 1
-              : dataItem.quantity,
+          quantity: newQuantity,
         };
       }
       return item;
     });
     stateData(newValue);
+    setSelectedProducts(newValue);
+
   }
 
   // function renderProductImage({ item }) {
