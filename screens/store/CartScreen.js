@@ -13,15 +13,12 @@ import { useSelector } from "react-redux";
 import { Colors } from "../../constants/styles";
 import ListCardCart from "../../components/listCard/ListCardCart";
 import { Ionicons } from "@expo/vector-icons";
-import ConfirmModal from "../../components/modal/ConfirmModal";
 
 export default function CartScreen({ navigation }) {
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
 
   const [meals, setMeals] = useState(cartInRedux);
   const [selectedProducts, setSelectedProducts] = useState([]);
-
-  const [visible, setVisible] = useState(false);
 
   const animatedValue = useRef(
     new Animated.Value(-(dWidth * 0.08 + dWidth * 0.4))
@@ -71,19 +68,6 @@ export default function CartScreen({ navigation }) {
           <Ionicons name="arrow-forward" size={20} color="white" />
         </Pressable>
       </Animated.View>
-      <Pressable
-        onPress={() => {
-          setVisible(true);
-        }}
-      >
-        <Text>Modal</Text>
-      </Pressable>
-      <ConfirmModal
-        visible={visible}
-        setVisible={setVisible}
-        requireUrl="lottie_loading_clock"
-        text="Processing....."
-      />
     </ScrollView>
   );
 }
