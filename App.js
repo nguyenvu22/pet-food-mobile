@@ -12,7 +12,7 @@ import CartScreen from "./screens/store/CartScreen";
 import SplashScreen from "./screens/splash/SplashScreen";
 import OnboardScreen from "./screens/onboard/OnboardScreen";
 import SearchScreen from "./screens/others/SearchScreen";
-import SettingScreen from "./screens/store/SettingScreen";
+import ShippingScreen from "./screens/store/ShippingScreen";
 import MealScreen from "./screens/store/MealScreen";
 import DetailScreen from "./screens/others/DetailScreen";
 import AddButtonTab from "./components/button/AddButtonTab";
@@ -23,7 +23,7 @@ import { initUser } from "./redux/user/user";
 import { updateCart } from "./redux/cart/cart";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign , FontAwesome5} from "@expo/vector-icons";
 import { Colors } from "./constants/styles";
 import { useFonts } from "expo-font";
 import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
@@ -122,13 +122,13 @@ function BottomTabsScreen() {
         }}
       />
       <Tabs.Screen
-        name="Setting"
-        component={SettingScreen}
+        name="Shipping"
+        component={ShippingScreen}
         options={{
-          tabBarLabel: "Setting",
+          tabBarLabel: "Shipping",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              <AntDesign name="setting" size={size} color={color} />
+              <FontAwesome5 name="shipping-fast" size={size} color={color} />
             </View>
           ),
         }}
