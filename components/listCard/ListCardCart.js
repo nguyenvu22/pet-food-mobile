@@ -2,7 +2,6 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import CardCartItem from "../card/CardCartItem";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
-import { useState } from "react";
 
 export default function ListCardCart({
   data,
@@ -10,21 +9,22 @@ export default function ListCardCart({
   selectedProducts,
   setSelectedProducts,
 }) {
-
   function dataSelection() {
     if (selectedProducts.length === data.length) {
       setSelectedProducts([]);
+      console.log("Set Empty");
     } else {
       setSelectedProducts(data);
+      console.log("Set All");
     }
   }
 
   function renderItemCard({ item }) {
     return (
       <CardCartItem
-        data={data}
         dataItem={item}
-        stateData={setMeals}
+        data={data}
+        setMeals={setMeals}
         selectedProducts={selectedProducts}
         setSelectedProducts={setSelectedProducts}
       />

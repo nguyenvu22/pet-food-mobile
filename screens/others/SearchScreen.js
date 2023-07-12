@@ -20,7 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function SearchScreen() {
   const [isLoading, setIsLoading] = useState(false);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
   const [dataProducts, setDataProducts] = useState([]);
   const [dataMeals, setDataMeals] = useState([]);
@@ -120,8 +120,12 @@ export default function SearchScreen() {
     <>
       <View style={styles.header}>
         <View style={styles.headerBtn}>
-          <Ionicons name="chevron-back" size={22} color="black"
-            onPress={navigation.goBack} />
+          <Ionicons
+            name="chevron-back"
+            size={22}
+            color="black"
+            onPress={navigation.goBack}
+          />
         </View>
         <View style={styles.searchContainer}>
           <View style={styles.searchInnerContainer}>
@@ -150,7 +154,6 @@ export default function SearchScreen() {
           backgroundColor: Colors.white,
         }}
       >
-
         <ScrollView>
           <View style={styles.container}>
             <View style={styles.productContainer}>
@@ -193,7 +196,6 @@ export default function SearchScreen() {
         </ScrollView>
       </SafeAreaView>
     </>
-
   );
 }
 
@@ -204,12 +206,12 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     marginBottom: 30,
-    marginTop: 30
+    marginTop: 30,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: Colors.purple800,
     paddingHorizontal: 10,
     paddingTop: 60,
@@ -221,9 +223,9 @@ const styles = StyleSheet.create({
     width: 35,
     backgroundColor: Colors.white,
     borderRadius: 99999,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
   },
   searchContainer: {
     flex: 1,
@@ -239,7 +241,6 @@ const styles = StyleSheet.create({
   searchInnerContainer: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: Colors.light,
     alignItems: "center",
     width: "100%",
     borderRadius: 40,

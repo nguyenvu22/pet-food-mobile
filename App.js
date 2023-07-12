@@ -17,7 +17,7 @@ import MealScreen from "./screens/store/MealScreen";
 import DetailScreen from "./screens/others/DetailScreen";
 import AddButtonTab from "./components/button/AddButtonTab";
 import CheckoutScreen from "./screens/others/CheckoutScreen";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { store } from "./redux/redux";
 import { initUser } from "./redux/user/user";
 import { updateCart } from "./redux/cart/cart";
@@ -33,6 +33,7 @@ const Tabs = createBottomTabNavigator();
 const HAS_LAUNCH = "HAS_LAUNCH";
 
 function BottomTabsScreen() {
+  const cartInRedux = useSelector((state) => state.cartReducers.cart);
   function EmptyScreen() {
     return <></>;
   }
@@ -84,7 +85,10 @@ function BottomTabsScreen() {
                 <Text
                   style={{ color: "white", fontSize: 12, fontWeight: "500" }}
                 >
-                  1
+                  {cartInRedux.reduce(
+                    (value, item) => (value += item.quantity),
+                    0
+                  )}
                 </Text>
               </View>
             </View>

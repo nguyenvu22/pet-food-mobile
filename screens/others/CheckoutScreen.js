@@ -21,6 +21,7 @@ import {
   getWards,
   calcDeliveryFee,
 } from "../../services/delivery";
+import { sendMealOrder } from "../../services/meal";
 import { SelectList } from "react-native-dropdown-select-list";
 
 export default function CheckoutScreen({ navigation, route }) {
@@ -140,7 +141,7 @@ export default function CheckoutScreen({ navigation, route }) {
     );
   }
 
-  function onSubmit() {
+  async function onSubmit() {
     if (
       province === null ||
       district === null ||
@@ -152,7 +153,34 @@ export default function CheckoutScreen({ navigation, route }) {
         "Please give us your address"
       );
       return;
+    } else if (paymentMethod.length === 0) {
+      Alert.alert("Choose 1 payment method");
+      return;
     }
+    const orderInfo = {
+      fullname: fullname,
+      phoneNumber: phoneNumber,
+      address: address,
+      province: province,
+      district: district,
+      ward: ward,
+      shippingFee: shippingFee,
+      paymentMethod: paymentMethod,
+    };
+
+    const orderMeals = selectedProducts.map((item) => {
+      return { id: item.id, amount: item.quantity };
+    });
+
+    console.log(orderInfo);
+    console.log(orderMeals);
+
+    const response = await sendMealOrder(
+      orderInfo,
+      orderMeals,
+      user.accessToken
+    );
+    console.log(response);
   }
 
   return (
@@ -303,14 +331,16 @@ export default function CheckoutScreen({ navigation, route }) {
           <View style={[styles.payment, { marginBottom: 0 }]}>
             <Text style={styles.paymenText}>Total</Text>
             <Text style={styles.paymenText}>
-              {shippingFee +
+              {(
+                shippingFee / 24000 +
                 selectedProducts.reduce((value, item) => {
                   return (value +=
                     item.quantity *
                     item.productMeals.reduce((value, item) => {
                       return (value += item.amount * item.product.price);
                     }, 0));
-                }, 0)}
+                }, 0)
+              ).toFixed(1)}
               $
             </Text>
           </View>

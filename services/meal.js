@@ -27,3 +27,32 @@ export async function getMealByIdFunction(id, accessToken) {
     console.log(error.response);
   }
 }
+
+export async function sendMealOrder(orderInfo, orderMeals, accessToken) {
+  try {
+    const response = await axios.post(
+      API_KEY + "/order",
+      {
+        name: orderInfo.fullname,
+        phone: orderInfo.phoneNumber,
+        shippingAddress: orderInfo.address,
+        shippingProvinceCode: orderInfo.province,
+        shippingDistrictCode: orderInfo.district,
+        shippingWardCode: `${orderInfo.ward}`,
+        shippingFee: orderInfo.shippingFee,
+        paymentType: orderInfo.paymentMethod,
+        meals: orderMeals,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    console.log(response.data);
+    // return response.data;
+  } catch (error) {
+    console.log(error);
+    console.log(error.response);
+  }
+}
