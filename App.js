@@ -69,28 +69,33 @@ function BottomTabsScreen() {
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
               <AntDesign name="shoppingcart" size={size} color={color} />
-              <View
-                style={{
-                  position: "absolute",
-                  top: -5,
-                  right: -6,
-                  backgroundColor: "red",
-                  width: 18,
-                  height: 18,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 10,
-                }}
-              >
-                <Text
-                  style={{ color: "white", fontSize: 12, fontWeight: "500" }}
+              {cartInRedux.reduce(
+                (value, item) => (value += item.quantity),
+                0
+              ) !== 0 && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: -5,
+                    right: -6,
+                    backgroundColor: "red",
+                    width: 18,
+                    height: 18,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 10,
+                  }}
                 >
-                  {cartInRedux.reduce(
-                    (value, item) => (value += item.quantity),
-                    0
-                  )}
-                </Text>
-              </View>
+                  <Text
+                    style={{ color: "white", fontSize: 12, fontWeight: "500" }}
+                  >
+                    {cartInRedux.reduce(
+                      (value, item) => (value += item.quantity),
+                      0
+                    )}
+                  </Text>
+                </View>
+              )}
             </View>
           ),
         }}
