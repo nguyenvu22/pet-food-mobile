@@ -12,14 +12,19 @@ import {
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
+import { useDispatch } from "react-redux";
+import { updateCart } from "../../redux/cart/cart";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CartProduct({
-  data,
   dataItem,
-  stateData,
+  data,
+  setMeals,
   selectedProducts,
   setSelectedProducts,
 }) {
+  const dispatch = useDispatch();
+
   const [scaleValue, setScaleValue] = useState(new Animated.Value(1));
 
   function animationButton() {
@@ -45,31 +50,38 @@ export default function CartProduct({
     }
   }
 
-  function changeQuantity(method) {
+  async function changeQuantity(method) {
+    //Update in cart
     const newValue = data.map((item) => {
       if (item.id === dataItem.id) {
         let newQuantity = dataItem.quantity;
         if (method === "increase") {
           newQuantity += 1;
         } else {
-          
           if (dataItem.quantity > 1) {
             newQuantity -= 1;
           } else {
             Alert.alert("Removing from cart", "Are you sure?", [
               {
                 text: "No",
-                onPress: () => {},
                 style: "destructive",
               },
               {
                 text: "Yes",
-                onPress: () => {},
+                onPress: () => {
+                  const newCart = data.filter((item) => item.id !== dataItem.id)
+                  setMeals(newCart);
+                  dispatch(updateCart({ cart: newCart }));
+                  AsyncStorage.setItem("cart", JSON.stringify(newCart));
+
+                  setSelectedProducts(
+                    selectedProducts.filter((item) => item.id !== dataItem.id)
+                  );
+                },
               },
             ]);
           }
         }
-
         return {
           ...item,
           quantity: newQuantity,
@@ -77,37 +89,28 @@ export default function CartProduct({
       }
       return item;
     });
-    stateData(newValue);
-    setSelectedProducts(newValue);
+    setMeals(newValue);
+    // setSelectedProducts(newValue);
+    dispatch(updateCart({ cart: newValue }));
+    await AsyncStorage.setItem("cart", JSON.stringify(newValue));
 
+    //Update in checkout
+    if (dataItem.quantity > 1) {
+      const newSelectedValue = selectedProducts.map((item) => {
+        if (item.id === dataItem.id) {
+          let newQuantity = dataItem.quantity;
+          if (method === "increase") {
+            newQuantity += 1;
+          } else {
+            newQuantity -= 1;
+          }
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+      setSelectedProducts(newSelectedValue);
+    }
   }
-
-  // function renderProductImage({ item }) {
-  //   console.log(item);
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         marginRight: 10,
-  //         padding: 5,
-  //         borderColor: Colors.transparentDark,
-  //         borderWidth: 2,
-  //         borderRadius: 5,
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //         flexDirection: "row",
-  //       }}
-  //     >
-  //       <Image
-  //         source={{ uri: `${item.product.image}` }}
-  //         style={{ width: 40, height: 40 }}
-  //       />
-  //       <Text style={{ marginLeft: 5, color: "rgba(0,0,0,0.4)" }}>
-  //         x{item.amount}
-  //       </Text>
-  //     </View>
-  //   );
-  // }
 
   return (
     <TouchableWithoutFeedback onPress={animationButton}>
