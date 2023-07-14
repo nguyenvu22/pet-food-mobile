@@ -1,7 +1,14 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoginScreen from "./screens/auth/LoginScreen";
@@ -23,17 +30,25 @@ import { initUser } from "./redux/user/user";
 import { updateCart } from "./redux/cart/cart";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign , FontAwesome5} from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Colors } from "./constants/styles";
 import { useFonts } from "expo-font";
 import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
+import ChangPasswordScreen from "./screens/others/ChangPasswordScreen";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 const HAS_LAUNCH = "HAS_LAUNCH";
 
+// const navigation = useNavigation();
+// const goBack = () => {
+//   navigation.goBack();
+// };
+
 function BottomTabsScreen() {
+  const navigation = useNavigation();
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
+
   function EmptyScreen() {
     return <></>;
   }
@@ -69,28 +84,33 @@ function BottomTabsScreen() {
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
               <AntDesign name="shoppingcart" size={size} color={color} />
-              <View
-                style={{
-                  position: "absolute",
-                  top: -5,
-                  right: -6,
-                  backgroundColor: "red",
-                  width: 18,
-                  height: 18,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 10,
-                }}
-              >
-                <Text
-                  style={{ color: "white", fontSize: 12, fontWeight: "500" }}
+              {cartInRedux.reduce(
+                (value, item) => (value += item.quantity),
+                0
+              ) !== 0 && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: -5,
+                    right: -6,
+                    backgroundColor: "red",
+                    width: 18,
+                    height: 18,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRadius: 10,
+                  }}
                 >
-                  {cartInRedux.reduce(
-                    (value, item) => (value += item.quantity),
-                    0
-                  )}
-                </Text>
-              </View>
+                  <Text
+                    style={{ color: "white", fontSize: 12, fontWeight: "500" }}
+                  >
+                    {cartInRedux.reduce(
+                      (value, item) => (value += item.quantity),
+                      0
+                    )}
+                  </Text>
+                </View>
+              )}
             </View>
           ),
         }}
@@ -138,6 +158,10 @@ function BottomTabsScreen() {
 }
 
 function StackScreen({ hasLaunched }) {
+  const navigation = useNavigation();
+  const goBackFunction = () => {
+    navigation.goBack();
+  };
   return (
     <Stack.Navigator
       screenOptions={{
@@ -163,6 +187,24 @@ function StackScreen({ hasLaunched }) {
         options={{ presentation: "modal" }}
       />
       <Stack.Screen name="Detail" component={DetailScreen} options={{}} />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangPasswordScreen}
+        options={{
+          title: "Change Password",
+          presentation: "modal",
+          headerShown: true,
+          headerLeft: () => (
+            <Pressable onPress={goBackFunction}>
+              <Ionicons name="arrow-back" size={24} color="black" />
+            </Pressable>
+          ),
+          headerTitleStyle: {
+            fontSize: 16,
+            fontWeight: "500",
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 }

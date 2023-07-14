@@ -1,24 +1,41 @@
 import {
+  FlatList,
   Image,
   Pressable,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import image from "../../assets/meme1.jpg";
-
+import CardShipping from "../../components/card/CardShipping";
+import PagerView from "react-native-pager-view";
 const ShippingScreen = () => {
   const navigation = useNavigation();
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
   const [selectedButton, setSelectedButton] = useState("Delivery");
+  const ref = useRef();
+
+  const handlerPressDelivery = () => {
+    setSelectedButton("Delivery");
+    
+  };
+  const handlerPressSuccess = () => {
+    setSelectedButton("Succeeded");
+   
+  };
+  const handlerPressCancel = () => {
+    setSelectedButton("Canceled");
+   
+  };
 
   return (
     <View style={styles.shippingContainer}>
@@ -48,7 +65,7 @@ const ShippingScreen = () => {
               pressed ? styles.buttonPressed : null,
             ]}
             android_ripple={{ color: "#cccccc" }}
-            onPress={() => setSelectedButton("Delivery")}
+            onPress={handlerPressDelivery}
           >
             <View style={styles.btnInner}>
               <Text
@@ -69,7 +86,7 @@ const ShippingScreen = () => {
               pressed ? styles.buttonPressed : null,
             ]}
             android_ripple={{ color: "#cccccc" }}
-            onPress={() => setSelectedButton("Succeeded")}
+            onPress={handlerPressSuccess}
           >
             <View style={styles.btnInner}>
               <Text
@@ -90,7 +107,7 @@ const ShippingScreen = () => {
               pressed ? styles.buttonPressed : null,
             ]}
             android_ripple={{ color: "#cccccc" }}
-            onPress={() => setSelectedButton("Canceled")}
+            onPress={handlerPressCancel}
           >
             <View style={styles.btnInner}>
               <Text
@@ -109,23 +126,9 @@ const ShippingScreen = () => {
         <View style={styles.orderSummary}>
           <Text style={styles.summaryText}>Order Summary</Text>
         </View>
-        <ScrollView>
-          <View style={styles.oderCardContainer}>
-            <View style={styles.oderCardInner}>
-              <View style={styles.imageContainer}>
-                <Image source={image} style={styles.image} />
-              </View>
-              <View style={styles.desContainer}>
-                <Text style={styles.nameText}>Name</Text>
-                <View style={styles.priceContainer}>
-                  <Text style={{ fontSize: 11, fontWeight: "600" , color: Colors.purple800 }}>$</Text>
-                  <Text style={styles.priceText}>Price</Text>
-                </View>
-                <Text style={styles.addressText}>Address</Text>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
+        <View style={styles.listCardShipping}>
+          <FlatList/>
+        </View>
       </View>
 
       <View style={styles.footer}></View>
@@ -217,10 +220,10 @@ const styles = StyleSheet.create({
     width: 80,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: 'red'
+    backgroundColor: "red",
   },
   image: {
-    resizeMode: 'center',
+    resizeMode: "center",
     height: "100%",
     width: "100%",
   },
@@ -235,18 +238,17 @@ const styles = StyleSheet.create({
   priceContainer: {
     flexDirection: "row",
     alignItems: "center",
-
   },
   priceText: {
     fontSize: 13,
     fontWeight: "500",
     color: Colors.purple800,
-    marginLeft: 3
+    marginLeft: 3,
   },
-  addressText :{
+  addressText: {
     marginTop: 13,
     fontSize: 13,
-    fontWeight:'500',
-    color: 'gray'
-  }
+    fontWeight: "500",
+    color: "gray",
+  },
 });

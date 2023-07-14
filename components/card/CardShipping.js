@@ -1,13 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image} from "react-native";
 import React from "react";
 import { Colors } from "../../constants/styles";
+import image1 from '../../assets/meme1.jpg'
 
-const CardShipping = ({image, name}) => {
+
+const CardShipping = ({image, name , price}) => {
+
+
   return (
     <View style={styles.oderCardContainer}>
       <View style={styles.oderCardInner}>
         <View style={styles.imageContainer}>
-          <Image source={image} style={styles.image} />
+          <Image source={image1} style={styles.image} />
         </View>
         <View style={styles.desContainer}>
           <Text style={styles.nameText}>Name</Text>
@@ -34,9 +38,10 @@ export default CardShipping;
 
 const styles = StyleSheet.create({
   oderCardContainer: {
-    backgroundColor: Colors.light,
+    backgroundColor: Colors.white,
     height: 120,
     borderRadius: 8,
+
   },
   oderCardInner: {
     flex: 1,

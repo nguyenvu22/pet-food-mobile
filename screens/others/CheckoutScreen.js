@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Colors } from "../../constants/styles";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TextInput } from "react-native-paper";
 import {
   getProvinces,
@@ -23,10 +23,15 @@ import {
 } from "../../services/delivery";
 import { sendMealOrder } from "../../services/meal";
 import { SelectList } from "react-native-dropdown-select-list";
+import ConfirmModal from "../../components/modal/ConfirmModal";
+import cart, { updateCart } from "../../redux/cart/cart";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function CheckoutScreen({ navigation, route }) {
   const user = useSelector((state) => state.userReducers.user);
   const selectedProducts = route.params.selectedProducts;
+  const cartInRedux = useSelector((state) => state.cartReducers.cart);
+  const dispatch = useDispatch();
 
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -40,6 +45,9 @@ export default function CheckoutScreen({ navigation, route }) {
   const [address, setAddress] = useState("");
   const [shippingFee, setShippingFee] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("");
+
+  const [loadingVisible, setLoadingVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const paymentMethodData = [
     { key: "1", value: "COD" },
@@ -172,19 +180,45 @@ export default function CheckoutScreen({ navigation, route }) {
       return { id: item.id, amount: item.quantity };
     });
 
-    console.log(orderInfo);
-    console.log(orderMeals);
-
+    setLoadingVisible(true);
     const response = await sendMealOrder(
       orderInfo,
       orderMeals,
       user.accessToken
     );
-    console.log(response);
+    setLoadingVisible(false);
+    if (response?.status === "Success") {
+      setVisible(true);
+      setTimeout(() => {
+        const orderMealsId = orderMeals.map((item) => {
+          return item.id;
+        });
+        const updatedCart = cartInRedux.filter(
+          (item) => !orderMealsId.includes(item.id)
+        );
+        dispatch(updateCart({ cart: updatedCart }));
+        AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        setVisible(false);
+        navigation.goBack();
+      }, 3000);
+    }
   }
 
   return (
     <SafeAreaView style={styles.rootContainer}>
+      <ConfirmModal
+        visible={visible}
+        setVisible={setVisible}
+        requireUrl="lottie_order_success"
+        text="Order successfully"
+      />
+      <ConfirmModal
+        visible={loadingVisible}
+        setVisible={setLoadingVisible}
+        requireUrl="lottie_loading_clock"
+        text="Processing....."
+      />
       <Pressable
         style={styles.headerContainer}
         onPress={() => {
@@ -346,7 +380,7 @@ export default function CheckoutScreen({ navigation, route }) {
           </View>
         </View>
         <View style={[styles.separator, { height: 3 }]} />
-        <View style={{ paddingHorizontal: 20, marginBottom: 50 }}>
+        <View style={{ paddingHorizontal: 20, marginBottom: 200 }}>
           <Text style={[styles.label, { marginBottom: 10 }]}>
             Payment methods:
           </Text>

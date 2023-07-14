@@ -18,6 +18,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateCart } from "../../redux/cart/cart";
 import LoadingScreen from "../../components/loading/LoadingScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ConfirmModal from "../../components/modal/ConfirmModal";
 
 const DetailScreen = ({ navigation, route }) => {
   const type = route.params.itemType;
@@ -29,6 +30,7 @@ const DetailScreen = ({ navigation, route }) => {
   const [products, setProducts] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [meals, setMeals] = useState();
+  const [visible, setVisible] = useState(false);
 
   let selectItem;
   if (type === "product") {
@@ -110,6 +112,10 @@ const DetailScreen = ({ navigation, route }) => {
       dispatch(updateCart({ cart: addToCart }));
       await AsyncStorage.setItem("cart", JSON.stringify(addToCart));
     }
+    setVisible(true);
+    setTimeout(() => {
+      setVisible(false);
+    }, 2000);
   };
 
   const handlerLike = () => {
@@ -138,6 +144,11 @@ const DetailScreen = ({ navigation, route }) => {
         backgroundColor: Colors.pink100,
       }}
     >
+      <ConfirmModal
+        visible={visible}
+        setVisible={setVisible}
+        requireUrl="lottie_add_to_cart"
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.ImgBgContainer}>
           <ImageBackground
