@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import ConfirmModal from "../../components/modal/ConfirmModal";
 
 const ChangPasswordScreen = ({ route }) => {
-  const accessToken = route.params.token;
+  const user = route.params.user;
   const [oldPass, setOldPass] = useState({ value: "", error: "" });
   const [newPass, setNewPass] = useState({ value: "", error: "" });
   const [confirmPass, setConfirmPass] = useState({ value: "", error: "" });
@@ -70,7 +70,7 @@ const ChangPasswordScreen = ({ route }) => {
         confirmNewPassword: confirmPass.value,
       };
       console.log("data", data);
-      const response = await changePassWordHandler(data, accessToken);
+      const response = await changePassWordHandler(data, user.accessToken);
       if (response.status === "Success") {
         setIsSuccess(true);
         setVisible(true);
@@ -100,13 +100,13 @@ const ChangPasswordScreen = ({ route }) => {
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <Avatar.Image
             source={{
-              uri: "https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/358617917_2338932642955510_7479849569806966300_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=hyE2dpaemR0AX_6SIkb&_nc_oc=AQmNjIX6UyP3vA3SPp-wioEgkYNT7r3aleqg00DoDFSBajmnkBFN0I8YB-d6EYhEs24&_nc_ht=scontent.fsgn8-4.fna&oh=00_AfC2yJNz9KAfEQe_aERu23dF3ZWSbPaJv5xOlI41vY9NQw&oe=64B5DB77",
+              uri: `${user.avatar}`,
             }}
             size={80}
           />
           <View style={{ marginLeft: 20, marginTop: 5 }}>
             <Title style={[styles.title, { marginTop: 15, marginBottom: 5 }]}>
-              Đùi Gà Sốt ĐẬU
+              {user.fullName}
             </Title>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Octicons name="dot-fill" size={20} color="green" />

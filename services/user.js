@@ -66,3 +66,11 @@ export async function changePassWordHandler(data, accessToken) {
     return error.response.data;
   }
 }
+
+export async function getProfileUserFunction(accessToken) {
+  try {
+    const response = await axios.get(API_KEY + "/account/profile" , {
+      
+    });
+  } catch (error) {}
+}

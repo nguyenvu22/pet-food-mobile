@@ -19,13 +19,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const accessToken = useSelector(
-    (state) => state.userReducers.user.accessToken
-  );
+  const user = useSelector((state) => state.userReducers.user);
 
   const openModalChange = () => {
     navigation.navigate("ChangePassword", {
-      token: accessToken,
+      // token: user.accessToken,
+      user: user,
     });
   };
 
@@ -41,13 +40,13 @@ export default function ProfileScreen() {
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <Avatar.Image
             source={{
-              uri: "https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/358617917_2338932642955510_7479849569806966300_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=hyE2dpaemR0AX_6SIkb&_nc_oc=AQmNjIX6UyP3vA3SPp-wioEgkYNT7r3aleqg00DoDFSBajmnkBFN0I8YB-d6EYhEs24&_nc_ht=scontent.fsgn8-4.fna&oh=00_AfC2yJNz9KAfEQe_aERu23dF3ZWSbPaJv5xOlI41vY9NQw&oe=64B5DB77",
+              uri: `${user.avatar}`,
             }}
             size={80}
           />
           <View style={{ marginLeft: 20, marginTop: 5 }}>
             <Title style={[styles.title, { marginTop: 15, marginBottom: 5 }]}>
-              Đùi Gà Sốt ĐẬU
+              {user.fullName}
             </Title>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Octicons name="dot-fill" size={20} color="green" />
@@ -60,7 +59,7 @@ export default function ProfileScreen() {
       <View style={styles.userInfoSection}>
         <View style={styles.row}>
           <AntDesign name="calendar" size={20} color={Colors.dark} />
-          <Text style={styles.infText}>2023-07-12</Text>
+          <Text style={styles.infText}>{user.dob}</Text>
         </View>
         <View style={styles.row}>
           <MaterialCommunityIcons
@@ -68,11 +67,11 @@ export default function ProfileScreen() {
             size={20}
             color={Colors.dark}
           />
-          <Text style={styles.infText}>synqse151029@fpt.edu.vn</Text>
+          <Text style={styles.infText}>{user.email}</Text>
         </View>
         <View style={styles.row}>
           <Feather name="phone" size={20} color={Colors.dark} />
-          <Text style={styles.infText}>0983709791</Text>
+          <Text style={styles.infText}>{user.phoneNumber}</Text>
         </View>
       </View>
       <View style={styles.infoBoxWrapper}></View>
