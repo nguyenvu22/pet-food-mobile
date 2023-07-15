@@ -8,6 +8,7 @@ const animationSources = {
   lottie_order_success: require("../../assets/animations/lottie_order_success.json"),
   lottie_unshipping: require("../../assets/animations/lottie_unshipping.json"),
   lottie_loading_clock: require("../../assets/animations/lottie_loading_clock.json"),
+  lottie_regist_success: require("../../assets/animations/lottie_regist_success.json"),
   // Add more animation sources as needed
 };
 

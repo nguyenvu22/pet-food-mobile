@@ -9,12 +9,16 @@ import {
   Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
+
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../constants/styles";
+import { initUser } from "../../redux/user/user";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
@@ -26,7 +30,9 @@ export default function ProfileScreen() {
   };
 
   const logOut = () => {
-    navigation.navigate("Login");
+    dispatch(initUser({ user: {} }));
+    AsyncStorage.removeItem("user");
+    navigation.replace("Login");
   };
 
   return (
