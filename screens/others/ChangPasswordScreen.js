@@ -72,7 +72,6 @@ const ChangPasswordScreen = ({ route }) => {
       console.log("data", data);
       const response = await changePassWordHandler(data, user.accessToken);
       if (response.status === "Success") {
-        setIsSuccess(true);
         setVisible(true);
         setTimeout(() => {
           setVisible(false);
@@ -95,7 +94,6 @@ const ChangPasswordScreen = ({ route }) => {
         requireUrl={"lottie_regist_success"}
         text="Change Password Successfully"
       />
-
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <Avatar.Image
