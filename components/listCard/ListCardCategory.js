@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import img1 from "../../assets/care.png";
 import img2 from "../../assets/clothes.png";
 import img3 from "../../assets/food.png";
@@ -9,6 +9,8 @@ import img6 from "../../assets/medical.png";
 import img7 from "../../assets/other.png";
 import img8 from "../../assets/walk.png";
 import CardCategory from "../card/CardCategory";
+import { useSelector } from "react-redux";
+import { getAllBird } from "../../services/bird";
 
 const ListCardCategory = () => {
   const dataCategory = [
@@ -62,10 +64,25 @@ const ListCardCategory = () => {
     },
   ];
 
+  const accessToken = useSelector(
+    (state) => state.userReducers.user.accessToken
+  );
+
+  useEffect(() => {
+    getAllBirdHandle(accessToken);
+  }, [accessToken]);
+
+  const getAllBirdHandle = async (accessToken) => {
+    try {
+      const response = await getAllBird(accessToken);
+      console.log("response : ", response);
+    } catch (error) {
+      console.log("error in screen : ", error);
+    }
+  };
+
   const renderCategoryList = (itemData) => {
-    const handlerCategory = () => {
-      
-    };
+    const handlerCategory = () => {};
     return (
       <CardCategory
         color={itemData.item.color}
