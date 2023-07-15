@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Button,
   Dimensions,
   FlatList,
   Pressable,
@@ -13,6 +14,8 @@ import { useSelector } from "react-redux";
 import { Colors } from "../../constants/styles";
 import ListCardCart from "../../components/listCard/ListCardCart";
 import { Ionicons } from "@expo/vector-icons";
+
+import * as Linking from "expo-linking";
 
 export default function CartScreen({ navigation }) {
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
@@ -68,6 +71,15 @@ export default function CartScreen({ navigation }) {
           <Ionicons name="arrow-forward" size={20} color="white" />
         </Pressable>
       </Animated.View>
+
+      {/* <Button
+        title="Linking open url"
+        onPress={() =>
+          Linking.openURL(
+            "https://www.google.com/"
+          )
+        }
+      /> */}
     </ScrollView>
   );
 }

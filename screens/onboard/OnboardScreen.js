@@ -7,20 +7,22 @@ import NextButton from "../../components/onboard/NextButton";
 const data = [
   {
     id: 1,
-    title: "l",
-    description: "",
+    title: "Feathered Favorites",
+    description: "Discover the Finest Bird Food Selection at Our Store",
     //   image: require(),
   },
   {
     id: 2,
-    title: "gf",
-    description: "",
+    title: "Wings & Seeds",
+    description:
+      "Satisfy Your Avian Friends' Appetites with Our Premium Bird Food",
     //   image: require(),
   },
   {
     id: 3,
-    title: "gf",
-    description: "",
+    title: "Flock Feast",
+    description:
+      "Step into our Store and Treat Your Feathers to the Best Bird Food in Town",
     //   image: require(),
   },
 ];

@@ -26,6 +26,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import ConfirmModal from "../../components/modal/ConfirmModal";
 import cart, { updateCart } from "../../redux/cart/cart";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Linking from "expo-linking";
 
 export default function CheckoutScreen({ navigation, route }) {
   const user = useSelector((state) => state.userReducers.user);
@@ -190,6 +191,9 @@ export default function CheckoutScreen({ navigation, route }) {
     if (response?.status === "Success") {
       setVisible(true);
       setTimeout(() => {
+        if (!response.data.paymentUrl) {
+          Linking.openURL(response.data.paymentUrl);
+        }
         const orderMealsId = orderMeals.map((item) => {
           return item.id;
         });
@@ -380,7 +384,7 @@ export default function CheckoutScreen({ navigation, route }) {
           </View>
         </View>
         <View style={[styles.separator, { height: 3 }]} />
-        <View style={{ paddingHorizontal: 20, marginBottom: 200 }}>
+        <View style={{ paddingHorizontal: 20, marginBottom: 100 }}>
           <Text style={[styles.label, { marginBottom: 10 }]}>
             Payment methods:
           </Text>

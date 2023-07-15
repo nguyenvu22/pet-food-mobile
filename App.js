@@ -248,7 +248,7 @@ function Main({ hasLaunched, setHasLaunched }) {
 
 export default function App() {
   const [hasLaunched, setHasLaunched] = useState(false);
-  // AsyncStorage.clear();
+  AsyncStorage.clear();
   return (
     <>
       <StatusBar
