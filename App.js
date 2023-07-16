@@ -38,6 +38,7 @@ import ChangPasswordScreen from "./screens/others/ChangPasswordScreen";
 import CustomMealScreen from "./screens/others/CustomMealScreen";
 import ArchiveCustomerScreen from "./screens/store/ArchiveCustomerScreen";
 import FilterMealsScreen from "./screens/others/FilterMealsScreen";
+import DetailNewScreen from "./screens/others/DetailNewScreen";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -184,7 +185,8 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen name="Regist" component={RegistScreen} options={{}} />
       <Stack.Screen name="Search" component={SearchScreen} options={{}} />
       <Stack.Screen name="Checkout" component={CheckoutScreen} options={{}} />
-      <Stack.Screen name="FilterMeals" component={FilterMealsScreen}/>
+      <Stack.Screen name="FilterMeals" component={FilterMealsScreen} />
+      <Stack.Screen name="DetailNewScreen" component={DetailNewScreen} />
       <Stack.Screen
         name="ArchiveCustomer"
         component={ArchiveCustomerScreen}
