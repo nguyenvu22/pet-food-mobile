@@ -20,7 +20,7 @@ const AddButtonTab = () => {
       <View style={styles.box}>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => navigation.navigate("AddMeal")}
+          onPress={() => navigation.navigate("ArchiveCustomer")}
         >
           <View style={[styles.addButtonInner]}>
             <Image source={addTab} style={styles.imgAdd} />

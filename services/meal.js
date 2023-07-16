@@ -56,3 +56,30 @@ export async function sendMealOrder(orderInfo, orderMeals, accessToken) {
     console.log(error.response);
   }
 }
+
+export async function getAllMealCustomerFunction(accessToken) {
+  try {
+    const response = await axios.get(API_KEY + "/meal/customer", {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error.response);
+  }
+}
+
+export async function getMealsByBirdIdFunctions(idBird ,accessToken) {
+  try {
+    const response = await axios.get(API_KEY + `/meal/bird/${idBird}`, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    })
+    return response.data;
+  } catch (error) {
+    console.log(error.response);
+  }
+  
+}

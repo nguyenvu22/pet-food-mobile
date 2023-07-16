@@ -1,8 +1,15 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Colors } from "../../constants/styles";
+import { useNavigation } from "@react-navigation/native";
 
-const CardCategory = ({ color, title, onPress, image }) => {
+const CardCategory = ({ onPress, data }) => {
+  const navigation = useNavigation();
+  const SelectMealsByBird = () => {
+    navigation.navigate("FilterMeals", {
+      Bird: data,
+    });
+  };
   return (
     <View style={styles.categoryContainer}>
       <Pressable
@@ -11,9 +18,11 @@ const CardCategory = ({ color, title, onPress, image }) => {
           pressed ? styles.buttonPressed : null,
         ]}
         android_ripple={{ color: "#cccccc" }}
-        onPress={onPress}
+        onPress={SelectMealsByBird}
       >
-        <View style={[styles.innerContainer, { backgroundColor: color }]}>
+        <View
+          style={[styles.innerContainer, { backgroundColor: Colors.white }]}
+        >
           <View
             style={{
               height: 50,
@@ -21,11 +30,14 @@ const CardCategory = ({ color, title, onPress, image }) => {
               marginTop: 2,
               justifyContent: "center",
               alignItems: "center",
+              borderRadius: 8,
+              overflow: 'hidden',
+              marginBottom: 2
             }}
           >
-            <Image source={image} style={styles.ImgCategory} />
+            <Image source={{ uri: data.images }} style={styles.ImgCategory} />
           </View>
-          <Text style={styles.titleText}>{title}</Text>
+          <Text style={styles.titleText}>{data.birdName}</Text>
         </View>
       </Pressable>
     </View>
@@ -41,11 +53,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderRadius: 15,
     backgroundColor: "white",
-    elevation: 8,
-    shadowColor: "black",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
+
+    // elevation: 8,
+    // shadowColor: "black",
+    // shadowOpacity: 0.3,
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowRadius: 5,
   },
   button: {
     flex: 1,
@@ -59,9 +72,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 15,
   },
+  ImgCategory: {
+    height: "100%",
+    width: "100%",
+    resizeMode: 'cover'
+  },
   titleText: {
     fontWeight: "bold",
-    fontSize: 13,
+    fontSize: 10,
     color: "#545151",
   },
 });

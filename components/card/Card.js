@@ -9,19 +9,26 @@ import {
 import React from "react";
 import { Entypo } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("screen").width;
-const Card = ({ id, image, remainQuantity, expiredDate, price, productName, type }) => {
-
+const Card = ({
+  id,
+  image,
+  remainQuantity,
+  expiredDate,
+  price,
+  productName,
+  type,
+}) => {
   const navigation = useNavigation();
 
   const SelectProduct = () => {
-    navigation.navigate('Detail', {
+    navigation.navigate("Detail", {
       itemId: id,
-      itemType: type
-    })
-  }
+      itemType: type,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -73,6 +80,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     // marginHorizontal: 10,
     borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonPressed: {
     opacity: 0.75,
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
   },
   imgContainer: {
     height: 110,
-    width: 155,
+    width: 156,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: Colors.light,
@@ -89,9 +98,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   img: {
-    resizeMode: "cover",
-    height: '100%',
-    width: '100%',
+    resizeMode: "contain",
+    height: "100%",
+    width: "100%",
     borderRadius: 8,
   },
   title: {
