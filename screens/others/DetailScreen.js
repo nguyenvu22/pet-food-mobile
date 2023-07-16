@@ -42,37 +42,10 @@ const DetailScreen = ({ navigation, route }) => {
   } else {
     selectItem = meals?.find((item) => item.id === id);
   }
-  console.log(selectItem);
 
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
-
-  //   const getProductById = async (idProduct, accessToken) => {
-  //     try {
-  //       const response = await getProductByIdFunction(idProduct, accessToken);
-  //       if (response?.status === "Success") {
-  //         setProducts(response.data);
-  //       } else {
-  //         console.log("error in screen : ");
-  //       }
-  //     } catch (error) {
-  //       console.log("error in screen : ", error);
-  //     }
-  //   };
-
-  //   const getMealById = async (idMeal, accessToken) => {
-  //     try {
-  //       const response = await getMealByIdFunction(idMeal, accessToken);
-  //       if (response?.status === "Success") {
-  //         setMeals(response.data);
-  //       } else {
-  //         console.log("error in screen : ");
-  //       }
-  //     } catch (error) {
-  //       console.log("error in screen : ", error);
-  //     }
-  //   };
 
   const getAllProducts = async (accessToken) => {
     try {
@@ -184,7 +157,7 @@ const DetailScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView
       style={{
-        paddingBottom: type === "product" ? 1 : 40,
+        paddingBottom: type === "product" ? 1 : 20,
         backgroundColor: Colors.pink100,
       }}
     >
@@ -225,6 +198,7 @@ const DetailScreen = ({ navigation, route }) => {
             </Text>
           </View>
         </View>
+
         <View style={styles.desContainer}>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -299,6 +273,7 @@ const DetailScreen = ({ navigation, route }) => {
             </View>
           </View>
         </View>
+        
       </ScrollView>
       {type === "meal" && (
         <View style={styles.footer}>

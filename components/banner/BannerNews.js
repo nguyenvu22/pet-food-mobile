@@ -57,7 +57,7 @@ const BannerNews = ({ title }) => {
             resizeMode="center"
           />
           <View style={styles.carouselTextContainer}>
-            <Text style={styles.carouselTextTitle}>Blog</Text>
+            <Text style={styles.carouselTextTitle}>News </Text>
             <Text style={styles.carouselTextTitle2}>{itemData.item.title}</Text>
           </View>
         </View>
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
   containerCarousel: {
     justifyContent: "center",
     alignItems: "center",
-    height: 150,
-    width: 325,
+    height: 250,
+    width: 300,
     marginHorizontal: 10,
     borderRadius: 20,
     overflow: "hidden",
@@ -107,15 +107,12 @@ const styles = StyleSheet.create({
   carouselTextContainer: {
     position: "absolute",
     backgroundColor: Colors.white,
-    // top: 43,
-    // right: 85,
     width: "100%",
     paddingHorizontal: 5,
-    // borderBottomLeftRadius: 20,
-    // borderTopRightRadius: 40,
     overflow: "hidden",
     bottom: 0,
     left: 0,
+    paddingVertical: 10,
   },
   carouselTextTitle: {
     padding: 5,
