@@ -43,3 +43,34 @@ export async function getUserProfile(accessToken) {
     console.log(error.response.data);
   }
 }
+
+export async function changePassWordHandler(data, accessToken) {
+  try {
+    const response = await axios.post(
+      API_KEY + "/account/change-password",
+      {
+        oldPassword: data.oldPassword,
+        newPassword: data.newPassword,
+        confirmNewPassword: data.confirmNewPassword,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    // console.log("res in service : ", response.data);
+    return response.data;
+  } catch (error) {
+    console.log("error in service : ", error.response.data);
+    return error.response.data;
+  }
+}
+
+export async function getProfileUserFunction(accessToken) {
+  try {
+    const response = await axios.get(API_KEY + "/account/profile" , {
+      
+    });
+  } catch (error) {}
+}

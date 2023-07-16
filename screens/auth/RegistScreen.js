@@ -17,6 +17,7 @@ import { signup } from "../../services/user";
 import DatePicker, { getFormatedDate } from "react-native-modern-datepicker";
 import { Ionicons } from "@expo/vector-icons";
 import Lottie from "lottie-react-native";
+import ConfirmModal from "../../components/modal/ConfirmModal";
 
 export default function RegistScreen({ navigation }) {
   const [openModal, setOpenModal] = useState(false);
@@ -107,6 +108,7 @@ export default function RegistScreen({ navigation }) {
       } else if (res.status === "Success") {
         setIsSuccess(true);
         setTimeout(() => {
+          setIsSuccess(false);
           navigation.navigate("Login");
         }, 3000);
       } else {
@@ -131,6 +133,12 @@ export default function RegistScreen({ navigation }) {
       }}
     >
       <View style={styles.rootContainer}>
+        <ConfirmModal
+          visible={isSuccess}
+          setVisible={setIsSuccess}
+          requireUrl="lottie_regist_success"
+          text="Verify your account in email"
+        />
         <Modal animationType="fade" transparent={true} visible={openModal}>
           <TouchableWithoutFeedback onPress={handleModel}>
             <View
@@ -343,7 +351,7 @@ export default function RegistScreen({ navigation }) {
             </Text>
           </Pressable>
         </View>
-        {isSuccess && (
+        {/* {isSuccess && (
           <View style={styles.success}>
             <View style={{ flex: 1, marginHorizontal: 40 }}>
               <Lottie
@@ -354,7 +362,7 @@ export default function RegistScreen({ navigation }) {
               />
             </View>
           </View>
-        )}
+        )} */}
       </View>
     </TouchableWithoutFeedback>
   );

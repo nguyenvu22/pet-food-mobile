@@ -1,11 +1,14 @@
 import {
   ActivityIndicator,
+  Dimensions,
   Image,
   ImageBackground,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -31,6 +34,7 @@ const DetailScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [meals, setMeals] = useState();
   const [visible, setVisible] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   let selectItem;
   if (type === "product") {
@@ -38,6 +42,7 @@ const DetailScreen = ({ navigation, route }) => {
   } else {
     selectItem = meals?.find((item) => item.id === id);
   }
+  console.log(selectItem);
 
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
@@ -98,24 +103,31 @@ const DetailScreen = ({ navigation, route }) => {
   };
 
   const handlerAddToCart = async () => {
+    console.log(cartInRedux);
+    let addToCart;
     if (cartInRedux.some((item) => item.id === selectItem.id)) {
-      const addToCart = cartInRedux.map((item) => {
+      addToCart = cartInRedux.map((item) => {
         if (item.id === selectItem.id) {
           return { ...item, quantity: item.quantity + 1 };
         }
         return item;
       });
-      dispatch(updateCart({ cart: addToCart }));
-      await AsyncStorage.setItem("cart", JSON.stringify(addToCart));
     } else {
-      const addToCart = [...cartInRedux, { ...selectItem, quantity: 1 }];
-      dispatch(updateCart({ cart: addToCart }));
-      await AsyncStorage.setItem("cart", JSON.stringify(addToCart));
+      addToCart = [...cartInRedux, { ...selectItem, quantity: 1 }];
     }
+    dispatch(updateCart({ cart: addToCart }));
+    await AsyncStorage.setItem("cart", JSON.stringify(addToCart));
+
+    setOpenModal(false);
     setVisible(true);
     setTimeout(() => {
       setVisible(false);
     }, 2000);
+  };
+
+  const handleCustomMeal = () => {
+    setOpenModal(false);
+    navigation.navigate("CustomMeal", { meal: selectItem });
   };
 
   const handlerLike = () => {
@@ -133,6 +145,38 @@ const DetailScreen = ({ navigation, route }) => {
     }
   }, [accessToken]);
 
+  function SelectorModal() {
+    return (
+      <Modal animationType="fade" transparent={true} visible={openModal}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setOpenModal(false);
+          }}
+        >
+          <View style={styles.modal}>
+            <Text style={{ fontSize: 25, fontWeight: "600", color: "white" }}>
+              Select your option
+            </Text>
+            <View style={{ height: 40 }} />
+            <Pressable style={styles.modalItem} onPress={handlerAddToCart}>
+              <Text style={styles.modalText}>Add to Cart</Text>
+              <View style={styles.modalButton}>
+                <Octicons name="plus" color={"white"} size={30} />
+              </View>
+            </Pressable>
+            <View style={{ height: 20 }} />
+            <Pressable style={styles.modalItem} onPress={handleCustomMeal}>
+              <Text style={styles.modalText}>Custom this Meal</Text>
+              <View style={styles.modalButton}>
+                <Octicons name="plus" color={"white"} size={30} />
+              </View>
+            </Pressable>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  }
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -144,6 +188,7 @@ const DetailScreen = ({ navigation, route }) => {
         backgroundColor: Colors.pink100,
       }}
     >
+      <SelectorModal />
       <ConfirmModal
         visible={visible}
         setVisible={setVisible}
@@ -280,7 +325,9 @@ const DetailScreen = ({ navigation, route }) => {
                 pressed ? styles.buttonPressed : null,
               ]}
               android_ripple={{ color: "#cccccc" }}
-              onPress={handlerAddToCart}
+              onPress={() => {
+                setOpenModal(true);
+              }}
             >
               <View style={styles.addCartInnerContainer}>
                 <Text style={styles.addCartText}>Add To Cart</Text>
@@ -294,6 +341,9 @@ const DetailScreen = ({ navigation, route }) => {
 };
 
 export default DetailScreen;
+
+const dWidth = Dimensions.get("window").width;
+const dHeight = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
   ImgBgContainer: {
@@ -514,5 +564,39 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 24,
     color: Colors.white,
+  },
+
+  modal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.6)",
+  },
+  modalItem: {
+    width: dWidth * 0.6,
+    height: 60,
+    backgroundColor: "white",
+    borderRadius: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: Colors.purple800,
+    marginRight: 30,
+  },
+  modalButton: {
+    position: "absolute",
+    right: 0,
+    width: 60,
+    height: 60,
+    borderRadius: 60,
+    backgroundColor: Colors.purple800,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "black",
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
   },
 });

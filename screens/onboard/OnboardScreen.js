@@ -9,21 +9,21 @@ const data = [
     id: 1,
     title: "Feathered Favorites",
     description: "Discover the Finest Bird Food Selection at Our Store",
-    //   image: require(),
+    image: require('../../assets/images/onboard1.png'),
   },
   {
     id: 2,
     title: "Wings & Seeds",
     description:
       "Satisfy Your Avian Friends' Appetites with Our Premium Bird Food",
-    //   image: require(),
+      image: require('../../assets/images/onboard2.png'),
   },
   {
     id: 3,
     title: "Flock Feast",
     description:
       "Step into our Store and Treat Your Feathers to the Best Bird Food in Town",
-    //   image: require(),
+      image: require('../../assets/images/onboard1.png'),
   },
 ];
 

@@ -15,8 +15,6 @@ import { Colors } from "../../constants/styles";
 import ListCardCart from "../../components/listCard/ListCardCart";
 import { Ionicons } from "@expo/vector-icons";
 
-import * as Linking from "expo-linking";
-
 export default function CartScreen({ navigation }) {
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
 
@@ -55,14 +53,16 @@ export default function CartScreen({ navigation }) {
   return (
     <ScrollView style={styles.rootContainer}>
       <Text style={styles.title}>Cart</Text>
-      {meals.length !== 0 && (
+      {meals.length !== 0 ? (
+        <ListCardCart
+          data={meals}
+          setMeals={setMeals}
+          selectedProducts={selectedProducts}
+          setSelectedProducts={setSelectedProducts}
+        />
+      ) : (
         <View style={styles.section}>
-          <ListCardCart
-            data={meals}
-            setMeals={setMeals}
-            selectedProducts={selectedProducts}
-            setSelectedProducts={setSelectedProducts}
-          />
+          <Text>Add something you want to buy</Text>
         </View>
       )}
       <Animated.View style={[styles.buttonContainer, { right: animatedValue }]}>
@@ -71,15 +71,6 @@ export default function CartScreen({ navigation }) {
           <Ionicons name="arrow-forward" size={20} color="white" />
         </Pressable>
       </Animated.View>
-
-      {/* <Button
-        title="Linking open url"
-        onPress={() =>
-          Linking.openURL(
-            "https://www.google.com/"
-          )
-        }
-      /> */}
     </ScrollView>
   );
 }
@@ -101,7 +92,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 10,
   },
-  section: {},
+  section: {
+    flex: 1,
+    height: dHeight * 0.7,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   buttonContainer: {
     position: "absolute",
     top: dHeight * 0.75,

@@ -42,9 +42,6 @@ export default function HomeScreen() {
             <BannerSale title="Sale this Week" />
           </View>
 
-          {/* <View style={styles.listCard}>
-            <ListCard title="Best Seller Food" />
-          </View> */}
         </View>
       </View>
     </ScrollView>

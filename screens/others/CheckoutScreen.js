@@ -190,10 +190,19 @@ export default function CheckoutScreen({ navigation, route }) {
     setLoadingVisible(false);
     if (response?.status === "Success") {
       setVisible(true);
+      if (response.data.paymentUrl) {
+        console.log("Linking");
+        console.log(response.data.paymentUrl);
+        Linking.openURL(response.data.paymentUrl);
+        // Linking.addEventListener(response.data.paymentUrl, (event) => {
+        //   console.log("Inside Linking.addEventListener");
+        //   console.log(event);
+        //   console.log(Linking.parse(event));
+        //   console.log(event.url);
+        //   console.log(Linking.parse(eventurl));
+        // });
+      }
       setTimeout(() => {
-        if (!response.data.paymentUrl) {
-          Linking.openURL(response.data.paymentUrl);
-        }
         const orderMealsId = orderMeals.map((item) => {
           return item.id;
         });

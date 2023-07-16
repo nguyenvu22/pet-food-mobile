@@ -1,7 +1,14 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoginScreen from "./screens/auth/LoginScreen";
@@ -12,7 +19,7 @@ import CartScreen from "./screens/store/CartScreen";
 import SplashScreen from "./screens/splash/SplashScreen";
 import OnboardScreen from "./screens/onboard/OnboardScreen";
 import SearchScreen from "./screens/others/SearchScreen";
-import SettingScreen from "./screens/store/SettingScreen";
+import ShippingScreen from "./screens/store/ShippingScreen";
 import MealScreen from "./screens/store/MealScreen";
 import DetailScreen from "./screens/others/DetailScreen";
 import AddButtonTab from "./components/button/AddButtonTab";
@@ -23,17 +30,26 @@ import { initUser } from "./redux/user/user";
 import { updateCart } from "./redux/cart/cart";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Colors } from "./constants/styles";
 import { useFonts } from "expo-font";
 import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
+import ChangPasswordScreen from "./screens/others/ChangPasswordScreen";
+import CustomMealScreen from "./screens/others/CustomMealScreen";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 const HAS_LAUNCH = "HAS_LAUNCH";
 
+// const navigation = useNavigation();
+// const goBack = () => {
+//   navigation.goBack();
+// };
+
 function BottomTabsScreen() {
+  const navigation = useNavigation();
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
+
   function EmptyScreen() {
     return <></>;
   }
@@ -127,13 +143,13 @@ function BottomTabsScreen() {
         }}
       />
       <Tabs.Screen
-        name="Setting"
-        component={SettingScreen}
+        name="Shipping"
+        component={ShippingScreen}
         options={{
-          tabBarLabel: "Setting",
+          tabBarLabel: "Shipping",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              <AntDesign name="setting" size={size} color={color} />
+              <FontAwesome5 name="shipping-fast" size={size} color={color} />
             </View>
           ),
         }}
@@ -143,6 +159,10 @@ function BottomTabsScreen() {
 }
 
 function StackScreen({ hasLaunched }) {
+  const navigation = useNavigation();
+  const goBackFunction = () => {
+    navigation.goBack();
+  };
   return (
     <Stack.Navigator
       screenOptions={{
@@ -163,11 +183,34 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen name="Search" component={SearchScreen} options={{}} />
       <Stack.Screen name="Checkout" component={CheckoutScreen} options={{}} />
       <Stack.Screen
+        name="CustomMeal"
+        component={CustomMealScreen}
+        options={{}}
+      />
+      <Stack.Screen
         name="AddMeal"
         component={MealScreen}
         options={{ presentation: "modal" }}
       />
       <Stack.Screen name="Detail" component={DetailScreen} options={{}} />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangPasswordScreen}
+        options={{
+          title: "Change Password",
+          presentation: "modal",
+          headerShown: true,
+          headerLeft: () => (
+            <Pressable onPress={goBackFunction}>
+              <Ionicons name="arrow-back" size={24} color="black" />
+            </Pressable>
+          ),
+          headerTitleStyle: {
+            fontSize: 16,
+            fontWeight: "500",
+          },
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -248,7 +291,7 @@ function Main({ hasLaunched, setHasLaunched }) {
 
 export default function App() {
   const [hasLaunched, setHasLaunched] = useState(false);
-  AsyncStorage.clear();
+  // AsyncStorage.clear();
   return (
     <>
       <StatusBar

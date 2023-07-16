@@ -11,12 +11,14 @@ export default function OnboardItem({ item }) {
   const { width } = useWindowDimensions();
   return (
     <View style={[styles.container, { width }]}>
-      <Image
-        source={item.image}
-        style={[styles.image, { width }]}
-        resizeMode="contain"
-      />
-      <View style={{ flex: 0.3 }}>
+      <View style={styles.image}>
+        <Image
+          source={item.image}
+          style={{ width: width * 0.7 }}
+          resizeMode="cover"
+        />
+      </View>
+      <View style={{ flex: 0.1 }}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description}>{item.description}</Text>
       </View>
@@ -33,6 +35,7 @@ const styles = StyleSheet.create({
   image: {
     flex: 0.7,
     justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 28,
