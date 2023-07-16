@@ -25,7 +25,7 @@ export default function CartProduct({
 }) {
   const dispatch = useDispatch();
 
-  const [scaleValue, setScaleValue] = useState(new Animated.Value(1));
+  const [scaleValue] = useState(new Animated.Value(1));
 
   function animationButton() {
     Animated.timing(scaleValue, {
@@ -69,7 +69,9 @@ export default function CartProduct({
               {
                 text: "Yes",
                 onPress: () => {
-                  const newCart = data.filter((item) => item.id !== dataItem.id)
+                  const newCart = data.filter(
+                    (item) => item.id !== dataItem.id
+                  );
                   setMeals(newCart);
                   dispatch(updateCart({ cart: newCart }));
                   AsyncStorage.setItem("cart", JSON.stringify(newCart));
@@ -171,9 +173,15 @@ export default function CartProduct({
             <View style={styles.footer}>
               <Text style={styles.price}>
                 $
-                {dataItem.productMeals.reduce((value, item) => {
+                {dataItem.productMeals.Morning.reduce((value, item) => {
                   return (value += item.amount * item.product.price);
-                }, 0)}
+                }, 0) +
+                  dataItem.productMeals.Afternoon.reduce((value, item) => {
+                    return (value += item.amount * item.product.price);
+                  }, 0) +
+                  dataItem.productMeals.Evening.reduce((value, item) => {
+                    return (value += item.amount * item.product.price);
+                  }, 0)}
               </Text>
               <View style={styles.plus}>
                 <Pressable onPress={changeQuantity.bind(this, "decrease")}>

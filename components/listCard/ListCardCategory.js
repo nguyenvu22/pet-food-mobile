@@ -34,7 +34,6 @@ const ListCardCategory = () => {
   const getAllBirdHandle = async (accessToken) => {
     try {
       const response = await getAllBird(accessToken);
-      // console.log("response in screen : ", response.data);
       if (response?.status === "Success") {
         setBird(response.data);
       } else {
@@ -46,7 +45,6 @@ const ListCardCategory = () => {
   };
 
   const renderCategoryList = (itemData) => {
-    // console.log("itemData : ", itemData.item);
 
     const handlerCategory = () => {};
     return <CardCategory data={itemData.item} onPress={handlerCategory} />;

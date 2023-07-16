@@ -17,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import CardSearch from "../../components/card/CardSearch";
 import LoadingScreen from "../../components/loading/LoadingScreen";
 import { useNavigation } from "@react-navigation/native";
+import CardSearchMeal from "../../components/card/CardSearchMeal";
 
 export default function SearchScreen() {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,11 +38,11 @@ export default function SearchScreen() {
     const filteredData = filter(fullData, (item) => {
       return (
         contains(item.productName, formattedQuery) ||
-        contains(item.mealName, formattedQuery)
+        contains(item.title, formattedQuery)
       );
     });
     setDataProducts(filteredData.filter((item) => item.productName));
-    setDataMeals(filteredData.filter((item) => item.mealName));
+    setDataMeals(filteredData.filter((item) => item.title));
   };
 
   const contains = (item, query) => {
@@ -57,7 +58,7 @@ export default function SearchScreen() {
           setDataProducts(response.data);
           setFullData((prevData) => [...prevData, ...response.data]);
         } else {
-          console.log("error in screen : ");
+          console.log("error in screen get product ");
         }
       } catch (error) {
         console.log("error in screen : ", error);
@@ -73,7 +74,7 @@ export default function SearchScreen() {
           setFullData((prevData) => [...prevData, ...response.data]);
           setIsLoading(false);
         } else {
-          console.log("error in screen : ");
+          console.log("error in screen get meal ");
         }
       } catch (error) {
         console.log("error in screen : ", error);
@@ -90,6 +91,7 @@ export default function SearchScreen() {
     return (
       <View>
         <CardSearch
+          data={itemData.item}
           image={itemData.item.image}
           productName={itemData.item.productName}
           expiredDate={itemData.item.expiredDate}
@@ -104,14 +106,16 @@ export default function SearchScreen() {
   const RenderItemMeal = (itemData) => {
     return (
       <View>
-        <CardSearch
+        {/* <CardSearch
+          data={itemData.item}
           image={itemData.item.image}
           productName={itemData.item.mealName}
           expiredDate={itemData.item.expiredDate}
           id={itemData.item.id}
           price={itemData.item.price}
           type="meal"
-        />
+        /> */}
+        <CardSearchMeal data={itemData.item} type="meal" />
       </View>
     );
   };

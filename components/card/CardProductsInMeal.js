@@ -3,18 +3,13 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../../constants/styles";
 
-//card for product
-const CardSearch = ({ type, data }) => {
-
-
+const CardProductsInMeal = ({ data }) => {
   const navigation = useNavigation();
   const SelectItem = () => {
-    navigation.navigate("Detail", {
+    navigation.navigate("DetailProductsMeal", {
       dataItem: data,
-      itemType: type,
     });
   };
-
   return (
     <Pressable
       onPress={SelectItem}
@@ -41,7 +36,7 @@ const CardSearch = ({ type, data }) => {
   );
 };
 
-export default CardSearch;
+export default CardProductsInMeal;
 
 const styles = StyleSheet.create({
   button: {

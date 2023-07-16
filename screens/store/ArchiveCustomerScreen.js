@@ -53,19 +53,16 @@ const ArchiveCustomerScreen = () => {
     return (
       <>
         <View style={styles.header}>
-          <View style={styles.headerBtn}>
+          {/* <View style={styles.headerBtn}>
             <Ionicons
               name="chevron-back"
               size={25}
               color={Colors.dark}
               onPress={navigation.goBack}
             />
-          </View>
+          </View> */}
           <View style={styles.innerHeader}>
-            <View />
-            <View>
-              <Text style={styles.title}>Archive</Text>
-            </View>
+            <Text style={styles.title}>Archive</Text>
           </View>
         </View>
         <View style={styles.emptyContainer}>
@@ -131,23 +128,17 @@ export default ArchiveCustomerScreen;
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.pink100,
     paddingTop: dHeight * 0.065,
     paddingBottom: 10,
   },
-  innerHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: dWith * 0.54,
-  },
   headerBtn: {
     height: 30,
     width: 30,
     borderRadius: 99999,
-    justifyContent: "flex-start",
+    justifyContent: "center",
     alignItems: "center",
     marginLeft: 13,
   },

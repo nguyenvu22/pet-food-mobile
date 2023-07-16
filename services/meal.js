@@ -70,16 +70,38 @@ export async function getAllMealCustomerFunction(accessToken) {
   }
 }
 
-export async function getMealsByBirdIdFunctions(idBird ,accessToken) {
+export async function getMealsByBirdIdFunctions(idBird, accessToken) {
   try {
     const response = await axios.get(API_KEY + `/meal/bird/${idBird}`, {
       headers: {
         Authorization: "Bearer " + accessToken,
       },
-    })
+    });
     return response.data;
   } catch (error) {
     console.log(error.response);
   }
-  
+}
+
+export async function createCustomerMeal(data, accessToken) {
+  try {
+    const response = await axios.post(
+      API_KEY + "/meal/create",
+      {
+        title: data.title,
+        description: data.description,
+        birdId: data.bird.id,
+        image: data.image,
+        sections: data.productMeals,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error.response);
+  }
 }

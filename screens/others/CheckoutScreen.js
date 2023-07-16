@@ -24,7 +24,7 @@ import {
 import { sendMealOrder } from "../../services/meal";
 import { SelectList } from "react-native-dropdown-select-list";
 import ConfirmModal from "../../components/modal/ConfirmModal";
-import cart, { updateCart } from "../../redux/cart/cart";
+import { updateCart } from "../../redux/cart/cart";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Linking from "expo-linking";
 
@@ -40,11 +40,11 @@ export default function CheckoutScreen({ navigation, route }) {
 
   const [fullname, setFullname] = useState(user.fullName);
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-  const [province, setProvince] = useState(null);
-  const [district, setDistrict] = useState(null);
-  const [ward, setWard] = useState(null);
+  const [province, setProvince] = useState(205);
+  const [district, setDistrict] = useState(1538);
+  const [ward, setWard] = useState(440109);
   const [address, setAddress] = useState("");
-  const [shippingFee, setShippingFee] = useState(0);
+  const [shippingFee, setShippingFee] = useState(22001);
   const [paymentMethod, setPaymentMethod] = useState("");
 
   const [loadingVisible, setLoadingVisible] = useState(false);
@@ -55,55 +55,55 @@ export default function CheckoutScreen({ navigation, route }) {
     { key: "2", value: "MOMO" },
   ];
 
-  useEffect(() => {
-    async function getAllProvince() {
-      const provinces = await getProvinces();
-      const parse = provinces.map(({ ProvinceID, ProvinceName }) => ({
-        key: ProvinceID,
-        value: ProvinceName,
-      }));
-      setProvinces(parse);
-    }
-    getAllProvince();
-  }, []);
+  // useEffect(() => {
+  //   async function getAllProvince() {
+  //     const provinces = await getProvinces();
+  //     const parse = provinces.map(({ ProvinceID, ProvinceName }) => ({
+  //       key: ProvinceID,
+  //       value: ProvinceName,
+  //     }));
+  //     setProvinces(parse);
+  //   }
+  //   getAllProvince();
+  // }, []);
 
-  useEffect(() => {
-    async function getAllDistrict() {
-      if (province) {
-        const districts = await getDistricts(province);
-        const parse = districts.map(({ DistrictID, DistrictName }) => ({
-          key: DistrictID,
-          value: DistrictName,
-        }));
-        setDistricts(parse);
-      }
-    }
-    getAllDistrict();
-  }, [province]);
+  // useEffect(() => {
+  //   async function getAllDistrict() {
+  //     if (province) {
+  //       const districts = await getDistricts(province);
+  //       const parse = districts.map(({ DistrictID, DistrictName }) => ({
+  //         key: DistrictID,
+  //         value: DistrictName,
+  //       }));
+  //       setDistricts(parse);
+  //     }
+  //   }
+  //   getAllDistrict();
+  // }, [province]);
 
-  useEffect(() => {
-    async function getAllWard() {
-      if (district) {
-        const wards = await getWards(district);
-        const parse = wards.map(({ WardCode, WardName }) => ({
-          key: WardCode,
-          value: WardName,
-        }));
-        setWards(parse);
-      }
-    }
-    getAllWard();
-  }, [district]);
+  // useEffect(() => {
+  //   async function getAllWard() {
+  //     if (district) {
+  //       const wards = await getWards(district);
+  //       const parse = wards.map(({ WardCode, WardName }) => ({
+  //         key: WardCode,
+  //         value: WardName,
+  //       }));
+  //       setWards(parse);
+  //     }
+  //   }
+  //   getAllWard();
+  // }, [district]);
 
-  useEffect(() => {
-    async function countShippingFee() {
-      if (ward) {
-        const response = await calcDeliveryFee(district, ward);
-        setShippingFee(response);
-      }
-    }
-    countShippingFee();
-  }, [ward]);
+  // useEffect(() => {
+  //   async function countShippingFee() {
+  //     if (ward) {
+  //       const response = await calcDeliveryFee(district, ward);
+  //       setShippingFee(response);
+  //     }
+  //   }
+  //   countShippingFee();
+  // }, [ward]);
 
   function renderMealItem({ item }) {
     return (
@@ -140,9 +140,15 @@ export default function CheckoutScreen({ navigation, route }) {
         <View style={{ flex: 1.5, alignItems: "flex-end", paddingTop: 5 }}>
           <Text numberOfLines={6}>
             {item.quantity *
-              item.productMeals.reduce((value, item) => {
+              (item.productMeals.Morning.reduce((value, item) => {
                 return (value += item.amount * item.product.price);
-              }, 0)}
+              }, 0) +
+                item.productMeals.Afternoon.reduce((value, item) => {
+                  return (value += item.amount * item.product.price);
+                }, 0) +
+                item.productMeals.Evening.reduce((value, item) => {
+                  return (value += item.amount * item.product.price);
+                }, 0))}
             $
           </Text>
         </View>
@@ -187,20 +193,12 @@ export default function CheckoutScreen({ navigation, route }) {
       orderMeals,
       user.accessToken
     );
+    console.log(response);
     setLoadingVisible(false);
     if (response?.status === "Success") {
       setVisible(true);
       if (response.data.paymentUrl) {
-        console.log("Linking");
-        console.log(response.data.paymentUrl);
         Linking.openURL(response.data.paymentUrl);
-        // Linking.addEventListener(response.data.paymentUrl, (event) => {
-        //   console.log("Inside Linking.addEventListener");
-        //   console.log(event);
-        //   console.log(Linking.parse(event));
-        //   console.log(event.url);
-        //   console.log(Linking.parse(eventurl));
-        // });
       }
       setTimeout(() => {
         const orderMealsId = orderMeals.map((item) => {
@@ -355,9 +353,15 @@ export default function CheckoutScreen({ navigation, route }) {
               {selectedProducts.reduce((value, item) => {
                 return (value +=
                   item.quantity *
-                  item.productMeals.reduce((value, item) => {
+                  (item.productMeals.Morning.reduce((value, item) => {
                     return (value += item.amount * item.product.price);
-                  }, 0));
+                  }, 0) +
+                    item.productMeals.Afternoon.reduce((value, item) => {
+                      return (value += item.amount * item.product.price);
+                    }, 0) +
+                    item.productMeals.Evening.reduce((value, item) => {
+                      return (value += item.amount * item.product.price);
+                    }, 0)));
               }, 0)}
               $
             </Text>
@@ -383,9 +387,15 @@ export default function CheckoutScreen({ navigation, route }) {
                 selectedProducts.reduce((value, item) => {
                   return (value +=
                     item.quantity *
-                    item.productMeals.reduce((value, item) => {
+                    (item.productMeals.Morning.reduce((value, item) => {
                       return (value += item.amount * item.product.price);
-                    }, 0));
+                    }, 0) +
+                      item.productMeals.Afternoon.reduce((value, item) => {
+                        return (value += item.amount * item.product.price);
+                      }, 0) +
+                      item.productMeals.Evening.reduce((value, item) => {
+                        return (value += item.amount * item.product.price);
+                      }, 0)));
                 }, 0)
               ).toFixed(1)}
               $

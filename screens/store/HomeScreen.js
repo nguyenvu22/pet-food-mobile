@@ -14,6 +14,7 @@ import ListCard from "../../components/listCard/ListCard";
 import ListCardCategory from "../../components/listCard/ListCardCategory";
 import BannerSale from "../../components/banner/BannerSale";
 import HeaderHome from "../../components/header/HeaderHome";
+import BannerNews from "../../components/banner/BannerNews";
 
 export default function HomeScreen() {
   return (
@@ -42,6 +43,9 @@ export default function HomeScreen() {
             <BannerSale title="Sale this Week" />
           </View>
 
+          <View style={styles.news}>
+            <BannerNews title="News" />
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -52,7 +56,6 @@ const styles = StyleSheet.create({
   container: {
     // paddingHorizontal: 15,
     marginBottom: 80,
-
   },
 
   banner: {
@@ -69,5 +72,8 @@ const styles = StyleSheet.create({
   sale: {
     marginTop: 5,
     marginHorizontal: 20,
+  },
+  news: {
+    marginTop: 30,
   },
 });

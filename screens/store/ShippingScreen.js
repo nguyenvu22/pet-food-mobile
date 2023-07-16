@@ -8,20 +8,37 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import image from "../../assets/meme1.jpg";
 import CardShipping from "../../components/card/CardShipping";
-const ShippingScreen = () => {
-  const navigation = useNavigation();
+import { getOrderByStatus } from "../../services/order";
+
+const ShippingScreen = ({ navigation }) => {
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
   const [selectedButton, setSelectedButton] = useState("Delivery");
-  const ref = useRef();
+  const [orderData, setOrderData] = useState([]);
+  console.log(orderData);
+
+  useEffect(() => {
+    async function getOrders() {
+      let statusToAPI;
+      if (selectedButton === "Delivery") statusToAPI = "delivering";
+      else if (selectedButton === "Succeeded") statusToAPI = "completed";
+      else statusToAPI = "canceled";
+
+      const response = await getOrderByStatus(accessToken, statusToAPI);
+
+      if (response.status === "Success") setOrderData(response.data);
+      else setOrderData([]);
+    }
+    getOrders();
+  }, [selectedButton]);
 
   const handlerPressDelivery = () => {
     setSelectedButton("Delivery");
@@ -118,12 +135,18 @@ const ShippingScreen = () => {
           </Pressable>
         </View>
       </View>
+
       <View style={styles.orderContainer}>
-        <View style={styles.orderSummary}>
+        {/* <View style={styles.orderSummary}>
           <Text style={styles.summaryText}>Order Summary</Text>
-        </View>
+        </View> */}
         <View style={styles.listCardShipping}>
-          <FlatList />
+          <FlatList
+            data={orderData}
+            renderItem={({ item }) => {
+              return <CardShipping item={item} />;
+            }}
+          />
         </View>
       </View>
 
@@ -135,7 +158,9 @@ const ShippingScreen = () => {
 export default ShippingScreen;
 
 const styles = StyleSheet.create({
-  shippingContainer: {},
+  shippingContainer: {
+    backgroundColor: Colors.light,
+  },
   header: {
     height: 120,
     backgroundColor: Colors.redPastel200,
@@ -155,7 +180,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 30,
     height: 70,
-    width: 342,
     backgroundColor: Colors.white,
     borderRadius: 18,
     top: -35,
@@ -199,52 +223,10 @@ const styles = StyleSheet.create({
     color: Colors.dark,
   },
 
-  oderCardContainer: {
-    backgroundColor: "red",
-    height: 120,
-    borderRadius: 8,
-  },
-  oderCardInner: {
-    flex: 1,
-    flexDirection: "row",
-    margin: 10,
-    backgroundColor: "green",
-    padding: 10,
-  },
-  imageContainer: {
-    height: 80,
-    width: 80,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "red",
-  },
-  image: {
-    resizeMode: "center",
-    height: "100%",
-    width: "100%",
-  },
-  desContainer: {
-    marginLeft: 10,
-  },
-  nameText: {
-    marginBottom: 2,
-    fontSize: 17,
-    fontWeight: "600",
-  },
-  priceContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  priceText: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: Colors.purple800,
-    marginLeft: 3,
-  },
-  addressText: {
-    marginTop: 13,
-    fontSize: 13,
-    fontWeight: "500",
-    color: "gray",
+  listCardShipping: {
+    backgroundColor: "white",
+    marginHorizontal: 20,
+    padding: 20,
+    borderRadius: 15,
   },
 });

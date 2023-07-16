@@ -1,6 +1,7 @@
 import {
   ActivityIndicator,
   Dimensions,
+  FlatList,
   Image,
   ImageBackground,
   Modal,
@@ -11,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "../../constants/styles";
 import { Ionicons, Octicons, Feather, AntDesign } from "@expo/vector-icons";
@@ -22,11 +23,17 @@ import { updateCart } from "../../redux/cart/cart";
 import LoadingScreen from "../../components/loading/LoadingScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ConfirmModal from "../../components/modal/ConfirmModal";
+import CardSearch from "../../components/card/CardSearch";
+import CardProductsInMeal from "../../components/card/CardProductsInMeal";
+import { getBirdByIdFunction } from "../../services/bird";
 
 const DetailScreen = ({ navigation, route }) => {
   const type = route.params.itemType;
-  const id = route.params.itemId;
+  const data = route.params.dataItem;
 
+  const accessToken = useSelector(
+    (state) => state.userReducers.user.accessToken
+  );
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
   const dispatch = useDispatch();
 
@@ -35,44 +42,40 @@ const DetailScreen = ({ navigation, route }) => {
   const [meals, setMeals] = useState();
   const [visible, setVisible] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [bird, setBird] = useState();
 
   let selectItem;
+  let birdId;
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (type === "product") {
+      getAllProducts(accessToken);
+    } else {
+      getAllMeals(accessToken);
+      getBirdByID(birdId, accessToken);
+    }
+  }, [accessToken]);
+
   if (type === "product") {
-    selectItem = products?.find((item) => item.id === id);
+    selectItem = products?.find((item) => item.id === data.id);
   } else {
-    selectItem = meals?.find((item) => item.id === id);
+    selectItem = meals?.find((item) => item.id === data.id);
+    birdId = data.bird.id;
   }
-  console.log(selectItem);
 
-  const accessToken = useSelector(
-    (state) => state.userReducers.user.accessToken
-  );
-
-  //   const getProductById = async (idProduct, accessToken) => {
-  //     try {
-  //       const response = await getProductByIdFunction(idProduct, accessToken);
-  //       if (response?.status === "Success") {
-  //         setProducts(response.data);
-  //       } else {
-  //         console.log("error in screen : ");
-  //       }
-  //     } catch (error) {
-  //       console.log("error in screen : ", error);
-  //     }
-  //   };
-
-  //   const getMealById = async (idMeal, accessToken) => {
-  //     try {
-  //       const response = await getMealByIdFunction(idMeal, accessToken);
-  //       if (response?.status === "Success") {
-  //         setMeals(response.data);
-  //       } else {
-  //         console.log("error in screen : ");
-  //       }
-  //     } catch (error) {
-  //       console.log("error in screen : ", error);
-  //     }
-  //   };
+  const getBirdByID = async (birdId, accessToken) => {
+    try {
+      const response = await getBirdByIdFunction(birdId, accessToken);
+      if (response?.status === "Success") {
+        setBird(response.data);
+      } else {
+        console.log("Error set in screen ");
+      }
+    } catch (error) {
+      console.log("error in Screen ", error);
+    }
+  };
 
   const getAllProducts = async (accessToken) => {
     try {
@@ -103,7 +106,6 @@ const DetailScreen = ({ navigation, route }) => {
   };
 
   const handlerAddToCart = async () => {
-    console.log(cartInRedux);
     let addToCart;
     if (cartInRedux.some((item) => item.id === selectItem.id)) {
       addToCart = cartInRedux.map((item) => {
@@ -115,10 +117,10 @@ const DetailScreen = ({ navigation, route }) => {
     } else {
       addToCart = [...cartInRedux, { ...selectItem, quantity: 1 }];
     }
+    setOpenModal(false);
     dispatch(updateCart({ cart: addToCart }));
     await AsyncStorage.setItem("cart", JSON.stringify(addToCart));
 
-    setOpenModal(false);
     setVisible(true);
     setTimeout(() => {
       setVisible(false);
@@ -129,21 +131,6 @@ const DetailScreen = ({ navigation, route }) => {
     setOpenModal(false);
     navigation.navigate("CustomMeal", { meal: selectItem });
   };
-
-  const handlerLike = () => {
-    console.log("click like");
-  };
-
-  useEffect(() => {
-    setIsLoading(true);
-    if (type === "product") {
-      // getProductById(id, accessToken);
-      getAllProducts(accessToken);
-    } else {
-      // getMealById(id, accessToken);
-      getAllMeals(accessToken);
-    }
-  }, [accessToken]);
 
   function SelectorModal() {
     return (
@@ -177,6 +164,10 @@ const DetailScreen = ({ navigation, route }) => {
     );
   }
 
+  const renderListProductMorning = (itemData) => {
+    return <CardProductsInMeal data={itemData.item.product} type="product" />;
+  };
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -184,8 +175,9 @@ const DetailScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView
       style={{
-        paddingBottom: type === "product" ? 1 : 40,
+        paddingBottom: type === "product" ? 1 : 20,
         backgroundColor: Colors.pink100,
+        flex: 1,
       }}
     >
       <SelectorModal />
@@ -196,11 +188,11 @@ const DetailScreen = ({ navigation, route }) => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ marginBottom: 40 }}
+        style={{ marginBottom: type === "product" ? 1 : 40 }}
       >
         <View style={styles.ImgBgContainer}>
           <ImageBackground
-            source={{ uri: selectItem?.image }}
+            source={{ uri: `${selectItem?.image}` }}
             style={styles.image}
           >
             <View style={styles.header}>
@@ -215,79 +207,172 @@ const DetailScreen = ({ navigation, route }) => {
             </View>
           </ImageBackground>
           <View style={styles.desTag}>
-            <Text
-              style={styles.desTitle}
-              ellipsizeMode="tail"
-              numberOfLines={1}
-            >
-              {/* {selectItem?.productName} */}
-              {selectItem?.title}
-            </Text>
+            {type === "product" ? (
+              <Text
+                style={styles.desTitle}
+                ellipsizeMode="tail"
+                numberOfLines={1}
+              >
+                {selectItem?.productName}
+                {/* {selectItem?.title} */}
+              </Text>
+            ) : (
+              <Text
+                style={styles.desTitle}
+                ellipsizeMode="tail"
+                numberOfLines={1}
+              >
+                {/* {selectItem?.productName} */}
+                {selectItem?.title}
+              </Text>
+            )}
           </View>
         </View>
+
         <View style={styles.desContainer}>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={styles.desText}>{selectItem?.expiredDate}</Text>
-            <View style={styles.priceContainer}>
-              <Text style={styles.priceText}>{selectItem?.price}</Text>
-              <Text style={styles.currencyUnit}>VND</Text>
+          {type === "product" && (
+            <>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={styles.desText}>{selectItem?.expiredDate}</Text>
+                <View style={styles.priceContainer}>
+                  <Text style={styles.priceText}>{selectItem?.price}</Text>
+                  <Text style={styles.currencyUnit}>$</Text>
+                </View>
+              </View>
+              <View style={styles.quantity}>
+                <Feather name="box" size={20} color="black" />
+                <Text style={styles.desText2}>
+                  {selectItem?.remainQuantity}
+                </Text>
+              </View>
+              <View style={styles.box}>
+                <View style={styles.innerBox}>
+                  <Text style={styles.titleBox}>Weight</Text>
+                  <Text style={styles.textBox}>200g</Text>
+                </View>
+                <View>
+                  <Text style={styles.titleBox}>Branch</Text>
+                  <Text style={styles.textBox}>Supereme</Text>
+                </View>
+                <View>
+                  <Text style={styles.titleBox}>Origin</Text>
+                  <Text style={styles.textBox}>US/UK</Text>
+                </View>
+              </View>
+              <View style={styles.instructContainer}>
+                <Text style={styles.instructTitle}>Storage Instructions :</Text>
+                <Text style={styles.instructText}>
+                  - Use about 30 days after opening
+                </Text>
+                <Text style={styles.instructText}>
+                  - Store the product at a cool temperature
+                </Text>
+                <Text style={styles.instructText}>
+                  -
+                  <Text style={{ fontSize: 15, fontWeight: "800" }}>
+                    {" "}
+                    Note{" "}
+                  </Text>
+                  Do not use products that show signs of damage
+                </Text>
+              </View>
+              <View style={styles.instructContainer}>
+                <Text style={styles.instructTitle}>Refund Instructions :</Text>
+                <Text style={styles.instructText}>
+                  In case the customer receives a damaged product due to the
+                  transfer process, please take a photo of the product and
+                  contact it through the Pet Shop app via the following 2 ways
+                  for instructions on how to return it via the following 2 ways.
+                </Text>
+                <Text style={styles.instructText}>
+                  - <Text style={{ fontSize: 15, fontWeight: "800" }}> 1 </Text>{" "}
+                  Go to the app to choose a product, please leave a picture in
+                  the comment below
+                </Text>
+                <Text style={styles.instructText}>
+                  -<Text style={{ fontSize: 15, fontWeight: "800" }}> 2 </Text>
+                  At the Pet shop page, please contact us to leave a picture of
+                  the product name you want to support
+                </Text>
+              </View>
+            </>
+          )}
+          {type === "meal" && (
+            <View
+              style={{
+                marginHorizontal: 20,
+                marginVertical: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontWeight: "600",
+                  color: Colors.dark,
+                  marginBottom: 10,
+                  marginVertical: 10,
+                }}
+              >
+                Meal For Bird
+              </Text>
+              <View style={styles.birdContainer}>
+                <View style={styles.birdInnerContainer}>
+                  <Image
+                    source={{ uri: `${bird?.images}` }}
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      resizeMode: "cover",
+                    }}
+                  />
+                </View>
+                <View style={styles.desBird}>
+                  <Text style={styles.nameBird}>{bird?.birdName}</Text>
+                  <Text style={styles.colorBird}>{bird?.birdColor}</Text>
+                </View>
+              </View>
             </View>
-          </View>
-          <View style={styles.quantity}>
-            <Feather name="box" size={20} color="black" />
-            <Text style={styles.desText2}>{selectItem?.remainQuantity}</Text>
-          </View>
-          <View style={styles.box}>
-            <View style={styles.innerBox}>
-              <Text style={styles.titleBox}>Weight</Text>
-              <Text style={styles.textBox}>200g</Text>
-            </View>
-            <View>
-              <Text style={styles.titleBox}>Branch</Text>
-              <Text style={styles.textBox}>Supereme</Text>
-            </View>
-            <View>
-              <Text style={styles.titleBox}>Origin</Text>
-              <Text style={styles.textBox}>US/UK</Text>
-            </View>
-          </View>
+          )}
           <View style={styles.desDetailContainer}>
+            <Text style={styles.instructTitle}>Description :</Text>
             <Text style={styles.desDetailText}>{selectItem?.description}</Text>
           </View>
-          <View style={styles.instructContainer}>
-            <Text style={styles.instructTitle}>Storage Instructions :</Text>
-            <Text style={styles.instructText}>
-              - Use about 30 days after opening
-            </Text>
-            <Text style={styles.instructText}>
-              - Store the product at a cool temperature
-            </Text>
-            <Text style={styles.instructText}>
-              -<Text style={{ fontSize: 15, fontWeight: "800" }}> Note </Text>Do
-              not use products that show signs of damage
-            </Text>
-          </View>
-          <View style={styles.instructContainer}>
-            <Text style={styles.instructTitle}>Refund Instructions :</Text>
-            <Text style={styles.instructText}>
-              In case the customer receives a damaged product due to the
-              transfer process, please take a photo of the product and contact
-              it through the Pet Shop app via the following 2 ways for
-              instructions on how to return it via the following 2 ways.
-            </Text>
-            <Text style={styles.instructText}>
-              - <Text style={{ fontSize: 15, fontWeight: "800" }}> 1 </Text> Go
-              to the app to choose a product, please leave a picture in the
-              comment below
-            </Text>
-            <Text style={styles.instructText}>
-              -<Text style={{ fontSize: 15, fontWeight: "800" }}> 2 </Text>At
-              the Pet shop page, please contact us to leave a picture of the
-              product name you want to support
-            </Text>
-          </View>
+          {type === "meal" && (
+            <View style={styles.productsOfMealContainer}>
+              <View style={styles.morningProductContainer}>
+                <Text style={styles.sectionText}>Morning</Text>
+                <FlatList
+                  data={data.productMeals.Morning}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={renderListProductMorning}
+                  scrollEnabled={false}
+                />
+              </View>
+              <View style={styles.afternoonProductContainer}>
+                <Text style={styles.sectionText}>Afternoon</Text>
+                <FlatList
+                  data={data.productMeals.Afternoon}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={renderListProductMorning}
+                  scrollEnabled={false}
+                />
+              </View>
+              <View style={styles.eveningProductContainer}>
+                <Text style={styles.sectionText}>Evening</Text>
+                <FlatList
+                  data={data.productMeals.Morning}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={renderListProductMorning}
+                  scrollEnabled={false}
+                />
+              </View>
+            </View>
+          )}
           <View style={styles.reviewContainer}>
             <Text style={styles.reviewTitle}>Review (12)</Text>
             <View style={styles.iconStarReview}>
@@ -302,20 +387,6 @@ const DetailScreen = ({ navigation, route }) => {
       </ScrollView>
       {type === "meal" && (
         <View style={styles.footer}>
-          <View style={styles.likeContainer}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                pressed ? styles.buttonPressed : null,
-              ]}
-              android_ripple={{ color: "#cccccc" }}
-              onPress={handlerLike}
-            >
-              <View style={styles.likeInnerContainer}>
-                <Octicons name="feed-heart" size={27} color="black" />
-              </View>
-            </Pressable>
-          </View>
           <View style={styles.addCartContainer}>
             <Pressable
               style={({ pressed }) => [
@@ -328,7 +399,7 @@ const DetailScreen = ({ navigation, route }) => {
               }}
             >
               <View style={styles.addCartInnerContainer}>
-                <Text style={styles.addCartText}>Add To Cart</Text>
+                <Text style={styles.addCartText}>Take This Meal</Text>
               </View>
             </Pressable>
           </View>
@@ -344,6 +415,52 @@ const dWidth = Dimensions.get("window").width;
 const dHeight = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
+  birdContainer: {
+    marginHorizontal: 20,
+    flexDirection: "row",
+    width: "70%",
+  },
+  birdInnerContainer: {
+    height: 70,
+    width: 70,
+    overflow: "hidden",
+    borderRadius: 8,
+    backgroundColor: Colors.grey,
+  },
+  desBird: {
+    marginHorizontal: 15,
+  },
+  nameBird: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: Colors.dark,
+    marginBottom: 10,
+  },
+  colorBird: {
+    fontSize: 10,
+    fontWeight: "600",
+    marginBottom: 15,
+    color: "gray",
+  },
+  productsOfMealContainer: {
+    marginHorizontal: 20,
+  },
+  morningProductContainer: {
+    marginTop: 10,
+  },
+  afternoonProductContainer: {
+    marginTop: 20,
+  },
+  eveningProductContainer: {
+    marginTop: 25,
+  },
+  sectionText: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    fontSize: 20,
+    fontWeight: "600",
+    color: Colors.redPastel200,
+  },
   ImgBgContainer: {
     marginHorizontal: 20,
     marginTop: 20,
@@ -518,8 +635,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     left: 0,
-    // paddingTop: 10,
-    // paddingBottom: 30,
+    // marginTop: 20,
   },
   likeContainer: {
     height: 50,
