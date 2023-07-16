@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Dimensions,
   Keyboard,
@@ -113,6 +114,7 @@ export default function RegistScreen({ navigation }) {
         }, 3000);
       } else {
         setApiRes(null);
+        Alert.alert("An error has occur", "Please ty again");
       }
     }
   }
@@ -136,7 +138,7 @@ export default function RegistScreen({ navigation }) {
         <ConfirmModal
           visible={isSuccess}
           setVisible={setIsSuccess}
-          requireUrl="lottie_regist_success"
+          requireUrl="lottie_confirm"
           text="Verify your account in email"
         />
         <Modal animationType="fade" transparent={true} visible={openModal}>

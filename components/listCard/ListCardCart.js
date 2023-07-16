@@ -12,10 +12,8 @@ export default function ListCardCart({
   function dataSelection() {
     if (selectedProducts.length === data.length) {
       setSelectedProducts([]);
-      console.log("Set Empty");
     } else {
       setSelectedProducts(data);
-      console.log("Set All");
     }
   }
 
@@ -62,7 +60,7 @@ export default function ListCardCart({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, paddingBottom: 150 },
   labelContainer: {
     flexDirection: "row",
     justifyContent: "space-between",

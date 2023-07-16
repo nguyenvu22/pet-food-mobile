@@ -43,13 +43,7 @@ const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 const HAS_LAUNCH = "HAS_LAUNCH";
 
-// const navigation = useNavigation();
-// const goBack = () => {
-//   navigation.goBack();
-// };
-
 function BottomTabsScreen() {
-  const navigation = useNavigation();
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
 
   function EmptyScreen() {
@@ -206,7 +200,6 @@ function StackScreen({ hasLaunched }) {
         component={ChangPasswordScreen}
         options={{
           title: "Change Password",
-          presentation: "modal",
           headerShown: true,
           headerLeft: () => (
             <Pressable onPress={goBackFunction}>

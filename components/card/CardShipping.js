@@ -1,34 +1,35 @@
-import { StyleSheet, Text, View, Image} from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import React from "react";
 import { Colors } from "../../constants/styles";
-import image1 from '../../assets/meme1.jpg'
+import image1 from "../../assets/meme1.jpg";
 
-
-const CardShipping = ({image, name , price}) => {
-
-
+const CardShipping = ({ item }) => {
+  console.log("CardShipping");
+  console.log(item);
+  console.log(item.orderDetails[0]);
   return (
-    <View style={styles.oderCardContainer}>
-      <View style={styles.oderCardInner}>
-        <View style={styles.imageContainer}>
-          <Image source={image1} style={styles.image} />
+    <View style={styles.container}>
+      <View style={{ flexDirection: "row" }}>
+        <View
+          style={{
+            backgroundColor: "white",
+            shadowColor: "black",
+            shadowOpacity: 0.3,
+            shadowRadius: 3,
+            shadowOffset: { width: 0 },
+            marginLeft: 10,
+          }}
+        >
+          <Image
+            source={require("../../assets/images/delivery.png")}
+            resizeMode="cover"
+            style={{
+              width: 100,
+              height: 100,
+            }}
+          />
         </View>
-        <View style={styles.desContainer}>
-          <Text style={styles.nameText}>Name</Text>
-          <View style={styles.priceContainer}>
-            <Text
-              style={{
-                fontSize: 11,
-                fontWeight: "600",
-                color: Colors.purple800,
-              }}
-            >
-              $
-            </Text>
-            <Text style={styles.priceText}>Price</Text>
-          </View>
-          <Text style={styles.addressText}>Address</Text>
-        </View>
+        <View style={{ flex: 1 }}></View>
       </View>
     </View>
   );
@@ -37,51 +38,11 @@ const CardShipping = ({image, name , price}) => {
 export default CardShipping;
 
 const styles = StyleSheet.create({
-  oderCardContainer: {
-    backgroundColor: Colors.white,
-    height: 120,
-    borderRadius: 8,
-
-  },
-  oderCardInner: {
+  container: {
     flex: 1,
-    flexDirection: "row",
-    margin: 10,
-    padding: 10,
-  },
-  imageContainer: {
-    height: 80,
-    width: 80,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    resizeMode: "center",
-    height: "100%",
     width: "100%",
-  },
-  desContainer: {
-    marginLeft: 10,
-  },
-  nameText: {
-    marginBottom: 2,
-    fontSize: 17,
-    fontWeight: "600",
-  },
-  priceContainer: {
-    flexDirection: "row",
+    height: 120,
+    justifyContent: "center",
     alignItems: "center",
-  },
-  priceText: {
-    fontSize: 13,
-    fontWeight: "500",
-    color: Colors.purple800,
-    marginLeft: 3,
-  },
-  addressText: {
-    marginTop: 13,
-    fontSize: 13,
-    fontWeight: "500",
-    color: "gray",
   },
 });

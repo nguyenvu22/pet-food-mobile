@@ -51,27 +51,29 @@ export default function CartScreen({ navigation }) {
   }
 
   return (
-    <ScrollView style={styles.rootContainer}>
-      <Text style={styles.title}>Cart</Text>
-      {meals.length !== 0 ? (
-        <ListCardCart
-          data={meals}
-          setMeals={setMeals}
-          selectedProducts={selectedProducts}
-          setSelectedProducts={setSelectedProducts}
-        />
-      ) : (
-        <View style={styles.section}>
-          <Text>Add something you want to buy</Text>
-        </View>
-      )}
+    <View style={styles.rootContainer}>
+      <ScrollView>
+        <Text style={styles.title}>Cart</Text>
+        {meals.length !== 0 ? (
+          <ListCardCart
+            data={meals}
+            setMeals={setMeals}
+            selectedProducts={selectedProducts}
+            setSelectedProducts={setSelectedProducts}
+          />
+        ) : (
+          <View style={styles.section}>
+            <Text>Add something you want to buy</Text>
+          </View>
+        )}
+      </ScrollView>
       <Animated.View style={[styles.buttonContainer, { right: animatedValue }]}>
         <Pressable onPress={goToCheckout} style={styles.button}>
           <Text style={styles.buttonText}>Checkout </Text>
           <Ionicons name="arrow-forward" size={20} color="white" />
         </Pressable>
       </Animated.View>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -100,10 +102,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: "absolute",
-    top: dHeight * 0.75,
-    // right: -dWidth * 0.08,
+    top: dHeight * 0.8,
     height: 60,
-    width: dWidth * 0.4,
+    width: dWidth * 0.5,
     backgroundColor: Colors.purple400,
     justifyContent: "center",
     alignItems: "center",

@@ -42,37 +42,21 @@ const DetailScreen = ({ navigation, route }) => {
   } else {
     selectItem = meals?.find((item) => item.id === id);
   }
-  console.log(selectItem);
 
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
 
-  //   const getProductById = async (idProduct, accessToken) => {
-  //     try {
-  //       const response = await getProductByIdFunction(idProduct, accessToken);
-  //       if (response?.status === "Success") {
-  //         setProducts(response.data);
-  //       } else {
-  //         console.log("error in screen : ");
-  //       }
-  //     } catch (error) {
-  //       console.log("error in screen : ", error);
-  //     }
-  //   };
-
-  //   const getMealById = async (idMeal, accessToken) => {
-  //     try {
-  //       const response = await getMealByIdFunction(idMeal, accessToken);
-  //       if (response?.status === "Success") {
-  //         setMeals(response.data);
-  //       } else {
-  //         console.log("error in screen : ");
-  //       }
-  //     } catch (error) {
-  //       console.log("error in screen : ", error);
-  //     }
-  //   };
+  useEffect(() => {
+    setIsLoading(true);
+    if (type === "product") {
+      // getProductById(id, accessToken);
+      getAllProducts(accessToken);
+    } else {
+      // getMealById(id, accessToken);
+      getAllMeals(accessToken);
+    }
+  }, [accessToken]);
 
   const getAllProducts = async (accessToken) => {
     try {
@@ -103,7 +87,6 @@ const DetailScreen = ({ navigation, route }) => {
   };
 
   const handlerAddToCart = async () => {
-    console.log(cartInRedux);
     let addToCart;
     if (cartInRedux.some((item) => item.id === selectItem.id)) {
       addToCart = cartInRedux.map((item) => {
@@ -115,10 +98,10 @@ const DetailScreen = ({ navigation, route }) => {
     } else {
       addToCart = [...cartInRedux, { ...selectItem, quantity: 1 }];
     }
+    setOpenModal(false);
     dispatch(updateCart({ cart: addToCart }));
     await AsyncStorage.setItem("cart", JSON.stringify(addToCart));
 
-    setOpenModal(false);
     setVisible(true);
     setTimeout(() => {
       setVisible(false);
@@ -129,21 +112,6 @@ const DetailScreen = ({ navigation, route }) => {
     setOpenModal(false);
     navigation.navigate("CustomMeal", { meal: selectItem });
   };
-
-  const handlerLike = () => {
-    console.log("click like");
-  };
-
-  useEffect(() => {
-    setIsLoading(true);
-    if (type === "product") {
-      // getProductById(id, accessToken);
-      getAllProducts(accessToken);
-    } else {
-      // getMealById(id, accessToken);
-      getAllMeals(accessToken);
-    }
-  }, [accessToken]);
 
   function SelectorModal() {
     return (
@@ -302,20 +270,6 @@ const DetailScreen = ({ navigation, route }) => {
       </ScrollView>
       {type === "meal" && (
         <View style={styles.footer}>
-          <View style={styles.likeContainer}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                pressed ? styles.buttonPressed : null,
-              ]}
-              android_ripple={{ color: "#cccccc" }}
-              onPress={handlerLike}
-            >
-              <View style={styles.likeInnerContainer}>
-                <Octicons name="feed-heart" size={27} color="black" />
-              </View>
-            </Pressable>
-          </View>
           <View style={styles.addCartContainer}>
             <Pressable
               style={({ pressed }) => [
@@ -328,7 +282,7 @@ const DetailScreen = ({ navigation, route }) => {
               }}
             >
               <View style={styles.addCartInnerContainer}>
-                <Text style={styles.addCartText}>Add To Cart</Text>
+                <Text style={styles.addCartText}>Take This Meal</Text>
               </View>
             </Pressable>
           </View>

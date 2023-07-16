@@ -1,4 +1,5 @@
 import {
+  Animated,
   Dimensions,
   FlatList,
   Image,
@@ -11,17 +12,24 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from "../../constants/styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "../../services/product";
 import { Octicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { updateCart } from "../../redux/cart/cart";
+import { createCustomerMeal } from "../../services/meal";
 
-export default function CustomMealScreen({ navifation, route }) {
+export default function CustomMealScreen({ navigation, route }) {
+  const cartInRedux = useSelector((state) => state.cartReducers.cart);
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
+  const dispatch = useDispatch();
 
   const meal = route.params.meal;
   const [openModal, setOpenModal] = useState(false);
+  const [scaleValue1] = useState(new Animated.Value(1));
+  const [scaleValue2] = useState(new Animated.Value(1));
 
   const [products, setProducts] = useState([]);
   const [session, setSession] = useState("Morning");
@@ -33,11 +41,15 @@ export default function CustomMealScreen({ navifation, route }) {
     async function getAllProducts() {
       const response = await getAllProduct(accessToken);
       if (response.status === "Success") {
+        const fixedData = response.data.map((item) => {
+          const { description, remainQuantity, ...newItem } = item;
+          return newItem;
+        });
         if (response.data.length % 3 === 1) {
-          setProducts([...response.data, null]);
+          setProducts([...fixedData, null]);
         } else if (response.data.length % 3 === 2) {
-          setProducts([...response.data, null, null]);
-        } else setProducts(response.data);
+          setProducts([...fixedData, null, null]);
+        } else setProducts(fixedData);
       }
     }
     getAllProducts();
@@ -88,7 +100,6 @@ export default function CustomMealScreen({ navifation, route }) {
         newList = list.filter((p) => p.product.id != item.id);
       } else {
         newList = [...list, { amount: 1, product: item }];
-        console.log(newList);
       }
       if (session === "Morning") setMorningProducts(newList);
       else if (session === "Afternoon") setAfternoonProducts(newList);
@@ -147,6 +158,88 @@ export default function CustomMealScreen({ navifation, route }) {
   }
 
   function SelectorModal() {
+    // console.log("---------------DATA IN---------------");
+    // console.log(morningProducts);
+    // console.log(afternoonProducts);
+    // console.log(eveningProducts);
+    // console.log("---------------MEAL---------------");
+    // console.log(meal);
+
+    const mealToAPI = {
+      ...meal,
+      productMeals: [
+        {
+          Morning: morningProducts.map((item) => {
+            return { id: item.product.id, amount: item.amount };
+          }),
+        },
+        {
+          Afternoon: afternoonProducts.map((item) => {
+            return { id: item.product.id, amount: item.amount };
+          }),
+        },
+        {
+          Evening: eveningProducts.map((item) => {
+            return { id: item.product.id, amount: item.amount };
+          }),
+        },
+      ],
+    };
+
+    // console.log("---------------mealToAPI---------------");
+    // console.log(mealToAPI);
+    // console.log(mealToAPI.productMeals);
+    // console.log(mealToAPI.productMeals[0].Morning);
+    // console.log(mealToAPI.productMeals[1].Afternoon);
+    // console.log(mealToAPI.productMeals[2].Evening);
+
+    async function addToCart() {
+      Animated.timing(scaleValue1, {
+        toValue: 0.9,
+        duration: 200,
+        useNativeDriver: true,
+      }).start(() => {
+        Animated.timing(scaleValue1, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+      });
+
+      const response = await createCustomerMeal(mealToAPI, accessToken);
+      if (response.status === "Success") {
+        const { createdBy, status, ...resMeal } = response.data;
+        const updatedData = [...cartInRedux, { ...resMeal, quantity: 1 }];
+        setOpenModal(false);
+        dispatch(updateCart({ cart: updatedData }));
+        await AsyncStorage.setItem("cart", JSON.stringify(updatedData));
+
+        navigation.navigate("Cart");
+      }
+    }
+
+    async function storeMeal() {
+      Animated.timing(scaleValue2, {
+        toValue: 0.9,
+        duration: 200,
+        useNativeDriver: true,
+      }).start(() => {
+        Animated.timing(scaleValue2, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+      });
+
+      const response = await createCustomerMeal(mealToAPI, accessToken);
+      if (response.status === "Success") {
+        // const { createdBy, status, ...resMeal } = response.data;
+
+        setOpenModal(false);
+        navigation.replace("ArchiveCustomer");
+      }
+    }
+
     return (
       <Modal animationType="fade" transparent={true} visible={openModal}>
         <TouchableWithoutFeedback
@@ -156,22 +249,36 @@ export default function CustomMealScreen({ navifation, route }) {
         >
           <View style={styles.modal}>
             <Text style={{ fontSize: 25, fontWeight: "600", color: "white" }}>
-              Select your option
+              This meal will
             </Text>
             <View style={{ height: 40 }} />
-            <Pressable style={styles.modalItem} onPress={() => {}}>
-              <Text style={styles.modalText}>Add to Cart</Text>
-              <View style={styles.modalButton}>
-                <Octicons name="plus" color={"white"} size={30} />
-              </View>
-            </Pressable>
+            <TouchableWithoutFeedback onPress={addToCart}>
+              <Animated.View
+                style={[
+                  styles.modalItem,
+                  { transform: [{ scale: scaleValue1 }] },
+                ]}
+              >
+                <Text style={styles.modalText}>Add to Cart</Text>
+                <View style={styles.modalButton}>
+                  <Octicons name="plus" color={"white"} size={30} />
+                </View>
+              </Animated.View>
+            </TouchableWithoutFeedback>
             <View style={{ height: 20 }} />
-            <Pressable style={styles.modalItem} onPress={() => {}}>
-              <Text style={styles.modalText}>Custom this Meal</Text>
-              <View style={styles.modalButton}>
-                <Octicons name="plus" color={"white"} size={30} />
-              </View>
-            </Pressable>
+            <TouchableWithoutFeedback onPress={storeMeal}>
+              <Animated.View
+                style={[
+                  styles.modalItem,
+                  { transform: [{ scale: scaleValue2 }] },
+                ]}
+              >
+                <Text style={styles.modalText}>Store it</Text>
+                <View style={styles.modalButton}>
+                  <Octicons name="plus" color={"white"} size={30} />
+                </View>
+              </Animated.View>
+            </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
@@ -179,16 +286,53 @@ export default function CustomMealScreen({ navifation, route }) {
   }
 
   return (
-    <View>
+    <View style={styles.rootContainer}>
       <SelectorModal />
-      <Text>CustomMealScreen</Text>
-      <Text>CustomMealScreen</Text>
-      <Text>CustomMealScreen</Text>
-      <Text>CustomMealScreen</Text>
-      <Text>CustomMealScreen</Text>
-      <Text>CustomMealScreen</Text>
-      <Text>CustomMealScreen</Text>
-      <Text>CustomMealScreen</Text>
+      <View
+        style={{
+          marginHorizontal: 25,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
+        <View>
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: "400",
+                color: "rgba(0,0,0,0.4)",
+              }}
+            >
+              Customize your own
+            </Text>
+            <Text style={{ fontSize: 30, fontWeight: "600" }}>MEAL.</Text>
+          </View>
+          <Text style={{ fontSize: 16 }}>{meal.title}</Text>
+        </View>
+        <View
+          style={{
+            borderRadius: 10,
+            backgroundColor: "white",
+            shadowColor: "black",
+            shadowOpacity: 0.5,
+            shadowRadius: 5,
+            shadowOffset: { height: 4 },
+          }}
+        >
+          <Image
+            source={{ uri: meal.image }}
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: 10,
+            }}
+            resizeMode="cover"
+            defaultSource={require("../../assets/images/loading_image_horizontally.png")}
+          />
+        </View>
+      </View>
 
       <View
         style={{
@@ -196,7 +340,8 @@ export default function CustomMealScreen({ navifation, route }) {
           height: 5,
           backgroundColor: Colors.purple400,
           borderRadius: 10,
-          marginVertical: 20,
+          marginVertical: 25,
+          marginLeft: 25,
         }}
       />
 
@@ -223,20 +368,28 @@ export default function CustomMealScreen({ navifation, route }) {
           }}
         />
       </View>
-      <View
+      <Pressable
         style={{
           position: "absolute",
-          bottom: 20,
-          right: 20,
+          bottom: dHeight * 0.05,
+          right: 30,
           backgroundColor: Colors.purple400,
-          paddingVertical: 20,
-          paddingHorizontal: 40,
+          paddingVertical: 15,
+          paddingHorizontal: 30,
+          borderRadius: 50,
+          shadowColor: "black",
+          shadowOpacity: 0.5,
+          shadowRadius: 4,
+          shadowOffset: { width: 0, height: 3 },
+        }}
+        onPress={() => {
+          setOpenModal(true);
         }}
       >
         <Text style={{ color: "white", fontSize: 18, fontWeight: "500" }}>
           Finish
         </Text>
-      </View>
+      </Pressable>
     </View>
   );
 }
@@ -245,6 +398,10 @@ const dWidth = Dimensions.get("window").width;
 const dHeight = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    paddingTop: dHeight * 0.08,
+  },
   modal: {
     flex: 1,
     justifyContent: "center",
