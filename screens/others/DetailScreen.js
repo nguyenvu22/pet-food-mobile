@@ -194,7 +194,10 @@ const DetailScreen = ({ navigation, route }) => {
         setVisible={setVisible}
         requireUrl="lottie_add_to_cart"
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ marginBottom: 40 }}
+      >
         <View style={styles.ImgBgContainer}>
           <ImageBackground
             source={{ uri: selectItem?.image }}
@@ -209,11 +212,6 @@ const DetailScreen = ({ navigation, route }) => {
                   onPress={navigation.goBack}
                 />
               </View>
-              {type === "meal" && (
-                <View style={styles.headerBtn}>
-                  <Ionicons name="cart-outline" size={22} color="black" />
-                </View>
-              )}
             </View>
           </ImageBackground>
           <View style={styles.desTag}>
@@ -389,7 +387,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   desTitle: {
     fontSize: 18,
@@ -510,13 +508,18 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   footer: {
+    position: "absolute",
+    height: dHeight * 0.11,
     backgroundColor: Colors.pink200,
     paddingHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingTop: 10,
-    paddingBottom: 20,
+    justifyContent: "space-around",
+    bottom: 0,
+    right: 0,
+    left: 0,
+    // paddingTop: 10,
+    // paddingBottom: 30,
   },
   likeContainer: {
     height: 50,

@@ -36,6 +36,8 @@ import { useFonts } from "expo-font";
 import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
 import ChangPasswordScreen from "./screens/others/ChangPasswordScreen";
 import CustomMealScreen from "./screens/others/CustomMealScreen";
+import ArchiveCustomerScreen from "./screens/store/ArchiveCustomerScreen";
+import FilterMealsScreen from "./screens/others/FilterMealsScreen";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -182,6 +184,12 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen name="Regist" component={RegistScreen} options={{}} />
       <Stack.Screen name="Search" component={SearchScreen} options={{}} />
       <Stack.Screen name="Checkout" component={CheckoutScreen} options={{}} />
+      <Stack.Screen name="FilterMeals" component={FilterMealsScreen}/>
+      <Stack.Screen
+        name="ArchiveCustomer"
+        component={ArchiveCustomerScreen}
+        options={{}}
+      />
       <Stack.Screen
         name="CustomMeal"
         component={CustomMealScreen}

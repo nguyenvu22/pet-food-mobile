@@ -94,7 +94,6 @@ const ChangPasswordScreen = ({ route }) => {
         requireUrl={"lottie_regist_success"}
         text="Change Password Successfully"
       />
-
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <Avatar.Image
