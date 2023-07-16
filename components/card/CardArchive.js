@@ -4,12 +4,11 @@ import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 
-const CardArchive = ({ title, description, image }) => {
+const CardArchive = ({ data }) => {
   const navigation = useNavigation();
   const SelectItem = () => {
     navigation.navigate("Detail", {
-      itemId: id,
-      itemType: type,
+      data: data,
     });
   };
 
@@ -24,11 +23,11 @@ const CardArchive = ({ title, description, image }) => {
     >
       <View style={styles.itemContainer}>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: image }} />
+          <Image style={styles.image} source={{ uri: `${data.image}` }} />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.textName}>{title}</Text>
-          <Text style={styles.textDes}>{description}</Text>
+          <Text style={styles.textName}>{data.title}</Text>
+          <Text style={styles.textDes}>{data.description}</Text>
           <View style={styles.starContainer}>
             <AntDesign name="star" size={16} color={Colors.yellow100} />
             <AntDesign name="star" size={16} color={Colors.yellow100} />
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: "row",
 
-    backgroundColor: Colors.white ,
+    backgroundColor: Colors.white,
     paddingVertical: 20,
     borderWidth: 1,
     borderBottomColor: "#cdcdcd",

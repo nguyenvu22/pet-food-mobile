@@ -9,35 +9,35 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../../constants/styles";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
-import CardArchive from "../../components/card/CardArchive";
+import { Ionicons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
-import { getAllMealCustomerFunction } from "../../services/meal";
-
+import { getMealsByBirdIdFunctions } from "../../services/meal";
+import CardArchive from "../../components/card/CardArchive";
 const dWith = Dimensions.get("window").width;
 const dHeight = Dimensions.get("window").height;
 
-const ArchiveCustomerScreen = () => {
-  const navigation = useNavigation();
-  const [mealCustomer, setMealCustomer] = useState([]);
+const FilterMealsScreen = ({ route }) => {
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
 
+  const navigation = useNavigation();
+  const data = route.params.Bird;
+  const idBird = data.id;
+  const [meal, setMeal] = useState([]);
+
   useEffect(() => {
-    getAllMealCustomer(accessToken);
+    getMealsByBirdId(accessToken);
   }, [accessToken]);
 
-  const getAllMealCustomer = async (accessToken) => {
+  const getMealsByBirdId = async (accessToken) => {
     try {
-      const response = await getAllMealCustomerFunction(accessToken);
+      const response = await getMealsByBirdIdFunctions(idBird, accessToken);
       if (response?.status === "Success") {
-        setMealCustomer(response.data);
-      } else {
-        console.log("error in screen : ");
+        setMeal(response.data);
       }
     } catch (error) {
-      console.log("error in screen : ", error);
+      console.log("error : ", error);
     }
   };
 
@@ -49,34 +49,6 @@ const ArchiveCustomerScreen = () => {
     );
   };
 
-  if (mealCustomer === [] || mealCustomer.length === 0) {
-    return (
-      <>
-        <View style={styles.header}>
-          <View style={styles.headerBtn}>
-            <Ionicons
-              name="chevron-back"
-              size={25}
-              color={Colors.dark}
-              onPress={navigation.goBack}
-            />
-          </View>
-          <View style={styles.innerHeader}>
-            <View />
-            <View>
-              <Text style={styles.title}>Archive</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.emptyContainer}>
-          <AntDesign name="dropbox" size={150} color={Colors.purple400} />
-          <View>
-            <Text textEmpty>Your Archive Is Empty </Text>
-          </View>
-        </View>
-      </>
-    );
-  }
   return (
     <>
       <View style={styles.header}>
@@ -89,9 +61,8 @@ const ArchiveCustomerScreen = () => {
           />
         </View>
         <View style={styles.innerHeader}>
-          <View />
           <View>
-            <Text style={styles.title}>Archive</Text>
+            <Text style={styles.title}>{data.birdName}</Text>
           </View>
         </View>
       </View>
@@ -112,12 +83,12 @@ const ArchiveCustomerScreen = () => {
                 marginLeft: 10,
               }}
             >
-              Meals Custom
+              Meals :
             </Text>
             <FlatList
-              data={mealCustomer}
-              renderItem={renderItem}
+              data={meal}
               key={(item) => item.id}
+              renderItem={renderItem}
             />
           </View>
         </View>
@@ -126,7 +97,7 @@ const ArchiveCustomerScreen = () => {
   );
 };
 
-export default ArchiveCustomerScreen;
+export default FilterMealsScreen;
 
 const styles = StyleSheet.create({
   header: {
@@ -139,9 +110,9 @@ const styles = StyleSheet.create({
   },
   innerHeader: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    width: dWith * 0.54,
+    width: dWith * 0.8,
   },
   headerBtn: {
     height: 30,
@@ -153,7 +124,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 45,
+    fontSize: 28,
     fontFamily: "SeaweedScript",
   },
   container: {

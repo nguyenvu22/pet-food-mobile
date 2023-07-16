@@ -1,5 +1,12 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import {
+  Dimensions,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import img1 from "../../assets/care.png";
 import img2 from "../../assets/clothes.png";
 import img3 from "../../assets/food.png";
@@ -13,56 +20,8 @@ import { useSelector } from "react-redux";
 import { getAllBird } from "../../services/bird";
 
 const ListCardCategory = () => {
-  const dataCategory = [
-    {
-      id: 1,
-      title: "care",
-      color: "#FF9B9B",
-      image: img1,
-    },
-    {
-      id: 2,
-      title: "clothes",
-      color: "#AAC8A7",
-      image: img2,
-    },
-    {
-      id: 4,
-      title: "game",
-      color: "#F1C27B",
-      image: img4,
-    },
-    {
-      id: 5,
-      title: "home",
-      color: "#C2DEDC",
-      image: img5,
-    },
-    {
-      id: 3,
-      title: "food",
-      color: "#9BABB8",
-      image: img3,
-    },
-    {
-      id: 6,
-      title: "medical",
-      color: "#F2D8D8",
-      image: img6,
-    },
-    {
-      id: 7,
-      title: "other",
-      color: "#ea580a9d",
-      image: img7,
-    },
-    {
-      id: 8,
-      title: "walk",
-      color: "#0094de94",
-      image: img8,
-    },
-  ];
+
+  const [bird, setBird] = useState([]);
 
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
@@ -75,34 +34,38 @@ const ListCardCategory = () => {
   const getAllBirdHandle = async (accessToken) => {
     try {
       const response = await getAllBird(accessToken);
-      console.log("response : ", response);
+      // console.log("response in screen : ", response.data);
+      if (response?.status === "Success") {
+        setBird(response.data);
+      } else {
+        console.log("error in screen get");
+      }
     } catch (error) {
       console.log("error in screen : ", error);
     }
   };
 
   const renderCategoryList = (itemData) => {
+    // console.log("itemData : ", itemData.item);
+
     const handlerCategory = () => {};
-    return (
-      <CardCategory
-        color={itemData.item.color}
-        image={itemData.item.image}
-        title={itemData.item.title}
-        onPress={handlerCategory}
-      />
-    );
+    return <CardCategory data={itemData.item} onPress={handlerCategory} />;
   };
 
+  const filteredBirds = bird.filter((item) => item.status === true);
+  const screenWidth = Dimensions.get("window").width;
+  const itemWidth = screenWidth / 3;
+  const numColumns = Math.floor(screenWidth / itemWidth);
   return (
     <View>
       <FlatList
-        data={dataCategory}
+        data={filteredBirds}
         keyExtractor={(item) => item.id}
         renderItem={renderCategoryList}
-        numColumns={4}
-        scrollEnabled={false}
         contentContainerStyle={styles.flatListContent}
+        scrollEnabled={false}
         columnWrapperStyle={styles.columnWrapper}
+        numColumns={numColumns}
       />
     </View>
   );
@@ -117,5 +80,6 @@ const styles = StyleSheet.create({
   columnWrapper: {
     justifyContent: "space-between",
     marginBottom: 20,
+    marginHorizontal: 10,
   },
 });
