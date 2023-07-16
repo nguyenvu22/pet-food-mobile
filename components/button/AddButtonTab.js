@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import addTab from "../../assets/addTab.png";
+import box from "../../assets/homeTab.png";
 import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 
@@ -20,10 +20,10 @@ const AddButtonTab = () => {
       <View style={styles.box}>
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => navigation.navigate("ArchiveCustomer")}
+          onPress={() => navigation.navigate("Home")}
         >
           <View style={[styles.addButtonInner]}>
-            <Image source={addTab} style={styles.imgAdd} />
+            <Image source={box} style={styles.imgAdd} />
           </View>
         </TouchableOpacity>
       </View>

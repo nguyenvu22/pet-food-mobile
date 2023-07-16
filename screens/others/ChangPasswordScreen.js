@@ -69,7 +69,6 @@ const ChangPasswordScreen = ({ route }) => {
         newPassword: newPass.value,
         confirmNewPassword: confirmPass.value,
       };
-      console.log("data", data);
       const response = await changePassWordHandler(data, user.accessToken);
       if (response.status === "Success") {
         setVisible(true);

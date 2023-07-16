@@ -6,19 +6,27 @@ const BannerCarousel = () => {
   const carouselData = [
     {
       id: 1,
-      image: require("../../assets/meme1.jpg"),
+      image: require("../../assets/chim1.jpeg"),
+      title: "Bird Pet",
+      name: "Food Service",
     },
     {
       id: 2,
-      image: require("../../assets/meme2.jpg"),
+      image: require("../../assets/chim2.jpeg"),
+      title: "Bird Pet",
+      name: "Bird Care",
     },
     {
       id: 3,
-      image: require("../../assets/meme3.jpg"),
+      image: require("../../assets/chim3.jpeg"),
+      title: "Bird Pet",
+      name: "Meals of Bird",
     },
     {
       id: 4,
-      image: require("../../assets/meme4.jpg"),
+      image: require("../../assets/chim4.webp"),
+      title: "Bird Pet",
+      name: "Custom Meal",
     },
   ];
 
@@ -31,8 +39,8 @@ const BannerCarousel = () => {
           resizeMode="contain"
         />
         <View style={styles.carouselTextContainer}>
-          <Text style={styles.carouselTextTitle}>Pet Sitter</Text>
-          <Text style={styles.carouselTextTitle2}>Care Service</Text>
+          <Text style={styles.carouselTextTitle}>{item.title}</Text>
+          <Text style={styles.carouselTextTitle2}>{item.name}</Text>
         </View>
       </View>
     );
@@ -70,7 +78,7 @@ const styles = StyleSheet.create({
   bannerImage: {
     position: "absolute",
     borderRadius: 20,
-    width: '100%'
+    width: "100%",
   },
   carouselTextContainer: {
     backgroundColor: Colors.transparentDark,

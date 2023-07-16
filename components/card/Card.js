@@ -12,20 +12,14 @@ import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("screen").width;
-const Card = ({
-  id,
-  image,
-  remainQuantity,
-  expiredDate,
-  price,
-  productName,
-  type,
-}) => {
+
+const Card = ({ data, id, type }) => {
   const navigation = useNavigation();
 
   const SelectProduct = () => {
     navigation.navigate("Detail", {
-      itemId: id,
+      dataItem: data,
+      itemId: data.id,
       itemType: type,
     });
   };
@@ -44,20 +38,20 @@ const Card = ({
           }}
         >
           <View style={styles.imgContainer}>
-            <Image style={styles.img} source={{ uri: image }} />
+            <Image style={styles.img} source={{ uri: `${data.image}` }} />
           </View>
           <View style={styles.title}>
             <Text style={styles.name} numberOfLines={1}>
-              {productName}
+              {data.productName}
             </Text>
             <View style={styles.desContainer}>
-              <Text style={styles.descriptionText}>{expiredDate} ,</Text>
-              <Text style={styles.descriptionText}>{remainQuantity}</Text>
+              <Text style={styles.descriptionText}>{data.expiredDate} ,</Text>
+              <Text style={styles.descriptionText}>{data.remainQuantity}</Text>
             </View>
           </View>
           <View style={styles.footer}>
             <View style={styles.priceContainer}>
-              <Text style={styles.priceText}>{price}</Text>
+              <Text style={styles.priceText}>{data.price}</Text>
               <Text style={styles.vnd}>VND</Text>
             </View>
             <View style={styles.iconAdd}>
