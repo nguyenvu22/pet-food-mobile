@@ -73,7 +73,7 @@ const ArchiveCustomerScreen = () => {
           </View>
         </View>
         <View style={styles.emptyContainer}>
-          <AntDesign name="dropbox" size={150} color={Colors.pink200} />
+          <AntDesign name="dropbox" size={150} color={Colors.purple400} />
           <View>
             <Text textEmpty>Your Archive Is Empty </Text>
           </View>
