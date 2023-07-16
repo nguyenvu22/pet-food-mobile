@@ -30,7 +30,7 @@ import { initUser } from "./redux/user/user";
 import { updateCart } from "./redux/cart/cart";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "./constants/styles";
 import { useFonts } from "expo-font";
 import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
@@ -38,7 +38,8 @@ import ChangPasswordScreen from "./screens/others/ChangPasswordScreen";
 import CustomMealScreen from "./screens/others/CustomMealScreen";
 import ArchiveCustomerScreen from "./screens/store/ArchiveCustomerScreen";
 import FilterMealsScreen from "./screens/others/FilterMealsScreen";
-
+import DetailNewScreen from "./screens/others/DetailNewScreen";
+import DetailProductInMeal from "./screens/others/DetailProductInMeal";
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 const HAS_LAUNCH = "HAS_LAUNCH";
@@ -51,6 +52,7 @@ function BottomTabsScreen() {
   }
   return (
     <Tabs.Navigator
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -61,13 +63,14 @@ function BottomTabsScreen() {
       }}
     >
       <Tabs.Screen
-        name="Home"
-        component={HomeScreen}
+        name="ArchiveCustomer"
+        component={ArchiveCustomerScreen}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "archive",
           tabBarIcon: ({ focused, size, color }) => (
             <View style={[styles.iconContainer]}>
-              <AntDesign name="home" size={size} color={color} />
+              {/* <AntDesign name="home" size={size} color={color} /> */}
+              <Feather name="archive" size={size} color={color} />
             </View>
           ),
         }}
@@ -114,8 +117,8 @@ function BottomTabsScreen() {
       />
 
       <Tabs.Screen
-        name="AddMealyyy"
-        component={EmptyScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
           tabBarLabel: "Add Meal",
           tabBarButton: () => (
@@ -178,10 +181,12 @@ function StackScreen({ hasLaunched }) {
       <Stack.Screen name="Regist" component={RegistScreen} options={{}} />
       <Stack.Screen name="Search" component={SearchScreen} options={{}} />
       <Stack.Screen name="Checkout" component={CheckoutScreen} options={{}} />
-      <Stack.Screen name="FilterMeals" component={FilterMealsScreen}/>
+      <Stack.Screen name="FilterMeals" component={FilterMealsScreen} />
+      <Stack.Screen name="DetailNewScreen" component={DetailNewScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} options={{}} />
       <Stack.Screen
-        name="ArchiveCustomer"
-        component={ArchiveCustomerScreen}
+        name="DetailProductsMeal"
+        component={DetailProductInMeal}
         options={{}}
       />
       <Stack.Screen

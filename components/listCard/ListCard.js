@@ -6,12 +6,10 @@ import { getAllProduct } from "../../services/product";
 import { useSelector } from "react-redux";
 import LoadingScreen from "../loading/LoadingScreen";
 
-
-
 const ListCard = ({ title }) => {
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
-  )
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [products, setProducts] = useState();
@@ -19,30 +17,26 @@ const ListCard = ({ title }) => {
   const getAllListProduct = async (accessToken) => {
     try {
       const response = await getAllProduct(accessToken);
-      if (response?.status === 'Success') {
+      if (response?.status === "Success") {
         setProducts(response.data);
         setIsLoading(false);
       }
-
     } catch (error) {
       console.log("error in screen : ", error);
     }
-  }
-
+  };
 
   useEffect(() => {
     setIsLoading(true);
     getAllListProduct(accessToken);
-  }, [accessToken])
+  }, [accessToken]);
 
   if (isLoading) {
-    return (
-      <LoadingScreen />
-    )
+    return <LoadingScreen />;
   }
 
-
   const renderItem = (itemData) => {
+
     function pressHandler() {
       console.log("click");
     }
@@ -55,7 +49,8 @@ const ListCard = ({ title }) => {
         productName={itemData.item.productName}
         remainQuantity={itemData.item.remainQuantity}
         onPress={pressHandler}
-        type='product'
+        data={itemData.item}
+        type="product"
       />
     );
   };

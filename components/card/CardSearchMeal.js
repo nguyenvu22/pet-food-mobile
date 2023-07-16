@@ -3,18 +3,15 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../../constants/styles";
 
-//card for product
-const CardSearch = ({ type, data }) => {
-
-
+const CardSearchMeal = ({ data, type }) => {
   const navigation = useNavigation();
   const SelectItem = () => {
     navigation.navigate("Detail", {
       dataItem: data,
+      // itemId: id,
       itemType: type,
     });
   };
-
   return (
     <Pressable
       onPress={SelectItem}
@@ -29,19 +26,15 @@ const CardSearch = ({ type, data }) => {
           <Image style={styles.image} source={{ uri: `${data.image}` }} />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.textName}>{data.productName}</Text>
-          <Text style={styles.textPriedDate}>{data.expiredDate}</Text>
-          <View style={styles.priceContainer}>
-            <Text style={styles.textPrice}>{data.price}</Text>
-            <Text style={{ fontSize: 10, fontWeight: "400" }}>$</Text>
-          </View>
+          <Text style={styles.textName}>{data.title}</Text>
+          <Text style={styles.textPriedDate}>{data.description}</Text>
         </View>
       </View>
     </Pressable>
   );
 };
 
-export default CardSearch;
+export default CardSearchMeal;
 
 const styles = StyleSheet.create({
   button: {
@@ -89,15 +82,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 15,
     color: "gray",
-  },
-  priceContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-  },
-  textPrice: {
-    fontSize: 12,
-    fontWeight: "500",
-    marginRight: 2,
   },
 });
