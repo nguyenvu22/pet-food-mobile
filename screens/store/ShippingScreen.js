@@ -1,4 +1,5 @@
 import {
+  Animated,
   FlatList,
   Image,
   Pressable,
@@ -23,21 +24,34 @@ const ShippingScreen = ({ navigation }) => {
   );
   const [selectedButton, setSelectedButton] = useState("Delivery");
   const [orderData, setOrderData] = useState([]);
-  console.log(orderData);
+
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  // const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0));
 
   useEffect(() => {
-    async function getOrders() {
-      let statusToAPI;
-      if (selectedButton === "Delivery") statusToAPI = "delivering";
-      else if (selectedButton === "Succeeded") statusToAPI = "completed";
-      else statusToAPI = "canceled";
+    Animated.timing(animatedValue, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start(() => {
+      async function getOrders() {
+        let statusToAPI;
+        if (selectedButton === "Delivery") statusToAPI = "delivering";
+        else if (selectedButton === "Succeeded") statusToAPI = "completed";
+        else statusToAPI = "canceled";
 
-      const response = await getOrderByStatus(accessToken, statusToAPI);
+        const response = await getOrderByStatus(accessToken, statusToAPI);
 
-      if (response.status === "Success") setOrderData(response.data);
-      else setOrderData([]);
-    }
-    getOrders();
+        if (response.status === "Success") setOrderData(response.data);
+        else setOrderData([]);
+      }
+      getOrders();
+      Animated.timing(animatedValue, {
+        toValue: 100,
+        duration: 1000,
+        useNativeDriver: false,
+      }).start();
+    });
   }, [selectedButton]);
 
   const handlerPressDelivery = () => {
@@ -140,14 +154,36 @@ const ShippingScreen = ({ navigation }) => {
         {/* <View style={styles.orderSummary}>
           <Text style={styles.summaryText}>Order Summary</Text>
         </View> */}
-        <View style={styles.listCardShipping}>
+        <Animated.View
+          style={[
+            styles.listCardShipping,
+            {
+              height: animatedValue.interpolate({
+                inputRange: [0, 100],
+                outputRange: ["0%", "80%"],
+                extrapolate: "clamp",
+              }),
+            },
+          ]}
+        >
           <FlatList
             data={orderData}
             renderItem={({ item }) => {
-              return <CardShipping item={item} />;
+              return (
+                <CardShipping item={item} selectedButton={selectedButton} />
+              );
             }}
+            ItemSeparatorComponent={() => (
+              <View
+                style={{
+                  height: 2,
+                  backgroundColor: Colors.light,
+                  marginVertical: 20,
+                }}
+              />
+            )}
           />
-        </View>
+        </Animated.View>
       </View>
 
       <View style={styles.footer}></View>
@@ -226,7 +262,7 @@ const styles = StyleSheet.create({
   listCardShipping: {
     backgroundColor: "white",
     marginHorizontal: 20,
-    padding: 20,
+    paddingVertical: 20,
     borderRadius: 15,
   },
 });

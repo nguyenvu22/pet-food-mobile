@@ -17,3 +17,16 @@ export async function getOrderByStatus(accessToken, status) {
     console.log(error.response);
   }
 }
+
+export async function cancelOrder(accessToken, orderId) {
+  try {
+    const response = await axios.delete(API_KEY + `/order/cancel/${orderId}`, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error.response);
+  }
+}
