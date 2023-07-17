@@ -76,7 +76,7 @@ const CardShipping = ({ item, selectedButton }) => {
             }, 0)}{" "}
             item
           </Text>
-          <Text>Transactions : {item.transactions[0].paymentType}</Text>
+          <Text>Payment method : {item.transactions[0].paymentType}</Text>
           <View style={{ height: 5 }} />
           <View
             style={{

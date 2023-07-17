@@ -236,7 +236,7 @@ export default function CustomMealScreen({ navigation, route }) {
         // const { createdBy, status, ...resMeal } = response.data;
 
         setOpenModal(false);
-        navigation.replace("ArchiveCustomer");
+        navigation.navigate("ArchiveCustomer");
       }
     }
 

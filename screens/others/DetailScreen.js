@@ -30,6 +30,7 @@ import { getBirdByIdFunction } from "../../services/bird";
 const DetailScreen = ({ navigation, route }) => {
   const type = route.params.itemType;
   const data = route.params.dataItem;
+  const isArchieve = route.params.isArchieve;
 
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
@@ -91,6 +92,7 @@ const DetailScreen = ({ navigation, route }) => {
     }
   };
 
+  // ---------------------------------------------------------------------
   const getAllMeals = async (accessToken) => {
     try {
       const response = await getAllMeal(accessToken);
@@ -104,6 +106,7 @@ const DetailScreen = ({ navigation, route }) => {
       console.log("error in screen : ", error);
     }
   };
+  // ---------------------------------------------------------------------
 
   const handlerAddToCart = async () => {
     let addToCart;
@@ -395,11 +398,14 @@ const DetailScreen = ({ navigation, route }) => {
               ]}
               android_ripple={{ color: "#cccccc" }}
               onPress={() => {
-                setOpenModal(true);
+                if (isArchieve) setOpenModal(true);
+                else handlerAddToCart();
               }}
             >
               <View style={styles.addCartInnerContainer}>
-                <Text style={styles.addCartText}>Take This Meal</Text>
+                <Text style={styles.addCartText}>
+                  {isArchieve ? "Add To Cart" : "Take This Meal"}
+                </Text>
               </View>
             </Pressable>
           </View>
@@ -661,7 +667,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     alignItems: "center",
     justifyContent: "center",
-
     borderRadius: 20,
     overflow: "hidden",
   },

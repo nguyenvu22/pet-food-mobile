@@ -2,12 +2,13 @@ import {
   Dimensions,
   FlatList,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Colors } from "../../constants/styles";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import CardArchive from "../../components/card/CardArchive";
@@ -23,10 +24,11 @@ const ArchiveCustomerScreen = () => {
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getAllMealCustomer(accessToken);
-  }, [accessToken]);
+  }, [accessToken, isFocused]);
 
   const getAllMealCustomer = async (accessToken) => {
     try {
@@ -75,28 +77,19 @@ const ArchiveCustomerScreen = () => {
     );
   }
   return (
-    <>
+    <ScrollView style={{ flex: 1 }}>
       <View style={styles.header}>
-        <View style={styles.headerBtn}>
-          <Ionicons
-            name="chevron-back"
-            size={25}
-            color={Colors.dark}
-            onPress={navigation.goBack}
-          />
-        </View>
         <View style={styles.innerHeader}>
-          <View />
           <View>
             <Text style={styles.title}>Archive</Text>
           </View>
         </View>
       </View>
-      <SafeAreaView
+      <View
         style={{
           flex: 1,
-          paddingBottom: 50,
-          backgroundColor: Colors.white,
+          paddingBottom: 150,
+          backgroundColor: Colors.pink100,
         }}
       >
         <View style={styles.container}>
@@ -115,11 +108,12 @@ const ArchiveCustomerScreen = () => {
               data={mealCustomer}
               renderItem={renderItem}
               key={(item) => item.id}
+              scrollEnabled={false}
             />
           </View>
         </View>
-      </SafeAreaView>
-    </>
+      </View>
+    </ScrollView>
   );
 };
 
