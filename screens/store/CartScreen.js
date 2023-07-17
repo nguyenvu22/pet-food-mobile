@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
-  Button,
   Dimensions,
-  FlatList,
   Pressable,
   ScrollView,
   StyleSheet,

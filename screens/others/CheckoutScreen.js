@@ -40,11 +40,11 @@ export default function CheckoutScreen({ navigation, route }) {
 
   const [fullname, setFullname] = useState(user.fullName);
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-  const [province, setProvince] = useState(205);
-  const [district, setDistrict] = useState(1538);
-  const [ward, setWard] = useState(440109);
+  const [province, setProvince] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [ward, setWard] = useState(null);
   const [address, setAddress] = useState("");
-  const [shippingFee, setShippingFee] = useState(22001);
+  const [shippingFee, setShippingFee] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("");
 
   const [loadingVisible, setLoadingVisible] = useState(false);
@@ -55,55 +55,55 @@ export default function CheckoutScreen({ navigation, route }) {
     { key: "2", value: "MOMO" },
   ];
 
-  // useEffect(() => {
-  //   async function getAllProvince() {
-  //     const provinces = await getProvinces();
-  //     const parse = provinces.map(({ ProvinceID, ProvinceName }) => ({
-  //       key: ProvinceID,
-  //       value: ProvinceName,
-  //     }));
-  //     setProvinces(parse);
-  //   }
-  //   getAllProvince();
-  // }, []);
+  useEffect(() => {
+    async function getAllProvince() {
+      const provinces = await getProvinces();
+      const parse = provinces.map(({ ProvinceID, ProvinceName }) => ({
+        key: ProvinceID,
+        value: ProvinceName,
+      }));
+      setProvinces(parse);
+    }
+    getAllProvince();
+  }, []);
 
-  // useEffect(() => {
-  //   async function getAllDistrict() {
-  //     if (province) {
-  //       const districts = await getDistricts(province);
-  //       const parse = districts.map(({ DistrictID, DistrictName }) => ({
-  //         key: DistrictID,
-  //         value: DistrictName,
-  //       }));
-  //       setDistricts(parse);
-  //     }
-  //   }
-  //   getAllDistrict();
-  // }, [province]);
+  useEffect(() => {
+    async function getAllDistrict() {
+      if (province) {
+        const districts = await getDistricts(province);
+        const parse = districts.map(({ DistrictID, DistrictName }) => ({
+          key: DistrictID,
+          value: DistrictName,
+        }));
+        setDistricts(parse);
+      }
+    }
+    getAllDistrict();
+  }, [province]);
 
-  // useEffect(() => {
-  //   async function getAllWard() {
-  //     if (district) {
-  //       const wards = await getWards(district);
-  //       const parse = wards.map(({ WardCode, WardName }) => ({
-  //         key: WardCode,
-  //         value: WardName,
-  //       }));
-  //       setWards(parse);
-  //     }
-  //   }
-  //   getAllWard();
-  // }, [district]);
+  useEffect(() => {
+    async function getAllWard() {
+      if (district) {
+        const wards = await getWards(district);
+        const parse = wards.map(({ WardCode, WardName }) => ({
+          key: WardCode,
+          value: WardName,
+        }));
+        setWards(parse);
+      }
+    }
+    getAllWard();
+  }, [district]);
 
-  // useEffect(() => {
-  //   async function countShippingFee() {
-  //     if (ward) {
-  //       const response = await calcDeliveryFee(district, ward);
-  //       setShippingFee(response);
-  //     }
-  //   }
-  //   countShippingFee();
-  // }, [ward]);
+  useEffect(() => {
+    async function countShippingFee() {
+      if (ward) {
+        const response = await calcDeliveryFee(district, ward);
+        setShippingFee(response);
+      }
+    }
+    countShippingFee();
+  }, [ward]);
 
   function renderMealItem({ item }) {
     return (
