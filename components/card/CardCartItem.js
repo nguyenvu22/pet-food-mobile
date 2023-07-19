@@ -162,11 +162,6 @@ export default function CartProduct({
             </View>
 
             <View style={styles.body}>
-              {/* <FlatList
-                data={dataItem.productMeals}
-                renderItem={renderProductImage}
-                horizontal
-              /> */}
               <Text numberOfLines={2}>{dataItem.description}</Text>
             </View>
 

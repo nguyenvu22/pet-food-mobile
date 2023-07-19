@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 
 const CardArchive = ({ data }) => {
-  console.log(data);
   const navigation = useNavigation();
   const SelectItem = () => {
     navigation.navigate("Detail", {
@@ -59,12 +58,8 @@ const styles = StyleSheet.create({
 
     // backgroundColor: Colors.white,
     paddingVertical: 20,
-    borderWidth: 1,
-    borderBottomColor: "#cdcdcd",
-    borderTopColor: Colors.white,
-    borderLeftColor: Colors.white,
-    borderRightColor: Colors.white,
     overflow: "hidden",
+    backgroundColor: Colors.white,
   },
   innerContainer: {},
   imageContainer: {

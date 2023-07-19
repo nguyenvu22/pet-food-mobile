@@ -14,7 +14,7 @@ export async function getOrderByStatus(accessToken, status) {
     );
     return response.data;
   } catch (error) {
-    console.log(error.response);
+    console.log(error.response.data);
   }
 }
 
@@ -27,6 +27,23 @@ export async function cancelOrder(accessToken, orderId) {
     });
     return response.data;
   } catch (error) {
-    console.log(error.response);
+    console.log(error.response.data);
+  }
+}
+
+export async function repaymentOrder(accessToken, orderId) {
+  try {
+    const response = await axios.post(
+      API_KEY + `/payment/re-payment/${orderId}`,
+      {},
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error.response.data);
   }
 }

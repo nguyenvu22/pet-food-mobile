@@ -70,26 +70,31 @@ const FilterMealsScreen = ({ route }) => {
         style={{
           flex: 1,
           paddingBottom: 50,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.pink100,
         }}
       >
         <View style={styles.container}>
           <View style={styles.productContainer}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                paddingBottom: 25,
-                marginLeft: 10,
-              }}
-            >
-              Meals :
-            </Text>
-            <FlatList
-              data={meal}
-              key={(item) => item.id}
-              renderItem={renderItem}
-            />
+            {meal.length !== 0 ? (
+              <FlatList
+                data={meal}
+                key={(item) => item.id}
+                renderItem={renderItem}
+              />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{fontSize:16}}>
+                  This bird don't have any{" "}
+                  <Text style={{ fontWeight: "bold" }}>meal</Text> yet!
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </SafeAreaView>
@@ -134,6 +139,7 @@ const styles = StyleSheet.create({
   productContainer: {
     marginBottom: 20,
     marginTop: 20,
+    flex: 1,
   },
   emptyContainer: {
     flex: 1,

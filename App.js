@@ -20,7 +20,6 @@ import SplashScreen from "./screens/splash/SplashScreen";
 import OnboardScreen from "./screens/onboard/OnboardScreen";
 import SearchScreen from "./screens/others/SearchScreen";
 import ShippingScreen from "./screens/store/ShippingScreen";
-import MealScreen from "./screens/store/MealScreen";
 import DetailScreen from "./screens/others/DetailScreen";
 import AddButtonTab from "./components/button/AddButtonTab";
 import CheckoutScreen from "./screens/others/CheckoutScreen";
@@ -193,11 +192,6 @@ function StackScreen({ hasLaunched }) {
         name="CustomMeal"
         component={CustomMealScreen}
         options={{}}
-      />
-      <Stack.Screen
-        name="AddMeal"
-        component={MealScreen}
-        options={{ presentation: "modal" }}
       />
       <Stack.Screen name="Detail" component={DetailScreen} options={{}} />
       <Stack.Screen
