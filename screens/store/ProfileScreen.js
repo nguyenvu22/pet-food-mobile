@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Avatar, Caption, Title, TouchableRipple } from "react-native-paper";
 import {
@@ -75,64 +75,74 @@ export default function ProfileScreen() {
 
       <View style={styles.infoBoxWrapper}></View>
 
-      <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => console.log("click")}>
-          <View style={styles.menuItem}>
-            <View style={styles.innerMenuItem}>
-              <Ionicons name="heart-circle-outline" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>My Favorite</Text>
+      <ScrollView>
+        <View style={styles.menuWrapper}>
+          <TouchableRipple onPress={() => console.log("click")}>
+            <View style={styles.menuItem}>
+              <View style={styles.innerMenuItem}>
+                <Ionicons
+                  name="heart-circle-outline"
+                  size={25}
+                  color="#FF6347"
+                />
+                <Text style={styles.menuItemText}>My Favorite</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => console.log("click")}>
-          <View style={styles.menuItem}>
-            <View style={styles.innerMenuItem}>
-              <MaterialIcons name="payment" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Payment</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => console.log("click")}>
+            <View style={styles.menuItem}>
+              <View style={styles.innerMenuItem}>
+                <MaterialIcons name="payment" size={25} color="#FF6347" />
+                <Text style={styles.menuItemText}>Payment</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => console.log("click")}>
-          <View style={styles.menuItem}>
-            <View style={styles.innerMenuItem}>
-              <Feather name="share" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Share With Friend</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => console.log("click")}>
+            <View style={styles.menuItem}>
+              <View style={styles.innerMenuItem}>
+                <Feather name="share" size={25} color="#FF6347" />
+                <Text style={styles.menuItemText}>Share With Friend</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => console.log("click")}>
-          <View style={styles.menuItem}>
-            <View style={styles.innerMenuItem}>
-              <MaterialIcons name="contact-support" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Support</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => console.log("click")}>
+            <View style={styles.menuItem}>
+              <View style={styles.innerMenuItem}>
+                <MaterialIcons
+                  name="contact-support"
+                  size={25}
+                  color="#FF6347"
+                />
+                <Text style={styles.menuItemText}>Support</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={openModalChange}>
-          <View style={[styles.menuItem]}>
-            <View style={styles.innerMenuItem}>
-              <AntDesign name="setting" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Change Password</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={openModalChange}>
+            <View style={[styles.menuItem]}>
+              <View style={styles.innerMenuItem}>
+                <AntDesign name="setting" size={25} color="#FF6347" />
+                <Text style={styles.menuItemText}>Change Password</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={logOut}>
-          <View
-            style={[styles.menuItem, { borderBottomColor: Colors.pink100 }]}
-          >
-            <View style={styles.innerMenuItem}>
-              <AntDesign name="logout" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Logout</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={logOut}>
+            <View
+              style={[styles.menuItem, { borderBottomColor: Colors.pink100 }]}
+            >
+              <View style={styles.innerMenuItem}>
+                <AntDesign name="logout" size={25} color="#FF6347" />
+                <Text style={styles.menuItemText}>Logout</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-      </View>
+          </TouchableRipple>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
