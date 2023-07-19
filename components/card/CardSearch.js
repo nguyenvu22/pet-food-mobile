@@ -5,13 +5,12 @@ import { Colors } from "../../constants/styles";
 
 //card for product
 const CardSearch = ({ type, data }) => {
-
-
   const navigation = useNavigation();
   const SelectItem = () => {
     navigation.navigate("Detail", {
       dataItem: data,
       itemType: type,
+      isArchieve: true,
     });
   };
 

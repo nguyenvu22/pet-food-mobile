@@ -10,9 +10,10 @@ import {
 import React, { useState } from "react";
 import { Colors } from "../../constants/styles";
 import image1 from "../../assets/meme1.jpg";
-import { Ionicons, Feather } from "@expo/vector-icons";
-import { cancelOrder } from "../../services/order";
+import { Ionicons, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { cancelOrder, repaymentOrder } from "../../services/order";
 import { useSelector } from "react-redux";
+import * as Linking from "expo-linking";
 
 const img = {
   created: require("../../assets/images/delivery_order.png"),
@@ -51,6 +52,39 @@ const CardShipping = ({
         },
       },
     ]);
+  }
+
+  function handleRepayment() {
+    Alert.alert(
+      "Payment again?",
+      "We are redicrect you to MOMO payment method",
+      [
+        {
+          text: "No",
+          style: "destructive",
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            async function handleRepayment() {
+
+              const response = await repaymentOrder(accessToken, item.id);
+              console.log(response);
+              if (response?.status === "Success") {
+                Linking.openURL(response.data);
+                setSelectedButton("Delivery");
+              } else {
+                Alert.alert(
+                  "Something went wrong",
+                  "We can not take your bill! Please try again."
+                );
+              }
+            }
+            handleRepayment();
+          },
+        },
+      ]
+    );
   }
 
   return (
@@ -111,7 +145,7 @@ const CardShipping = ({
                     : "#0057a5",
               }}
             >
-              {item.transactions[0]?.paymentType ?? "unchecking"}
+              {item.transactions[0]?.paymentType ?? "none"}
             </Text>
           </Text>
           <View style={{ height: 5 }} />
@@ -134,6 +168,14 @@ const CardShipping = ({
             >
               ${(item.totalPrice / 24000).toFixed(1)}
             </Text>
+            {status === "created" && (
+              <Pressable
+                style={{ flex: 1, marginLeft: 5 }}
+                onPress={handleRepayment}
+              >
+                <MaterialCommunityIcons name="cash" size={30} />
+              </Pressable>
+            )}
             {status === "created" || status === "confirmed" ? (
               <TouchableOpacity onPress={handleCancelOrder}>
                 <Ionicons name="trash-outline" size={25} color={"#f36d10"} />

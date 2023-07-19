@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Feather } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 
@@ -52,10 +52,10 @@ const Card = ({ data, id, type }) => {
           <View style={styles.footer}>
             <View style={styles.priceContainer}>
               <Text style={styles.priceText}>{data.price}</Text>
-              <Text style={styles.vnd}>VND</Text>
+              <Text style={styles.vnd}>$</Text>
             </View>
             <View style={styles.iconAdd}>
-              <Entypo name="plus" size={24} color="black" />
+              <Feather name="info" size={24} color="black" />
             </View>
           </View>
         </View>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   vnd: {
     paddingTop: 3,
-    fontSize: 11,
+    fontSize: 15,
     color: "gray",
   },
   priceContainer: {

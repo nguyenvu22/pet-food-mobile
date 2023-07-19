@@ -64,6 +64,13 @@ const DetailScreen = ({ navigation, route }) => {
     }
   }, [accessToken]);
 
+  if (type === "product") {
+    selectItem = products?.find((item) => item.id === data.id);
+  } else {
+    selectItem = meals?.find((item) => item.id === data.id);
+    birdId = data.bird?.id;
+  }
+
   const getBirdByID = async (birdId, accessToken) => {
     try {
       const response = await getBirdByIdFunction(birdId, accessToken);
@@ -196,6 +203,7 @@ const DetailScreen = ({ navigation, route }) => {
           <ImageBackground
             source={{ uri: `${selectItem?.image}` }}
             style={styles.image}
+            defaultSource={require("../../assets/images/loading_image_horizontally.png")}
           >
             <View style={styles.header}>
               <View style={styles.headerBtn}>
@@ -331,6 +339,7 @@ const DetailScreen = ({ navigation, route }) => {
                       width: "100%",
                       resizeMode: "cover",
                     }}
+                    defaultSource={require("../../assets/images/loading_image_horizontally.png")}
                   />
                 </View>
                 <View style={styles.desBird}>
@@ -348,30 +357,42 @@ const DetailScreen = ({ navigation, route }) => {
             <View style={styles.productsOfMealContainer}>
               <View style={styles.morningProductContainer}>
                 <Text style={styles.sectionText}>Morning</Text>
-                <FlatList
-                  data={data.productMeals.Morning}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={renderListProductMorning}
-                  scrollEnabled={false}
-                />
+                {data.productMeals.Morning.length !== 0 ? (
+                  <FlatList
+                    data={data.productMeals.Morning}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderListProductMorning}
+                    scrollEnabled={false}
+                  />
+                ) : (
+                  <Text>None</Text>
+                )}
               </View>
               <View style={styles.afternoonProductContainer}>
                 <Text style={styles.sectionText}>Afternoon</Text>
-                <FlatList
-                  data={data.productMeals.Afternoon}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={renderListProductMorning}
-                  scrollEnabled={false}
-                />
+                {data.productMeals.Afternoon.length !== 0 ? (
+                  <FlatList
+                    data={data.productMeals.Afternoon}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderListProductMorning}
+                    scrollEnabled={false}
+                  />
+                ) : (
+                  <Text>Empty</Text>
+                )}
               </View>
               <View style={styles.eveningProductContainer}>
                 <Text style={styles.sectionText}>Evening</Text>
-                <FlatList
-                  data={data.productMeals.Morning}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={renderListProductMorning}
-                  scrollEnabled={false}
-                />
+                {data.productMeals.Evening.length !== 0 ? (
+                  <FlatList
+                    data={data.productMeals.Evening}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderListProductMorning}
+                    scrollEnabled={false}
+                  />
+                ) : (
+                  <Text>None</Text>
+                )}
               </View>
             </View>
           )}
