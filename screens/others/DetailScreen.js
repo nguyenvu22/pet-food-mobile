@@ -232,7 +232,6 @@ const DetailScreen = ({ navigation, route }) => {
                 ellipsizeMode="tail"
                 numberOfLines={1}
               >
-                {/* {selectItem?.productName} */}
                 {selectItem?.title}
               </Text>
             )}
