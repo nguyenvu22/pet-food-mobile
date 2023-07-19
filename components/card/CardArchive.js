@@ -6,6 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 const CardArchive = ({ data }) => {
   const navigation = useNavigation();
+  
   const SelectItem = () => {
     navigation.navigate("Detail", {
       dataItem: data,
@@ -60,6 +61,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     overflow: "hidden",
     backgroundColor: Colors.white,
+    borderRadius: 30,
+    marginVertical: 10,
   },
   innerContainer: {},
   imageContainer: {

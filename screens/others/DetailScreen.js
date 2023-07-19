@@ -51,7 +51,7 @@ const DetailScreen = ({ navigation, route }) => {
     selectItem = products?.find((item) => item.id === data.id);
   } else {
     selectItem = meals?.find((item) => item.id === data.id);
-    birdId = data.bird.id;
+    birdId = data.bird?.id;
   }
 
   useEffect(() => {
@@ -174,7 +174,7 @@ const DetailScreen = ({ navigation, route }) => {
   }
 
   const renderListProductMorning = (itemData) => {
-    return <CardProductsInMeal data={itemData.item.product} type="product" />;
+    return <CardProductsInMeal data={itemData.item} type="product" />;
   };
 
   if (isLoading) {
@@ -201,7 +201,7 @@ const DetailScreen = ({ navigation, route }) => {
       >
         <View style={styles.ImgBgContainer}>
           <ImageBackground
-            source={{ uri: `${selectItem?.image}` }}
+            source={{ uri: `${data?.image}` }}
             style={styles.image}
             defaultSource={require("../../assets/images/loading_image_horizontally.png")}
           >
@@ -233,7 +233,7 @@ const DetailScreen = ({ navigation, route }) => {
                 numberOfLines={1}
               >
                 {/* {selectItem?.productName} */}
-                {selectItem?.title}
+                {data?.title}
               </Text>
             )}
           </View>
@@ -351,7 +351,7 @@ const DetailScreen = ({ navigation, route }) => {
           )}
           <View style={styles.desDetailContainer}>
             <Text style={styles.instructTitle}>Description :</Text>
-            <Text style={styles.desDetailText}>{selectItem?.description}</Text>
+            <Text style={styles.desDetailText}>{data?.description}</Text>
           </View>
           {type === "meal" && (
             <View style={styles.productsOfMealContainer}>

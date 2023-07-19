@@ -15,6 +15,7 @@ import { Colors } from "../../constants/styles";
 import { useDispatch } from "react-redux";
 import { updateCart } from "../../redux/cart/cart";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CartProduct({
   dataItem,
@@ -23,9 +24,18 @@ export default function CartProduct({
   selectedProducts,
   setSelectedProducts,
 }) {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
-
   const [scaleValue] = useState(new Animated.Value(1));
+  // console.log("dataItem in cardCart : ", dataItem);
+
+  const SelectItem = () => {
+    navigation.navigate("Detail", {
+      dataItem: dataItem,
+      itemType: "meal",
+      isArchieve: true,
+    });
+  };
 
   function animationButton() {
     Animated.timing(scaleValue, {
@@ -141,6 +151,15 @@ export default function CartProduct({
               <Text numberOfLines={1} style={styles.name}>
                 {dataItem.title}
               </Text>
+              <Pressable
+                android_ripple={{ color: "#ccccc" }}
+                style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
+                onPress={SelectItem}
+              >
+                <Text style={{ color: Colors.green, fontWeight: "800" }}>
+                  View
+                </Text>
+              </Pressable>
               <View
                 style={[
                   styles.check,
@@ -196,6 +215,10 @@ export default function CartProduct({
 }
 
 const styles = StyleSheet.create({
+  buttonPressed: {
+    opacity: 0.25,
+    borderRadius: 10,
+  },
   container: {
     backgroundColor: "white",
     width: "100%",
@@ -210,7 +233,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderRadius: 20,
   },
-  left: {},
+  left: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   right: {
     flex: 1,
     paddingLeft: 20,
