@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Avatar, Caption, Title, TouchableRipple } from "react-native-paper";
 import {
@@ -34,7 +34,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <Avatar.Image
@@ -133,7 +133,7 @@ export default function ProfileScreen() {
           </View>
         </TouchableRipple>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.pink100,
+    paddingTop: 50,
   },
   userInfoSection: {
     marginTop: 10,
