@@ -1,4 +1,5 @@
 import {
+  Alert,
   Animated,
   Dimensions,
   FlatList,
@@ -7,6 +8,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -36,6 +38,7 @@ export default function CustomMealScreen({ navigation, route }) {
   const [morningProducts, setMorningProducts] = useState([]);
   const [afternoonProducts, setAfternoonProducts] = useState([]);
   const [eveningProducts, setEveningProducts] = useState([]);
+  const [title, setTitle] = useState(meal.title);
 
   useEffect(() => {
     async function getAllProducts() {
@@ -167,6 +170,7 @@ export default function CustomMealScreen({ navigation, route }) {
 
     const mealToAPI = {
       ...meal,
+      title: title,
       productMeals: [
         {
           Morning: morningProducts.map((item) => {
@@ -186,14 +190,18 @@ export default function CustomMealScreen({ navigation, route }) {
       ],
     };
 
-    // console.log("---------------mealToAPI---------------");
-    // console.log(mealToAPI);
-    // console.log(mealToAPI.productMeals);
-    // console.log(mealToAPI.productMeals[0].Morning);
-    // console.log(mealToAPI.productMeals[1].Afternoon);
-    // console.log(mealToAPI.productMeals[2].Evening);
-
     async function addToCart() {
+      if (
+        morningProducts.length === 0 &&
+        afternoonProducts.length === 0 &&
+        eveningProducts.length === 0
+      ) {
+        Alert.alert(
+          "Missing information!",
+          "You can not clone a meal with empty product"
+        );
+        return;
+      }
       Animated.timing(scaleValue1, {
         toValue: 0.9,
         duration: 200,
@@ -219,6 +227,17 @@ export default function CustomMealScreen({ navigation, route }) {
     }
 
     async function storeMeal() {
+      if (
+        morningProducts.length === 0 &&
+        afternoonProducts.length === 0 &&
+        eveningProducts.length === 0
+      ) {
+        Alert.alert(
+          "Missing information!",
+          "You can not clone a meal with empty product"
+        );
+        return;
+      }
       Animated.timing(scaleValue2, {
         toValue: 0.9,
         duration: 200,
@@ -233,8 +252,6 @@ export default function CustomMealScreen({ navigation, route }) {
 
       const response = await createCustomerMeal(mealToAPI, accessToken);
       if (response.status === "Success") {
-        // const { createdBy, status, ...resMeal } = response.data;
-
         setOpenModal(false);
         navigation.navigate("ArchiveCustomer");
       }
@@ -309,7 +326,12 @@ export default function CustomMealScreen({ navigation, route }) {
             </Text>
             <Text style={{ fontSize: 30, fontWeight: "600" }}>MEAL.</Text>
           </View>
-          <Text style={{ fontSize: 16 }}>{meal.title}</Text>
+          <TextInput
+            value={title}
+            onChangeText={(value) => setTitle(value)}
+            style={{ borderBottomColor: "rgba(0,0,0,0.1)", borderBottomWidth: 1.5 }}
+            placeholder="Description"
+          />
         </View>
         <View
           style={{
@@ -355,13 +377,13 @@ export default function CustomMealScreen({ navigation, route }) {
         />
       </View>
 
-      <View>
+      <View style={{ paddingBottom: 100 }}>
         <FlatList
           data={products}
           renderItem={renderProductItem}
           // keyExtractor={(item) => item.id}
           numColumns={3}
-          contentContainerStyle={{ marginHorizontal: 25 }}
+          contentContainerStyle={{ marginHorizontal: 25, paddingBottom: 200 }}
           columnWrapperStyle={{
             justifyContent: "space-between",
             marginBottom: 10,

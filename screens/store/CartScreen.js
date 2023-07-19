@@ -15,7 +15,6 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function CartScreen({ navigation }) {
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
-
   const [meals, setMeals] = useState(cartInRedux);
   const [selectedProducts, setSelectedProducts] = useState([]);
 

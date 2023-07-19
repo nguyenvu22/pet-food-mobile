@@ -23,7 +23,6 @@ import { updateCart } from "../../redux/cart/cart";
 import LoadingScreen from "../../components/loading/LoadingScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ConfirmModal from "../../components/modal/ConfirmModal";
-import CardSearch from "../../components/card/CardSearch";
 import CardProductsInMeal from "../../components/card/CardProductsInMeal";
 import { getBirdByIdFunction } from "../../services/bird";
 
@@ -48,6 +47,13 @@ const DetailScreen = ({ navigation, route }) => {
   let selectItem;
   let birdId;
 
+  if (type === "product") {
+    selectItem = products?.find((item) => item.id === data.id);
+  } else {
+    selectItem = meals?.find((item) => item.id === data.id);
+    birdId = data.bird.id;
+  }
+
   useEffect(() => {
     setIsLoading(true);
     if (type === "product") {
@@ -57,13 +63,6 @@ const DetailScreen = ({ navigation, route }) => {
       getBirdByID(birdId, accessToken);
     }
   }, [accessToken]);
-
-  if (type === "product") {
-    selectItem = products?.find((item) => item.id === data.id);
-  } else {
-    selectItem = meals?.find((item) => item.id === data.id);
-    birdId = data.bird.id;
-  }
 
   const getBirdByID = async (birdId, accessToken) => {
     try {
@@ -110,15 +109,15 @@ const DetailScreen = ({ navigation, route }) => {
 
   const handlerAddToCart = async () => {
     let addToCart;
-    if (cartInRedux.some((item) => item.id === selectItem.id)) {
+    if (cartInRedux.some((item) => item.id === data.id)) {
       addToCart = cartInRedux.map((item) => {
-        if (item.id === selectItem.id) {
+        if (item.id === data.id) {
           return { ...item, quantity: item.quantity + 1 };
         }
         return item;
       });
     } else {
-      addToCart = [...cartInRedux, { ...selectItem, quantity: 1 }];
+      addToCart = [...cartInRedux, { ...data, quantity: 1 }];
     }
     setOpenModal(false);
     dispatch(updateCart({ cart: addToCart }));
@@ -132,7 +131,7 @@ const DetailScreen = ({ navigation, route }) => {
 
   const handleCustomMeal = () => {
     setOpenModal(false);
-    navigation.navigate("CustomMeal", { meal: selectItem });
+    navigation.navigate("CustomMeal", { meal: data });
   };
 
   function SelectorModal() {
@@ -398,8 +397,8 @@ const DetailScreen = ({ navigation, route }) => {
               ]}
               android_ripple={{ color: "#cccccc" }}
               onPress={() => {
-                if (isArchieve) setOpenModal(true);
-                else handlerAddToCart();
+                if (isArchieve) handlerAddToCart();
+                else setOpenModal(true);
               }}
             >
               <View style={styles.addCartInnerContainer}>
