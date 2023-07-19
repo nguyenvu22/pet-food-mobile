@@ -193,7 +193,6 @@ export default function CheckoutScreen({ navigation, route }) {
       orderMeals,
       user.accessToken
     );
-    console.log(response);
     setLoadingVisible(false);
     if (response?.status === "Success") {
       setVisible(true);

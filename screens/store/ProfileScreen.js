@@ -55,7 +55,6 @@ export default function ProfileScreen() {
           </View>
         </View>
       </View>
-
       <View style={styles.userInfoSection}>
         <View style={styles.row}>
           <AntDesign name="calendar" size={20} color={Colors.dark} />
@@ -74,42 +73,64 @@ export default function ProfileScreen() {
           <Text style={styles.infText}>{user.phoneNumber}</Text>
         </View>
       </View>
+
       <View style={styles.infoBoxWrapper}></View>
+
       <View style={styles.menuWrapper}>
         <TouchableRipple onPress={() => console.log("click")}>
           <View style={styles.menuItem}>
-            <Ionicons name="heart-circle-outline" size={25} color="#FF6347" />
-            <Text style={styles.menuItemText}>My Favorite</Text>
+            <View style={styles.innerMenuItem}>
+              <Ionicons name="heart-circle-outline" size={25} color="#FF6347" />
+              <Text style={styles.menuItemText}>My Favorite</Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="black" />
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => console.log("click")}>
           <View style={styles.menuItem}>
-            <MaterialIcons name="payment" size={25} color="#FF6347" />
-            <Text style={styles.menuItemText}>Payment</Text>
+            <View style={styles.innerMenuItem}>
+              <MaterialIcons name="payment" size={25} color="#FF6347" />
+              <Text style={styles.menuItemText}>Payment</Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="black" />
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => console.log("click")}>
           <View style={styles.menuItem}>
-            <Feather name="share" size={25} color="#FF6347" />
-            <Text style={styles.menuItemText}>Share With Friend</Text>
+            <View style={styles.innerMenuItem}>
+              <Feather name="share" size={25} color="#FF6347" />
+              <Text style={styles.menuItemText}>Share With Friend</Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="black" />
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => console.log("click")}>
           <View style={styles.menuItem}>
-            <MaterialIcons name="contact-support" size={25} color="#FF6347" />
-            <Text style={styles.menuItemText}>Support</Text>
+            <View style={styles.innerMenuItem}>
+              <MaterialIcons name="contact-support" size={25} color="#FF6347" />
+              <Text style={styles.menuItemText}>Support</Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="black" />
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={openModalChange}>
-          <View style={styles.menuItem}>
-            <AntDesign name="setting" size={25} color="#FF6347" />
-            <Text style={styles.menuItemText}>Setting</Text>
+          <View style={[styles.menuItem]}>
+            <View style={styles.innerMenuItem}>
+              <AntDesign name="setting" size={25} color="#FF6347" />
+              <Text style={styles.menuItemText}>Change Password</Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="black" />
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={logOut}>
-          <View style={styles.menuItem}>
-            <AntDesign name="logout" size={25} color="#FF6347" />
-            <Text style={styles.menuItemText}>Logout</Text>
+          <View
+            style={[styles.menuItem, { borderBottomColor: Colors.pink100 }]}
+          >
+            <View style={styles.innerMenuItem}>
+              <AntDesign name="logout" size={25} color="#FF6347" />
+              <Text style={styles.menuItemText}>Logout</Text>
+            </View>
+            <MaterialIcons name="navigate-next" size={25} color="black" />
           </View>
         </TouchableRipple>
       </View>
@@ -125,7 +146,7 @@ const styles = StyleSheet.create({
   userInfoSection: {
     marginTop: 10,
     paddingHorizontal: 20,
-    marginBottom: 25,
+    marginBottom: 15,
   },
   title: {
     fontSize: 24,
@@ -140,6 +161,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     marginBottom: 15,
+    marginTop: 10,
   },
   infText: {
     color: "#777777",
@@ -150,14 +172,29 @@ const styles = StyleSheet.create({
   infoBoxWrapper: {
     borderBottomColor: "#dddddd",
     borderBottomWidth: 1,
+    marginBottom: 15,
   },
   menuWrapper: {
-    marginTop: 10,
+    marginHorizontal: 10,
+    marginVertical: 20,
+    // backgroundColor: Colors.brown700,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#c4c4c4",
   },
   menuItem: {
     flexDirection: "row",
     paddingVertical: 15,
-    paddingHorizontal: 30,
+    // paddingHorizontal: 10,
+    // backgroundColor: Colors.brown700,
+    marginHorizontal: 25,
+    marginVertical: 8,
+    borderBottomColor: "#c4c4c4",
+    borderBottomWidth: 1,
+    justifyContent: "space-between",
+  },
+  innerMenuItem: {
+    flexDirection: "row",
   },
   menuItemText: {
     color: "#777777",

@@ -34,6 +34,8 @@ const FilterMealsScreen = ({ route }) => {
     try {
       const response = await getMealsByBirdIdFunctions(idBird, accessToken);
       if (response?.status === "Success") {
+        // const dataMeal = { birdName: idBird, ...response.data };
+        // console.log("data", data);
         setMeal(response.data);
       }
     } catch (error) {
@@ -42,9 +44,11 @@ const FilterMealsScreen = ({ route }) => {
   };
 
   const renderItem = (itemData) => {
+    const dataMeal = { bird: { id: idBird }, ...itemData.item };
+    // console.log("dataMeal : ", dataMeal);
     return (
       <View>
-        <CardArchive data={itemData.item} />
+        <CardArchive data={dataMeal} />
       </View>
     );
   };

@@ -4,6 +4,9 @@ import { Colors } from "../../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 
 const CardCategory = ({ onPress, data }) => {
+  console.log('data in card cate : ', data)
+
+
   const navigation = useNavigation();
   const SelectMealsByBird = () => {
     navigation.navigate("FilterMeals", {
@@ -31,8 +34,8 @@ const CardCategory = ({ onPress, data }) => {
               justifyContent: "center",
               alignItems: "center",
               borderRadius: 8,
-              overflow: 'hidden',
-              marginBottom: 2
+              overflow: "hidden",
+              marginBottom: 2,
             }}
           >
             <Image source={{ uri: data.images }} style={styles.ImgCategory} />
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
   ImgCategory: {
     height: "100%",
     width: "100%",
-    resizeMode: 'cover'
+    resizeMode: "cover",
   },
   titleText: {
     fontWeight: "bold",

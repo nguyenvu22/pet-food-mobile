@@ -77,7 +77,7 @@ const ArchiveCustomerScreen = () => {
     );
   }
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <>
       <View style={styles.header}>
         <View style={styles.innerHeader}>
           <View>
@@ -85,35 +85,37 @@ const ArchiveCustomerScreen = () => {
           </View>
         </View>
       </View>
-      <View
-        style={{
-          flex: 1,
-          paddingBottom: 150,
-          backgroundColor: Colors.pink100,
-        }}
-      >
-        <View style={styles.container}>
-          <View style={styles.productContainer}>
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                paddingBottom: 25,
-                marginLeft: 10,
-              }}
-            >
-              Meals Custom
-            </Text>
-            <FlatList
-              data={mealCustomer}
-              renderItem={renderItem}
-              key={(item) => item.id}
-              scrollEnabled={false}
-            />
+      <ScrollView style={{ flex: 1, backgroundColor: Colors.white }}>
+        <View
+          style={{
+            flex: 1,
+            paddingBottom: 150,
+            backgroundColor: Colors.white,
+          }}
+        >
+          <View style={styles.container}>
+            <View style={styles.productContainer}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  paddingBottom: 25,
+                  marginLeft: 10,
+                }}
+              >
+                Meals Custom
+              </Text>
+              <FlatList
+                data={mealCustomer}
+                renderItem={renderItem}
+                key={(item) => item.id}
+                scrollEnabled={false}
+              />
+            </View>
           </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 

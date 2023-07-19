@@ -62,7 +62,7 @@ const DetailScreen = ({ navigation, route }) => {
     selectItem = products?.find((item) => item.id === data.id);
   } else {
     selectItem = meals?.find((item) => item.id === data.id);
-    birdId = data.bird.id;
+    birdId = data.bird?.id;
   }
 
   const getBirdByID = async (birdId, accessToken) => {
@@ -132,7 +132,7 @@ const DetailScreen = ({ navigation, route }) => {
 
   const handleCustomMeal = () => {
     setOpenModal(false);
-    navigation.navigate("CustomMeal", { meal: selectItem });
+    navigation.navigate("CustomMeal", { meal: data });
   };
 
   function SelectorModal() {
@@ -197,6 +197,7 @@ const DetailScreen = ({ navigation, route }) => {
           <ImageBackground
             source={{ uri: `${selectItem?.image}` }}
             style={styles.image}
+            defaultSource={require("../../assets/images/loading_image_horizontally.png")}
           >
             <View style={styles.header}>
               <View style={styles.headerBtn}>
@@ -332,6 +333,7 @@ const DetailScreen = ({ navigation, route }) => {
                       width: "100%",
                       resizeMode: "cover",
                     }}
+                    defaultSource={require("../../assets/images/loading_image_horizontally.png")}
                   />
                 </View>
                 <View style={styles.desBird}>

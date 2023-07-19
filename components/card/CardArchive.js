@@ -5,12 +5,14 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 
 const CardArchive = ({ data }) => {
-  console.log(data)
+  // console.log("data in cardArchive : ", data);
+
   const navigation = useNavigation();
   const SelectItem = () => {
     navigation.navigate("Detail", {
       dataItem: data,
       itemType: "meal",
+      isArchieve: true
     });
   };
 
