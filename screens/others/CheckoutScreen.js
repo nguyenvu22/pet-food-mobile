@@ -213,6 +213,14 @@ export default function CheckoutScreen({ navigation, route }) {
         setVisible(false);
         navigation.goBack();
       }, 3000);
+    } else if (response?.status === "Fail") {
+      // if(response.message === "Product is not enough")
+      Alert.alert("Take order fail", response.data[0]);
+    } else {
+      Alert.alert(
+        "Take order fail",
+        "Please check your address and try again!"
+      );
     }
   }
 

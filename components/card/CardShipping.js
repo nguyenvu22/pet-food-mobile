@@ -7,17 +7,31 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Colors } from "../../constants/styles";
 import image1 from "../../assets/meme1.jpg";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Feather } from "@expo/vector-icons";
 import { cancelOrder } from "../../services/order";
 import { useSelector } from "react-redux";
 
-const CardShipping = ({ item, selectedButton }) => {
+const img = {
+  created: require("../../assets/images/delivery_order.png"),
+  confirmed: require("../../assets/images/delivery_order.png"),
+  delivering: require("../../assets/images/delivery.png"),
+  completed: require("../../assets/images/delivery_success.png"),
+  canceled: require("../../assets/images/delivery_cancel.png"),
+};
+
+const CardShipping = ({
+  item,
+  setOpenModal,
+  setIdOrder,
+  setSelectedButton,
+}) => {
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
+  const status = item.orderStatus;
 
   function handleCancelOrder() {
     Alert.alert("Are you sure?", "You are removing an order", [
@@ -28,18 +42,25 @@ const CardShipping = ({ item, selectedButton }) => {
       {
         text: "Yes",
         onPress: () => {
-          // async function handleCancel() {
-          //   const response = await cancelOrder(accessToken, item.id);
-          //   console.log(response);
-          // }
-          // handleCancel();
+          async function handleCancel() {
+            const response = await cancelOrder(accessToken, item.id);
+            console.log(response);
+            if (response.status === "Success") setSelectedButton("Canceled");
+          }
+          handleCancel();
         },
       },
     ]);
   }
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        setIdOrder(item.id);
+        setOpenModal(true);
+      }}
+    >
       <View style={{ flexDirection: "row" }}>
         <View
           style={{
@@ -53,8 +74,8 @@ const CardShipping = ({ item, selectedButton }) => {
           }}
         >
           <Image
-            source={require("../../assets/images/delivery.png")}
-            resizeMode="cover"
+            source={img[status]}
+            resizeMode="contain"
             style={{
               width: 100,
               height: 100,
@@ -76,7 +97,23 @@ const CardShipping = ({ item, selectedButton }) => {
             }, 0)}{" "}
             item
           </Text>
-          <Text>Payment method : {item.transactions[0].paymentType}</Text>
+          <Text>
+            Payment :{" "}
+            <Text
+              style={{
+                fontWeight: "600",
+                fontSize: 16,
+                color:
+                  item.transactions[0] === undefined
+                    ? "black"
+                    : item.transactions[0]?.paymentType === "MOMO"
+                    ? "#a50064"
+                    : "#0057a5",
+              }}
+            >
+              {item.transactions[0]?.paymentType ?? "unchecking"}
+            </Text>
+          </Text>
           <View style={{ height: 5 }} />
           <View
             style={{
@@ -85,18 +122,29 @@ const CardShipping = ({ item, selectedButton }) => {
               alignItems: "center",
             }}
           >
-            <Text>${(item.totalPrice / 24000).toFixed(1)}</Text>
-            {/* {selectedButton === "Delivery" ? (
+            <Text
+              style={{
+                color: "green",
+                borderWidth: 1,
+                borderColor: "green",
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+                borderRadius: 10,
+              }}
+            >
+              ${(item.totalPrice / 24000).toFixed(1)}
+            </Text>
+            {status === "created" || status === "confirmed" ? (
               <TouchableOpacity onPress={handleCancelOrder}>
                 <Ionicons name="trash-outline" size={25} color={"#f36d10"} />
               </TouchableOpacity>
             ) : (
-              <View style={{ height: 27 }} />
-            )} */}
+              <Feather name="search" size={25} color={Colors.transparentDark} />
+            )}
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

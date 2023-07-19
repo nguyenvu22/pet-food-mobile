@@ -11,22 +11,29 @@ import {
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Colors } from "../../constants/styles";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import image from "../../assets/meme1.jpg";
 import CardShipping from "../../components/card/CardShipping";
 import { getOrderByStatus } from "../../services/order";
+import OrderDetailModal from "../../components/modal/OrderDetailModal";
 
 const ShippingScreen = ({ navigation }) => {
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
   );
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const isFocused = useIsFocused();
+
   const [selectedButton, setSelectedButton] = useState("Delivery");
   const [orderData, setOrderData] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [idOrder, setIdOrder] = useState();
 
-  const animatedValue = useRef(new Animated.Value(0)).current;
-  // const [animatedValue, setAnimatedValue] = useState(new Animated.Value(0));
+  let orderItem;
+  if (idOrder) {
+    orderItem = orderData.find((item) => item.id === idOrder);
+  }
 
   useEffect(() => {
     Animated.timing(animatedValue, {
@@ -35,15 +42,26 @@ const ShippingScreen = ({ navigation }) => {
       useNativeDriver: false,
     }).start(() => {
       async function getOrders() {
-        let statusToAPI;
-        if (selectedButton === "Delivery") statusToAPI = "delivering";
-        else if (selectedButton === "Succeeded") statusToAPI = "completed";
-        else statusToAPI = "canceled";
+        if (selectedButton === "Ordered") {
+          const responseCre = await getOrderByStatus(accessToken, "created");
+          const responseCon = await getOrderByStatus(accessToken, "confirmed");
+          if (
+            responseCre.status === "Success" &&
+            responseCon.status === "Success"
+          ) {
+            setOrderData([...responseCre.data, ...responseCon.data]);
+          } else setOrderData([]);
+        } else {
+          let statusToAPI;
+          if (selectedButton === "Delivery") statusToAPI = "delivering";
+          else if (selectedButton === "Succeeded") statusToAPI = "completed";
+          else if (selectedButton === "Canceled") statusToAPI = "canceled";
 
-        const response = await getOrderByStatus(accessToken, statusToAPI);
+          const response = await getOrderByStatus(accessToken, statusToAPI);
 
-        if (response.status === "Success") setOrderData(response.data);
-        else setOrderData([]);
+          if (response.status === "Success") setOrderData(response.data);
+          else setOrderData([]);
+        }
       }
       getOrders();
       Animated.timing(animatedValue, {
@@ -52,20 +70,21 @@ const ShippingScreen = ({ navigation }) => {
         useNativeDriver: false,
       }).start();
     });
-  }, [selectedButton]);
+  }, [selectedButton, isFocused]);
 
-  const handlerPressDelivery = () => {
-    setSelectedButton("Delivery");
-  };
-  const handlerPressSuccess = () => {
-    setSelectedButton("Succeeded");
-  };
-  const handlerPressCancel = () => {
-    setSelectedButton("Canceled");
+  const handleOrderState = (stateSelection) => {
+    setSelectedButton(stateSelection);
   };
 
   return (
     <View style={styles.shippingContainer}>
+      {openModal && (
+        <OrderDetailModal
+          item={orderItem}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        />
+      )}
       <View style={styles.header}>
         <MaterialCommunityIcons
           name="bird"
@@ -92,7 +111,28 @@ const ShippingScreen = ({ navigation }) => {
               pressed ? styles.buttonPressed : null,
             ]}
             android_ripple={{ color: "#cccccc" }}
-            onPress={handlerPressDelivery}
+            onPress={handleOrderState.bind(this, "Ordered")}
+          >
+            <View style={styles.btnInner}>
+              <Text
+                style={[
+                  styles.title,
+                  selectedButton === "Ordered" && { color: Colors.green },
+                ]}
+              >
+                Ordered
+              </Text>
+            </View>
+          </Pressable>
+        </View>
+        <View style={styles.btn}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.button,
+              pressed ? styles.buttonPressed : null,
+            ]}
+            android_ripple={{ color: "#cccccc" }}
+            onPress={handleOrderState.bind(this, "Delivery")}
           >
             <View style={styles.btnInner}>
               <Text
@@ -113,7 +153,7 @@ const ShippingScreen = ({ navigation }) => {
               pressed ? styles.buttonPressed : null,
             ]}
             android_ripple={{ color: "#cccccc" }}
-            onPress={handlerPressSuccess}
+            onPress={handleOrderState.bind(this, "Succeeded")}
           >
             <View style={styles.btnInner}>
               <Text
@@ -134,7 +174,7 @@ const ShippingScreen = ({ navigation }) => {
               pressed ? styles.buttonPressed : null,
             ]}
             android_ripple={{ color: "#cccccc" }}
-            onPress={handlerPressCancel}
+            onPress={handleOrderState.bind(this, "Canceled")}
           >
             <View style={styles.btnInner}>
               <Text
@@ -151,9 +191,6 @@ const ShippingScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.orderContainer}>
-        {/* <View style={styles.orderSummary}>
-          <Text style={styles.summaryText}>Order Summary</Text>
-        </View> */}
         <Animated.View
           style={[
             styles.listCardShipping,
@@ -166,23 +203,47 @@ const ShippingScreen = ({ navigation }) => {
             },
           ]}
         >
-          <FlatList
-            data={orderData}
-            renderItem={({ item }) => {
-              return (
-                <CardShipping item={item} selectedButton={selectedButton} />
-              );
-            }}
-            ItemSeparatorComponent={() => (
-              <View
-                style={{
-                  height: 2,
-                  backgroundColor: Colors.light,
-                  marginVertical: 20,
-                }}
-              />
-            )}
-          />
+          {orderData.length !== 0 ? (
+            <FlatList
+              data={orderData}
+              renderItem={({ item }) => {
+                return (
+                  <CardShipping
+                    item={item}
+                    setOpenModal={setOpenModal}
+                    setIdOrder={setIdOrder}
+                    setSelectedButton={setSelectedButton}
+                  />
+                );
+              }}
+              keyExtractor={(item) => item.id}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    height: 2,
+                    backgroundColor: Colors.light,
+                    marginVertical: 20,
+                  }}
+                />
+              )}
+            />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text>
+                You don't have any{" "}
+                <Text style={{ fontWeight: "600", color: Colors.green }}>
+                  Order
+                </Text>{" "}
+                here!
+              </Text>
+            </View>
+          )}
         </Animated.View>
       </View>
 
