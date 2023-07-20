@@ -16,7 +16,7 @@ import React, { useEffect, useState } from "react";
 import { Colors } from "../../constants/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "../../services/product";
-import { Octicons } from "@expo/vector-icons";
+import { Ionicons, Octicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updateCart } from "../../redux/cart/cart";
 import { createCustomerMeal, saveCustomerMeal } from "../../services/meal";
@@ -356,12 +356,30 @@ export default function CustomMealScreen({ navigation, route }) {
         setVisible={setVisible}
         requireUrl="lottie_update"
       />
+
+      <Pressable
+        style={{
+          position: "absolute",
+          top: dHeight * 0.05,
+          left: 25,
+          // backgroundColor: Colors.purple400,
+          paddingTop: 5,
+          borderRadius: 50,
+        }}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Ionicons name="chevron-back" color={"black"} size={25} />
+      </Pressable>
+
       <View
         style={{
           marginHorizontal: 25,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "flex-start",
+          marginTop: 15,
         }}
       >
         <View>

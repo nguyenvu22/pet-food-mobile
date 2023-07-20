@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { Colors } from "../../constants/styles";
 import { useDispatch } from "react-redux";
 import { updateCart } from "../../redux/cart/cart";
@@ -125,92 +125,103 @@ export default function CartProduct({
   }
 
   return (
-    <TouchableWithoutFeedback onPress={animationButton}>
-      <Animated.View
-        style={[
-          styles.container,
-          { transform: [{ scale: scaleValue }] },
-          selectedProducts.some((item) => item.id === dataItem.id) && {
-            borderColor: Colors.pink800,
-          },
-        ]}
-      >
-        <View style={styles.innercontainer}>
-          <View style={styles.left}>
-            <View>
-              <Image
-                source={{ uri: `${dataItem.image}` }}
-                defaultSource={require("../../assets/images/loading_image_horizontally.png")}
-                style={styles.image}
-                resizeMode="cover"
-              />
-            </View>
-          </View>
-          <View style={styles.right}>
-            <View style={styles.header}>
-              <Text numberOfLines={1} style={styles.name}>
-                {dataItem.title}
-              </Text>
-              <Pressable
-                android_ripple={{ color: "#ccccc" }}
-                style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
-                onPress={SelectItem}
-              >
-                <Text style={{ color: Colors.green, fontWeight: "800" }}>
-                  View
-                </Text>
-              </Pressable>
-              <View
-                style={[
-                  styles.check,
-                  !selectedProducts.some((item) => item.id === dataItem.id) && {
-                    backgroundColor: "white",
-                  },
-                ]}
-              >
-                <Ionicons
-                  name="checkmark-sharp"
-                  color={
-                    selectedProducts.some((item) => item.id === dataItem.id)
-                      ? "white"
-                      : "transparent"
-                  }
-                  size={20}
+    <>
+      <TouchableWithoutFeedback onPress={animationButton}>
+        <Animated.View
+          style={[
+            styles.container,
+            { transform: [{ scale: scaleValue }] },
+            selectedProducts.some((item) => item.id === dataItem.id) && {
+              borderColor: Colors.pink800,
+            },
+          ]}
+        >
+          <View style={styles.innercontainer}>
+            <View style={styles.left}>
+              <View>
+                <Image
+                  source={{ uri: `${dataItem.image}` }}
+                  defaultSource={require("../../assets/images/loading_image_horizontally.png")}
+                  style={styles.image}
+                  resizeMode="cover"
                 />
               </View>
             </View>
+            <View style={styles.right}>
+              <View style={styles.header}>
+                <Text numberOfLines={1} style={styles.name}>
+                  {dataItem.title}
+                </Text>
 
-            <View style={styles.body}>
-              <Text numberOfLines={2}>{dataItem.description}</Text>
-            </View>
+                <View
+                  style={[
+                    styles.check,
+                    !selectedProducts.some(
+                      (item) => item.id === dataItem.id
+                    ) && {
+                      backgroundColor: "white",
+                    },
+                  ]}
+                >
+                  <Ionicons
+                    name="checkmark-sharp"
+                    color={
+                      selectedProducts.some((item) => item.id === dataItem.id)
+                        ? "white"
+                        : "transparent"
+                    }
+                    size={20}
+                  />
+                </View>
+              </View>
 
-            <View style={styles.footer}>
-              <Text style={styles.price}>
-                $
-                {dataItem.productMeals.Morning.reduce((value, item) => {
-                  return (value += item.amount * item.product.price);
-                }, 0) +
-                  dataItem.productMeals.Afternoon.reduce((value, item) => {
+              <View style={styles.body}>
+                <Text numberOfLines={2}>{dataItem.description}</Text>
+              </View>
+
+              <View style={styles.footer}>
+                <Text style={styles.price}>
+                  $
+                  {dataItem.productMeals.Morning.reduce((value, item) => {
                     return (value += item.amount * item.product.price);
                   }, 0) +
-                  dataItem.productMeals.Evening.reduce((value, item) => {
-                    return (value += item.amount * item.product.price);
-                  }, 0)}
-              </Text>
-              <View style={styles.plus}>
-                <Pressable onPress={changeQuantity.bind(this, "decrease")}>
-                  <Text style={styles.button}>-</Text>
-                </Pressable>
-                <Text style={styles.amount}>{dataItem.quantity}</Text>
-                <Pressable onPress={changeQuantity.bind(this, "increase")}>
-                  <Text style={styles.button}>+</Text>
-                </Pressable>
+                    dataItem.productMeals.Afternoon.reduce((value, item) => {
+                      return (value += item.amount * item.product.price);
+                    }, 0) +
+                    dataItem.productMeals.Evening.reduce((value, item) => {
+                      return (value += item.amount * item.product.price);
+                    }, 0)}
+                </Text>
+                <View style={styles.plus}>
+                  <Pressable onPress={changeQuantity.bind(this, "decrease")}>
+                    <Text style={styles.button}>-</Text>
+                  </Pressable>
+                  <Text style={styles.amount}>{dataItem.quantity}</Text>
+                  <Pressable onPress={changeQuantity.bind(this, "increase")}>
+                    <Text style={styles.button}>+</Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </Animated.View>
-    </TouchableWithoutFeedback>
+          <View
+            style={{
+              position: "absolute",
+              top: 10,
+              left: 15,
+            }}
+          >
+            <Pressable
+              android_ripple={{ color: "#ccccc" }}
+              style={({ pressed }) => (pressed ? styles.buttonPressed : null)}
+              onPress={SelectItem}
+            >
+              <AntDesign name="search1" size={24} color="black" />
+            </Pressable>
+          </View>
+        </Animated.View>
+      </TouchableWithoutFeedback>
+    </>
   );
 }
 

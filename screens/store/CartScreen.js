@@ -49,7 +49,7 @@ export default function CartScreen({ navigation }) {
 
   return (
     <View style={styles.rootContainer}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.title}>Cart</Text>
         {meals.length !== 0 ? (
           <ListCardCart

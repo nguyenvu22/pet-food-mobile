@@ -50,6 +50,7 @@ const ArchiveCustomerScreen = ({ navigation }) => {
           isDelete={true}
           mealCustomer={mealCustomer}
           setMealCustomer={setMealCustomer}
+          isArchieve={true}
         />
       </View>
     );

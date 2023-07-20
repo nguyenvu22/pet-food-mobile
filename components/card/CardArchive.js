@@ -6,7 +6,13 @@ import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import { updateCustomerMeal } from "../../services/meal";
 import { useSelector } from "react-redux";
 
-const CardArchive = ({ data, isDelete, mealCustomer, setMealCustomer }) => {
+const CardArchive = ({
+  data,
+  isDelete,
+  mealCustomer,
+  setMealCustomer,
+  isArchieve,
+}) => {
   const navigation = useNavigation();
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
@@ -16,6 +22,7 @@ const CardArchive = ({ data, isDelete, mealCustomer, setMealCustomer }) => {
     navigation.navigate("Detail", {
       dataItem: data,
       itemType: "meal",
+      isArchieve: isArchieve,
     });
   };
 

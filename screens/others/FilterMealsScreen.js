@@ -44,7 +44,7 @@ const FilterMealsScreen = ({ route }) => {
   const renderItem = (itemData) => {
     return (
       <View>
-        <CardArchive data={itemData.item} />
+        <CardArchive data={itemData.item} isArchieve={false} />
       </View>
     );
   };
