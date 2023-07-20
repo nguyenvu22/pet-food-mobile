@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: 30,
   },
   productContainer: {
     marginBottom: 20,

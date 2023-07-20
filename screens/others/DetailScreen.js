@@ -47,13 +47,6 @@ const DetailScreen = ({ navigation, route }) => {
   let selectItem;
   let birdId;
 
-  if (type === "product") {
-    selectItem = products?.find((item) => item.id === data.id);
-  } else {
-    selectItem = meals?.find((item) => item.id === data.id);
-    birdId = data.bird.id;
-  }
-
   useEffect(() => {
     setIsLoading(true);
     if (type === "product") {
@@ -174,7 +167,7 @@ const DetailScreen = ({ navigation, route }) => {
   }
 
   const renderListProductMorning = (itemData) => {
-    return <CardProductsInMeal data={itemData.item.product} type="product" />;
+    return <CardProductsInMeal data={itemData.item} type="product" />;
   };
 
   if (isLoading) {
@@ -201,7 +194,7 @@ const DetailScreen = ({ navigation, route }) => {
       >
         <View style={styles.ImgBgContainer}>
           <ImageBackground
-            source={{ uri: `${selectItem?.image}` }}
+            source={{ uri: `${data.image}` }}
             style={styles.image}
             defaultSource={require("../../assets/images/loading_image_horizontally.png")}
           >
@@ -232,7 +225,8 @@ const DetailScreen = ({ navigation, route }) => {
                 ellipsizeMode="tail"
                 numberOfLines={1}
               >
-                {selectItem?.title}
+                {/* {selectItem?.productName} */}
+                {data?.title}
               </Text>
             )}
           </View>
@@ -332,7 +326,12 @@ const DetailScreen = ({ navigation, route }) => {
               <View style={styles.birdContainer}>
                 <View style={styles.birdInnerContainer}>
                   <Image
-                    source={{ uri: `${bird?.images}` }}
+                    source={{
+                      uri: `${
+                        bird?.images ??
+                        "https://st2.depositphotos.com/1561359/12101/v/950/depositphotos_121012076-stock-illustration-blank-photo-icon.jpg"
+                      }`,
+                    }}
                     style={{
                       height: "100%",
                       width: "100%",
@@ -350,7 +349,7 @@ const DetailScreen = ({ navigation, route }) => {
           )}
           <View style={styles.desDetailContainer}>
             <Text style={styles.instructTitle}>Description :</Text>
-            <Text style={styles.desDetailText}>{selectItem?.description}</Text>
+            <Text style={styles.desDetailText}>{data?.description}</Text>
           </View>
           {type === "meal" && (
             <View style={styles.productsOfMealContainer}>

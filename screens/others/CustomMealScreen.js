@@ -19,7 +19,8 @@ import { getAllProduct } from "../../services/product";
 import { Octicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updateCart } from "../../redux/cart/cart";
-import { createCustomerMeal } from "../../services/meal";
+import { createCustomerMeal, saveCustomerMeal } from "../../services/meal";
+import ConfirmModal from "../../components/modal/ConfirmModal";
 
 export default function CustomMealScreen({ navigation, route }) {
   const cartInRedux = useSelector((state) => state.cartReducers.cart);
@@ -29,7 +30,9 @@ export default function CustomMealScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   const meal = route.params.meal;
+  const isUpdate = route.params.isUpdate;
   const [openModal, setOpenModal] = useState(false);
+  const [visible, setVisible] = useState(false);
   const [scaleValue1] = useState(new Animated.Value(1));
   const [scaleValue2] = useState(new Animated.Value(1));
 
@@ -161,13 +164,6 @@ export default function CustomMealScreen({ navigation, route }) {
   }
 
   function SelectorModal() {
-    // console.log("---------------DATA IN---------------");
-    // console.log(morningProducts);
-    // console.log(afternoonProducts);
-    // console.log(eveningProducts);
-    // console.log("---------------MEAL---------------");
-    // console.log(meal);
-
     const mealToAPI = {
       ...meal,
       title: title,
@@ -223,6 +219,8 @@ export default function CustomMealScreen({ navigation, route }) {
         await AsyncStorage.setItem("cart", JSON.stringify(updatedData));
 
         navigation.navigate("Cart");
+      } else {
+        Alert.alert("Something went wrong", "Please try again later");
       }
     }
 
@@ -254,6 +252,8 @@ export default function CustomMealScreen({ navigation, route }) {
       if (response.status === "Success") {
         setOpenModal(false);
         navigation.navigate("ArchiveCustomer");
+      } else {
+        Alert.alert("Something went wrong", "Please try again later");
       }
     }
 
@@ -302,9 +302,60 @@ export default function CustomMealScreen({ navigation, route }) {
     );
   }
 
+  async function saveMeal() {
+    if (
+      morningProducts.length === 0 &&
+      afternoonProducts.length === 0 &&
+      eveningProducts.length === 0
+    ) {
+      Alert.alert(
+        "Missing information!",
+        "You can not clone a meal with empty product"
+      );
+      return;
+    }
+    const mealToAPI = {
+      ...meal,
+      title: title,
+      productMeals: [
+        {
+          Morning: morningProducts.map((item) => {
+            return { id: item.product.id, amount: item.amount };
+          }),
+        },
+        {
+          Afternoon: afternoonProducts.map((item) => {
+            return { id: item.product.id, amount: item.amount };
+          }),
+        },
+        {
+          Evening: eveningProducts.map((item) => {
+            return { id: item.product.id, amount: item.amount };
+          }),
+        },
+      ],
+    };
+
+    const response = await saveCustomerMeal(mealToAPI, accessToken);
+    if (response.status === "Success") {
+      setVisible(true);
+      setTimeout(() => {
+        setVisible(false);
+        navigation.goBack();
+      }, 2000);
+    } else {
+      Alert.alert("Something went wrong", "Please try again later");
+    }
+  }
+
   return (
     <View style={styles.rootContainer}>
       <SelectorModal />
+      <ConfirmModal
+        visible={visible}
+        setVisible={setVisible}
+        requireUrl="lottie_update"
+      />
       <View
         style={{
           marginHorizontal: 25,
@@ -329,7 +380,10 @@ export default function CustomMealScreen({ navigation, route }) {
           <TextInput
             value={title}
             onChangeText={(value) => setTitle(value)}
-            style={{ borderBottomColor: "rgba(0,0,0,0.1)", borderBottomWidth: 1.5 }}
+            style={{
+              borderBottomColor: "rgba(0,0,0,0.1)",
+              borderBottomWidth: 1.5,
+            }}
             placeholder="Description"
           />
         </View>
@@ -405,11 +459,13 @@ export default function CustomMealScreen({ navigation, route }) {
           shadowOffset: { width: 0, height: 3 },
         }}
         onPress={() => {
-          setOpenModal(true);
+          if (isUpdate) {
+            saveMeal();
+          } else setOpenModal(true);
         }}
       >
         <Text style={{ color: "white", fontSize: 18, fontWeight: "500" }}>
-          Finish
+          {isUpdate ? "Save" : "Finish"}
         </Text>
       </Pressable>
     </View>
