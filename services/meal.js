@@ -105,3 +105,45 @@ export async function createCustomerMeal(data, accessToken) {
     console.log(error.response);
   }
 }
+
+export async function updateCustomerMeal(mealId, accessToken) {
+  try {
+    const response = await axios.put(
+      API_KEY + `/meal/status/${mealId}`,
+      {},
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error.response);
+  }
+}
+
+export async function saveCustomerMeal(data, accessToken) {
+  try {
+    const response = await axios.put(
+      API_KEY + "/meal/update",
+      {
+        id: data.id,
+        status: true,
+        title: data.title,
+        description: data.description,
+        birdId: data.bird.id,
+        image: data.image,
+        sections: data.productMeals,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error.response);
+  }
+}

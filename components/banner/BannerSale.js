@@ -9,7 +9,7 @@ const BannerSale = ({ title }) => {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.titleText}>{title}</Text>
-        <Text style={styles.moreText}>See all </Text>
+        {/* <Text style={styles.moreText}>See all </Text> */}
       </View>
       <ImageBackground
         source={bg}

@@ -18,6 +18,7 @@ import CardShipping from "../../components/card/CardShipping";
 import { getOrderByStatus } from "../../services/order";
 import OrderDetailModal from "../../components/modal/OrderDetailModal";
 
+
 const ShippingScreen = ({ navigation }) => {
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken

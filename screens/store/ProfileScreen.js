@@ -34,106 +34,114 @@ export default function ProfileScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.userInfoSection}>
-        <View style={{ flexDirection: "row", marginTop: 15 }}>
-          <Avatar.Image
-            source={{
-              uri: `${user.avatar}`,
-            }}
-            size={80}
-          />
-          <View style={{ marginLeft: 20, marginTop: 5 }}>
-            <Title style={[styles.title, { marginTop: 15, marginBottom: 5 }]}>
-              {user.fullName}
-            </Title>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Octicons name="dot-fill" size={20} color="green" />
-              <Caption style={styles.caption}>@user</Caption>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.userInfoSection}>
+          <View style={{ flexDirection: "row", marginTop: 15 }}>
+            <Avatar.Image
+              source={{
+                uri: `${user.avatar}`,
+              }}
+              size={80}
+            />
+            <View style={{ marginLeft: 20, marginTop: 5 }}>
+              <Title style={[styles.title, { marginTop: 15, marginBottom: 5 }]}>
+                {user.fullName}
+              </Title>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Octicons name="dot-fill" size={20} color="green" />
+                <Caption style={styles.caption}>@user</Caption>
+              </View>
             </View>
           </View>
         </View>
-      </View>
-      <View style={styles.userInfoSection}>
-        <View style={styles.row}>
-          <AntDesign name="calendar" size={20} color={Colors.dark} />
-          <Text style={styles.infText}>{user.dob}</Text>
+        <View style={styles.userInfoSection}>
+          <View style={styles.row}>
+            <MaterialCommunityIcons
+              name="email-fast-outline"
+              size={20}
+              color={Colors.dark}
+            />
+            <Text style={styles.infText}>{user.email}</Text>
+          </View>
+          <View style={styles.row}>
+            <AntDesign name="calendar" size={20} color={Colors.dark} />
+            <Text style={styles.infText}>{user.dob}</Text>
+          </View>
+          <View style={styles.row}>
+            <Feather name="phone" size={20} color={Colors.dark} />
+            <Text style={styles.infText}>{user.phoneNumber}</Text>
+          </View>
         </View>
-        <View style={styles.row}>
-          <MaterialCommunityIcons
-            name="email-fast-outline"
-            size={20}
-            color={Colors.dark}
-          />
-          <Text style={styles.infText}>{user.email}</Text>
-        </View>
-        <View style={styles.row}>
-          <Feather name="phone" size={20} color={Colors.dark} />
-          <Text style={styles.infText}>{user.phoneNumber}</Text>
-        </View>
-      </View>
 
-      <View style={styles.infoBoxWrapper}></View>
-
-      <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => console.log("click")}>
-          <View style={styles.menuItem}>
-            <View style={styles.innerMenuItem}>
-              <Ionicons name="heart-circle-outline" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>My Favorite</Text>
+        <View style={styles.menuWrapper}>
+          <TouchableRipple onPress={() => console.log("click")}>
+            <View style={styles.menuItem}>
+              <View style={styles.innerMenuItem}>
+                <Ionicons
+                  name="heart-circle-outline"
+                  size={25}
+                  color="#FF6347"
+                />
+                <Text style={styles.menuItemText}>My Favorite</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => console.log("click")}>
-          <View style={styles.menuItem}>
-            <View style={styles.innerMenuItem}>
-              <MaterialIcons name="payment" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Payment</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => console.log("click")}>
+            <View style={styles.menuItem}>
+              <View style={styles.innerMenuItem}>
+                <MaterialIcons name="payment" size={25} color="#FF6347" />
+                <Text style={styles.menuItemText}>Payment</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => console.log("click")}>
-          <View style={styles.menuItem}>
-            <View style={styles.innerMenuItem}>
-              <Feather name="share" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Share With Friend</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => console.log("click")}>
+            <View style={styles.menuItem}>
+              <View style={styles.innerMenuItem}>
+                <Feather name="share" size={25} color="#FF6347" />
+                <Text style={styles.menuItemText}>Share With Friend</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => console.log("click")}>
-          <View style={styles.menuItem}>
-            <View style={styles.innerMenuItem}>
-              <MaterialIcons name="contact-support" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Support</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={() => console.log("click")}>
+            <View style={styles.menuItem}>
+              <View style={styles.innerMenuItem}>
+                <MaterialIcons
+                  name="contact-support"
+                  size={25}
+                  color="#FF6347"
+                />
+                <Text style={styles.menuItemText}>Support</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={openModalChange}>
-          <View style={[styles.menuItem]}>
-            <View style={styles.innerMenuItem}>
-              <AntDesign name="setting" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Change Password</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={openModalChange}>
+            <View style={[styles.menuItem]}>
+              <View style={styles.innerMenuItem}>
+                <AntDesign name="setting" size={25} color="#FF6347" />
+                <Text style={styles.menuItemText}>Change Password</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={logOut}>
-          <View
-            style={[styles.menuItem, { borderBottomColor: Colors.pink100 }]}
-          >
-            <View style={styles.innerMenuItem}>
-              <AntDesign name="logout" size={25} color="#FF6347" />
-              <Text style={styles.menuItemText}>Logout</Text>
+          </TouchableRipple>
+          <TouchableRipple onPress={logOut}>
+            <View
+              style={[styles.menuItem, { borderBottomColor: Colors.pink100 }]}
+            >
+              <View style={styles.innerMenuItem}>
+                <AntDesign name="logout" size={25} color="#FF6347" />
+                <Text style={styles.menuItemText}>Logout</Text>
+              </View>
+              <MaterialIcons name="navigate-next" size={25} color="black" />
             </View>
-            <MaterialIcons name="navigate-next" size={25} color="black" />
-          </View>
-        </TouchableRipple>
-      </View>
-    </ScrollView>
+          </TouchableRipple>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -145,7 +153,7 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     marginTop: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     marginBottom: 15,
   },
   title: {
@@ -160,7 +168,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    marginBottom: 15,
+    marginBottom: 5,
     marginTop: 10,
   },
   infText: {
@@ -175,7 +183,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   menuWrapper: {
-    marginHorizontal: 10,
+    marginHorizontal: 30,
     marginVertical: 20,
     // backgroundColor: Colors.brown700,
     borderRadius: 8,
