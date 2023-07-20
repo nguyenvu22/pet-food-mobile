@@ -18,8 +18,7 @@ import { getAllMealCustomerFunction } from "../../services/meal";
 const dWith = Dimensions.get("window").width;
 const dHeight = Dimensions.get("window").height;
 
-const ArchiveCustomerScreen = () => {
-  const navigation = useNavigation();
+const ArchiveCustomerScreen = ({ navigation }) => {
   const [mealCustomer, setMealCustomer] = useState([]);
   const accessToken = useSelector(
     (state) => state.userReducers.user.accessToken
@@ -46,7 +45,12 @@ const ArchiveCustomerScreen = () => {
   const renderItem = (itemData) => {
     return (
       <View>
-        <CardArchive data={itemData.item} />
+        <CardArchive
+          data={itemData.item}
+          isDelete={true}
+          mealCustomer={mealCustomer}
+          setMealCustomer={setMealCustomer}
+        />
       </View>
     );
   };
@@ -55,14 +59,6 @@ const ArchiveCustomerScreen = () => {
     return (
       <>
         <View style={styles.header}>
-          {/* <View style={styles.headerBtn}>
-            <Ionicons
-              name="chevron-back"
-              size={25}
-              color={Colors.dark}
-              onPress={navigation.goBack}
-            />
-          </View> */}
           <View style={styles.innerHeader}>
             <Text style={styles.title}>Archive</Text>
           </View>
@@ -153,6 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: Colors.pink100,
   },
   textEmpty: {
     fontSize: 24,

@@ -59,7 +59,7 @@ const ListCard = ({ title }) => {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.titleText}>{title}</Text>
-        <Text style={styles.moreText}>See all </Text>
+        {/* <Text style={styles.moreText}>See all </Text> */}
       </View>
       <View style={styles.list}>
         <FlatList

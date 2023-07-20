@@ -54,7 +54,7 @@ const BannerNews = ({ title }) => {
           <Image
             source={{ uri: `${itemData.item.image}` }}
             style={styles.bannerImage}
-            resizeMode="center"
+            resizeMode="cover"
           />
           <View style={styles.carouselTextContainer}>
             <Text style={styles.carouselTextTitle}>News </Text>
@@ -69,7 +69,7 @@ const BannerNews = ({ title }) => {
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.titleText}>{title}</Text>
-        <Text style={styles.moreText}>See all </Text>
+        {/* <Text style={styles.moreText}>See all </Text> */}
       </View>
       <FlatList
         data={news}

@@ -7,7 +7,7 @@ const CardProductsInMeal = ({ data }) => {
   const navigation = useNavigation();
   const SelectItem = () => {
     navigation.navigate("DetailProductsMeal", {
-      dataItem: data,
+      dataItem: data.product,
     });
   };
   return (
@@ -21,13 +21,20 @@ const CardProductsInMeal = ({ data }) => {
     >
       <View style={styles.itemContainer}>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: `${data.image}` }} />
+          <Image
+            style={styles.image}
+            source={{ uri: `${data.product.image}` }}
+          />
         </View>
         <View style={styles.textContainer}>
-          <Text style={styles.textName}>{data.productName}</Text>
-          <Text style={styles.textPriedDate}>{data.expiredDate}</Text>
+          <View style={styles.textInnerContainer}>
+            <Text style={styles.textName}>{data.product.productName}</Text>
+            <Text style={styles.textName}>x {data.amount}</Text>
+          </View>
+
+          <Text style={styles.textPriedDate}>{data.product.expiredDate}</Text>
           <View style={styles.priceContainer}>
-            <Text style={styles.textPrice}>{data.price}</Text>
+            <Text style={styles.textPrice}>{data.product.price}</Text>
             <Text style={{ fontSize: 10, fontWeight: "400" }}>$</Text>
           </View>
         </View>
@@ -39,6 +46,11 @@ const CardProductsInMeal = ({ data }) => {
 export default CardProductsInMeal;
 
 const styles = StyleSheet.create({
+  textInnerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: 250,
+  },
   button: {
     flex: 1,
   },
